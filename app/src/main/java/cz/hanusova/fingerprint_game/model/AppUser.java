@@ -1,5 +1,8 @@
 package cz.hanusova.fingerprint_game.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by hanuska1 on 9.3.2016.
  */
@@ -10,8 +13,8 @@ public class AppUser {
     private String username;
     private String stagname;
     private String password;
-
-    //TODO: userRoles, inventory
+    private Set<Inventory> inventory = new HashSet<>();
+    private Set<String> userRoles = new HashSet<>();
 
     public Long getIdUser() {
         return idUser;
@@ -43,5 +46,21 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Inventory> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Set<Inventory> inventory) {
+        this.inventory = inventory;
+    }
+
+    public Set<String> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<String> userRoles) {
+        this.userRoles = userRoles;
     }
 }
