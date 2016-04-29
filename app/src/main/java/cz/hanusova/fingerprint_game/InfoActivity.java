@@ -1,34 +1,41 @@
 package cz.hanusova.fingerprint_game;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 4.4.2016.
  */
-public class InfoActivity extends Activity {
+public class InfoActivity extends AbstractAsyncActivity {
+    private static final String TAG = "InfoActivity";
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private TextView errorMessageTv;
+
+    private String url;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_info);
-//        SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
+        context = this;
         SharedPreferences sp = this.getSharedPreferences(Constants.SP_NAME, MODE_PRIVATE);
 
         TextView usernameTv = (TextView) findViewById(R.id.info_username);
@@ -52,12 +59,13 @@ public class InfoActivity extends Activity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra("Barcode");
-//                    statusMessage.setText(R.string.barcode_success);
-                    System.out.println(barcode.displayValue); //TODO: zpracovat precteny kod
-//                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    //TODO: zpracovat precteny kod
+                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    url = barcode.displayValue;
+                    new HttpAsyncTask().execute();
                 } else {
                     errorMessageTv.setText(R.string.info_scan_fail);
-//                    Log.d(TAG, "No barcode captured, intent data is null");
+                    Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
                 errorMessageTv.setText(String.format(getString(R.string.info_scan_fail),
@@ -80,13 +88,56 @@ public class InfoActivity extends Activity {
         loginBtn.setOnClickListener(listener);
     }
 
-    private void initDetector() {
-        BarcodeDetector detector = new BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE).build();
-        if (!detector.isOperational()) {
-            Toast.makeText(this, "Nepodařilo se načíst scanner.", Toast.LENGTH_LONG).show();
-            return;
+    private class HttpAsyncTask extends AsyncTask <Void, Void, Place>{
+
+        @Override
+        protected void onPreExecute() {
+            showLoadingProgressDialog();
         }
-//        Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
-//        SparseArray<Barcode> barcodes = detector.detect(frame);
+
+        @Override
+        protected Place doInBackground(Void... params) {
+            Place p = new Place();
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Place place = restTemplate.getForObject(url, Place.class);
+            return place;
+
+////            HttpAuthentication authHeader = new HttpBasicAuthentication("test", BCrypt.hashpw("test", BCrypt.gensalt()));
+//            HttpHeaders reqHeaders = new HttpHeaders();
+////            reqHeaders.setAuthorization(authHeader);
+//            reqHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//
+//            RestTemplate restTemplate = new RestTemplate();
+//            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+//            HttpEntity<Place> entity = new HttpEntity<>(reqHeaders);
+//            try {
+//                ResponseEntity<Place> resp = restTemplate.exchange(url, HttpMethod.POST, entity, Place.class);
+//                Place p = resp.getBody();
+//                return p;
+////            } catch(HttpClientErrorException e){
+////                Log.e(TAG, e.getLocalizedMessage(), e);
+////                return null;
+////            } catch(ResourceAccessException e){
+////                Log.e(TAG, e.getLocalizedMessage(), e);
+////                return null;
+//            } catch(Exception e){
+//                System.out.println(e.getMessage());
+//                e.printStackTrace();
+//                Log.e(TAG, e.getMessage(),e );
+//            }
+//            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Place place) {
+            dismissProgressDialog();
+            Intent intent = new Intent(context, PlaceActivity.class);
+            intent.putExtra(Constants.EXTRA_PLACE, place);
+            startActivity(intent);
+        }
     }
+
+
+
 }

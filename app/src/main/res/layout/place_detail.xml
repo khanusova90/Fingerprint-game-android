@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/place"
-        android:id="@+id/placeId"
+        android:text="@string/place_id"
+        android:id="@+id/place_placeId"
         android:layout_margin="10dp" />
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/place_info"
-        android:id="@+id/placeDescription"
+        android:id="@+id/place_placeDescription"
         android:layout_margin="10dp" />
 
 </LinearLayout>

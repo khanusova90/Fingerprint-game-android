@@ -7,8 +7,8 @@
     <string name="password">Heslo</string>
     <string name="sign_in">Přihlásit</string>
 
-    <string name="place">Místo ID: </string>
-    <string name="place_info">Informace o místě: </string>
+    <string name="place_id">Místo ID: %1$d</string>
+    <string name="place_info">Informace o místě: %1$s</string>
 
     <string name="info_user">Informace o uživateli</string>
     <string name="info_scan">Načíst QR kód</string>

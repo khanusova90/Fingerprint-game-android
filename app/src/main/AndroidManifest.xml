@@ -36,6 +36,7 @@
         </activity>
 
         <activity android:name=".QrActivity"/>
+        <activity android:name=".PlaceActivity" />
     </application>
 
 </manifest>
