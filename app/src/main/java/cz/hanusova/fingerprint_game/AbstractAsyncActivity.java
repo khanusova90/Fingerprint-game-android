@@ -15,8 +15,8 @@
  */
 package cz.hanusova.fingerprint_game;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by khanusova on 21.3.2016.
@@ -27,7 +27,7 @@ import android.app.ProgressDialog;
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
  */
-public abstract class AbstractAsyncActivity extends Activity{
+public abstract class AbstractAsyncActivity extends AppCompatActivity{
 
     protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();
 
@@ -48,7 +48,7 @@ public abstract class AbstractAsyncActivity extends Activity{
     // Public methods
     // ***************************************
     public void showLoadingProgressDialog() {
-        this.showProgressDialog("Loading. Please wait...");
+        showProgressDialog("Loading. Please wait...");
     }
 
     public void showProgressDialog(CharSequence message) {

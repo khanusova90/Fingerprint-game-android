@@ -59,7 +59,6 @@ public class InfoActivity extends AbstractAsyncActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra("Barcode");
-                    //TODO: zpracovat precteny kod
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     url = barcode.displayValue;
                     new HttpAsyncTask().execute();
@@ -97,36 +96,10 @@ public class InfoActivity extends AbstractAsyncActivity {
 
         @Override
         protected Place doInBackground(Void... params) {
-            Place p = new Place();
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             Place place = restTemplate.getForObject(url, Place.class);
             return place;
-
-////            HttpAuthentication authHeader = new HttpBasicAuthentication("test", BCrypt.hashpw("test", BCrypt.gensalt()));
-//            HttpHeaders reqHeaders = new HttpHeaders();
-////            reqHeaders.setAuthorization(authHeader);
-//            reqHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-//
-//            RestTemplate restTemplate = new RestTemplate();
-//            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-//            HttpEntity<Place> entity = new HttpEntity<>(reqHeaders);
-//            try {
-//                ResponseEntity<Place> resp = restTemplate.exchange(url, HttpMethod.POST, entity, Place.class);
-//                Place p = resp.getBody();
-//                return p;
-////            } catch(HttpClientErrorException e){
-////                Log.e(TAG, e.getLocalizedMessage(), e);
-////                return null;
-////            } catch(ResourceAccessException e){
-////                Log.e(TAG, e.getLocalizedMessage(), e);
-////                return null;
-//            } catch(Exception e){
-//                System.out.println(e.getMessage());
-//                e.printStackTrace();
-//                Log.e(TAG, e.getMessage(),e );
-//            }
-//            return null;
         }
 
         @Override

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <TextView
         android:layout_width="match_parent"
@@ -9,14 +10,54 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/place_id"
         android:id="@+id/place_placeId"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:layout_weight="0.06" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/place_info"
-        android:id="@+id/place_placeDescription"
-        android:layout_margin="10dp" />
+        android:text="@string/place_name"
+        android:id="@+id/place_name_head"
+        android:layout_margin="10dp"
+        android:layout_below="@id/place_placeId"
+        android:textStyle="bold"/>
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/place_name"
+        android:layout_alignTop="@+id/place_name_head"
+        android:layout_toRightOf="@+id/place_name_head"
+        android:layout_toEndOf="@+id/place_name_head" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:text="@string/place_info"
+        android:id="@+id/place_placeDescription_head"
+        android:layout_margin="10dp"
+        android:layout_below="@id/place_name_head"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/place_placeDescription"
+        android:layout_alignTop="@+id/place_placeDescription_head"
+        android:layout_toRightOf="@+id/place_placeDescription_head"
+        android:layout_toEndOf="@+id/place_placeDescription_head" />
+
+    <ImageView
+        android:id="@+id/place_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_placeDescription"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+
+</RelativeLayout>

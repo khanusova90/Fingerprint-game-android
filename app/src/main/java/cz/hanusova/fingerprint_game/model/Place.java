@@ -18,10 +18,33 @@ public class Place implements Serializable{
     private String code;
 
     /**
-     * Popis mista
+     * Nazev mista
      */
-    private String description;
+    private String name;
 
+    /**
+     * Typ místa
+     */
+    private PlaceType placeType;
+
+    /**
+     * Patro, na kterem se misto nachazi
+     */
+    private Integer floor;
+
+    /**
+     * Vodorovne souradnice umisteni na mape
+     */
+    private Integer xCoord;
+
+    /**
+     * Svisle souradnice umisteni na mape
+     */
+    private Integer yCoord;
+
+    /**
+     * Zdroje, ktere jsou k dispozici na danem miste
+     */
     private List<Resource> resources;
 
     public Long getIdPlace() {
@@ -40,12 +63,12 @@ public class Place implements Serializable{
         this.code = code;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Resource> getResources() {
@@ -54,5 +77,37 @@ public class Place implements Serializable{
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    public PlaceType getPlaceType() {
+        return placeType;
+    }
+
+    public void setPlaceType(PlaceType placeType) {
+        this.placeType = placeType;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getxCoord() {
+        return xCoord;
+    }
+
+    public void setxCoord(Integer xCoord) {
+        this.xCoord = xCoord;
+    }
+
+    public Integer getyCoord() {
+        return yCoord;
+    }
+
+    public void setyCoord(Integer yCoord) {
+        this.yCoord = yCoord;
     }
 }

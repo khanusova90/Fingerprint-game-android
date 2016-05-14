@@ -72,7 +72,7 @@ public class QrActivity extends AppCompatActivity{
         preview = (CameraSourcePreview) findViewById(R.id.preview);
         overlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
 
-        boolean autoFocus = getIntent().getBooleanExtra("AutoFocus", false);
+        boolean autoFocus = getIntent().getBooleanExtra("AutoFocus", true);
         boolean useFlash = getIntent().getBooleanExtra("UseFlash", false);
 
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -186,7 +186,7 @@ public class QrActivity extends AppCompatActivity{
         // make sure that auto focus is an available option
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             builder = builder.setFocusMode(
-                    autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null);
+                    autoFocus ? Camera.Parameters.FOCUS_MODE_AUTO : null);
         }
 
         cameraSource = builder
@@ -313,7 +313,6 @@ public class QrActivity extends AppCompatActivity{
      */
     private boolean onTap(float rawX, float rawY) {
 
-        //TODO: use the tap position to select the barcode.
         BarcodeGraphic graphic = overlay.getFirstGraphic();
         Barcode barcode = null;
         if (graphic != null) {
