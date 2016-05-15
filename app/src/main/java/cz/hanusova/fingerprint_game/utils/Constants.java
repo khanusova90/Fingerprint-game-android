@@ -1,7 +1,7 @@
 package cz.hanusova.fingerprint_game.utils;
 
 /**
- * Trida pro ukladani konstant potrebnych pro celou aplikaci
+ * Util class with constants for application
  *
  * Created by khanusova on 21.3.2016.
  */
@@ -9,7 +9,7 @@ public final class Constants {
 
     public static final String URL_BASE = "http://192.168.0.106:8080/fingerprint-game/android";
 
-    public static final String IMG_URL_BASE = "http://192.168.0.106:/icons/";
+    public static final String IMG_URL_BASE = "http://192.168.0.106:8080/fingerprint-game/disk-resources/";
 
     //Emulator
 //    public static final String URL_BASE = "http://10.0.2.2:8080/fingerprint-game/android";

@@ -8,8 +8,20 @@ import java.math.BigDecimal;
 public class Inventory {
 
     private Long idInventory;
+
+    /**
+     * Owner of the inventory
+     */
     private AppUser user;
+
+    /**
+     * {@link Material}
+     */
     private String material;
+
+    /**
+     * Amount of the material stored in inventory
+     */
     private BigDecimal amount;
 
     public Long getIdInventory() {

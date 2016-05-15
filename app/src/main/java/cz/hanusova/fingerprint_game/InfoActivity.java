@@ -49,8 +49,6 @@ public class InfoActivity extends AbstractAsyncActivity {
         stagnameTv.setText(stagname);
 
         initQrBtn(this);
-
-        //TODO: http://stackoverflow.com/questions/8831050/android-how-to-read-qr-code-in-my-application
     }
 
     @Override

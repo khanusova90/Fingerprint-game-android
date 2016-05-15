@@ -1,8 +1,15 @@
 package cz.hanusova.fingerprint_game;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
+import java.net.URL;
 
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
@@ -41,22 +48,31 @@ public class PlaceActivity extends AbstractAsyncActivity {
         placeNameTv.setText(place.getName());
         descriptionTv.setText(place.getPlaceType().getDescription());
 
-        drawPlaceImage(place.getPlaceType());
+        new HttpAsyncTask().execute(place.getPlaceType());
     }
 
-    private void drawPlaceImage(PlaceType placeType){
+    private class HttpAsyncTask extends AsyncTask<PlaceType, Void, Bitmap>{
+
         ImageView imgView = (ImageView) findViewById(R.id.place_image);
-        imgView.setImageResource(R.drawable.money_icon);
-//        try {
-//            URL url = new URL(Constants.IMG_URL_BASE + placeType.getImgUrl());
-//            InputStream inputStream = url.openStream();
-//            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//            imgView.setImageBitmap(bitmap);
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
+        @Override
+        protected Bitmap doInBackground(PlaceType... placeType) {
+            Bitmap bitmap = null;
+            try {
+                URL url = new URL(Constants.IMG_URL_BASE + placeType[0].getImgUrl());
+                InputStream inputStream = url.openConnection().getInputStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+            } catch (Exception e) {
+                Log.e(TAG, "Error occurred while trying to show image");
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            imgView.setImageBitmap(bitmap);
+        }
     }
 
 }

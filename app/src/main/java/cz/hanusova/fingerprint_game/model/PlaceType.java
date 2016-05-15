@@ -9,11 +9,30 @@ import java.util.List;
 public class PlaceType implements Serializable{
 
     private Long idPlaceType;
+
+    /**
+     * Name of place type
+     */
     private String placeType;
+
+    /**
+     * Description
+     */
     private String description;
+
+    /**
+     * Image URL (relative, see {@link cz.hanusova.fingerprint_game.utils.Constants#IMG_URL_BASE}
+     */
     private String imgUrl;
+
+    /**
+     * List of {@link Activity} that are possible to do on this type of place
+     */
     private List<Activity> activities;
 
+    /*
+     * Getters and setters
+     */
     public String getDescription() {
         return description;
     }

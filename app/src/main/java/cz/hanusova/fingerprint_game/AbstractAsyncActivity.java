@@ -21,15 +21,13 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by khanusova on 21.3.2016.
  *
- * Rodicovska trida pro asynchronni activity <br/>
+ * Parent class for asynchronous activities <br/>
  * Zdroj: https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/AbstractAsyncActivity.java
  *
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
  */
 public abstract class AbstractAsyncActivity extends AppCompatActivity{
-
-    protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();
 
     private ProgressDialog progressDialog;
 

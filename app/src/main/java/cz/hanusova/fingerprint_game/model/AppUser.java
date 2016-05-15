@@ -4,16 +4,37 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * User of the application
+ *
  * Created by hanuska1 on 9.3.2016.
  */
 public class AppUser {
 
     private Long idUser;
 
+    /**
+     * Username - should be unique
+     */
     private String username;
+
+    /**
+     * Username in STAG
+     */
     private String stagname;
+
+    /**
+     * Password
+     */
     private String password;
+
+    /**
+     * User's inventory
+     */
     private Set<Inventory> inventory = new HashSet<>();
+
+    /**
+     * Set of user's roles
+     */
     private Set<String> userRoles = new HashSet<>();
 
     public Long getIdUser() {

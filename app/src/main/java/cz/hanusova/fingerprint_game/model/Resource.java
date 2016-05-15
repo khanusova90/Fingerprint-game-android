@@ -7,19 +7,23 @@ public class Resource {
 
     private Long idResources;
 
-    /*
-     * Souradnice mista
+    /**
+     * X coordinates
      */
     private Integer x;
+
+    /**
+     * Y coordinates
+     */
     private Integer y;
 
     /**
-     * Misto, na kterem se zdroj materialu nachazi
+     * Place with resource
      */
     private Place place;
 
     /**
-     * Druh materialu, ktery je mozne zde tezit
+     * {@link Material} available here
      */
     private Material material;
 

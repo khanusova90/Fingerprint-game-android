@@ -34,13 +34,13 @@ import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
- *
+ * <p/>
  * Created by khanusova on 21.3.2016.
  */
-public class LoginActivity extends AbstractAsyncActivity{
+public class LoginActivity extends AbstractAsyncActivity {
+    private static final String TAG = "LoginActivity";
 
     protected Context context;
-
 
 
     @Override
@@ -51,7 +51,7 @@ public class LoginActivity extends AbstractAsyncActivity{
         context = this;
     }
 
-    private void initLoginBtn(){
+    private void initLoginBtn() {
         Button loginBtn = (Button) findViewById(R.id.btn_sign_in);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -104,10 +104,10 @@ public class LoginActivity extends AbstractAsyncActivity{
             try {
                 ResponseEntity<AppUser> resp = restTemplate.exchange(url, HttpMethod.POST, entity, AppUser.class);
                 return resp.getBody();
-            } catch(HttpClientErrorException e){
+            } catch (HttpClientErrorException e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
                 return null;
-            } catch(ResourceAccessException e){
+            } catch (ResourceAccessException e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
                 return null;
             }

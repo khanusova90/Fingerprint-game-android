@@ -13,40 +13,43 @@ public class Place implements Serializable{
     private Long idPlace;
 
     /**
-     * Kod mista
+     * Code
      */
     private String code;
 
     /**
-     * Nazev mista
+     * Name
      */
     private String name;
 
     /**
-     * Typ místa
+     * Type of place
      */
     private PlaceType placeType;
 
     /**
-     * Patro, na kterem se misto nachazi
+     * Floor
      */
     private Integer floor;
 
     /**
-     * Vodorovne souradnice umisteni na mape
+     * X coordinates
      */
     private Integer xCoord;
 
     /**
-     * Svisle souradnice umisteni na mape
+     * Y coordinates
      */
     private Integer yCoord;
 
     /**
-     * Zdroje, ktere jsou k dispozici na danem miste
+     * List of {@link Resource}s available on this place
      */
     private List<Resource> resources;
 
+    /*
+     * Getters and setters
+     */
     public Long getIdPlace() {
         return idPlace;
     }
