@@ -1,16 +1,33 @@
 package cz.hanusova.fingerprint_game;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import cz.hanusova.fingerprint_game.adapter.ActivitySpinAdapter;
+import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
 import cz.hanusova.fingerprint_game.utils.Constants;
@@ -27,16 +44,17 @@ public class PlaceActivity extends AbstractAsyncActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_detail);
-        setPlaceValues();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        setPlaceValues();
+        setPlaceInfo();
+        showActivities();
+        addStartBtnListener();
     }
 
-    private void setPlaceValues(){
+    private void setPlaceInfo(){
         Bundle extras = getIntent().getExtras();
         place = (Place)extras.get(Constants.EXTRA_PLACE);
 
@@ -48,10 +66,34 @@ public class PlaceActivity extends AbstractAsyncActivity {
         placeNameTv.setText(place.getName());
         descriptionTv.setText(place.getPlaceType().getDescription());
 
-        new HttpAsyncTask().execute(place.getPlaceType());
+        new ImageHttpAsyncTask().execute(place.getPlaceType());
     }
 
-    private class HttpAsyncTask extends AsyncTask<PlaceType, Void, Bitmap>{
+    private void showActivities(){
+        List<Activity> activities = place.getPlaceType().getActivities();
+
+        Spinner activitySpin = (Spinner) findViewById(R.id.spin_place_activity);
+        final ArrayAdapter<Activity> adapter = new ActivitySpinAdapter(this, android.R.layout.simple_spinner_item, activities);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        activitySpin.setAdapter(adapter);
+    }
+
+    private void addStartBtnListener(){
+        Button btnStart = (Button) findViewById(R.id.btn_place_activity);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Spinner spinner = (Spinner) findViewById(R.id.spin_place_activity);
+                Activity activity = (Activity)spinner.getSelectedItem();
+                System.out.println("CHOSEN ACTIVITY: " + activity.getName() + ", ID: " + activity.getIdActivity());
+            }
+        });
+    }
+
+    /**
+     * AsyncTask for obtaining place image
+     */
+    private class ImageHttpAsyncTask extends AsyncTask<PlaceType, Void, Bitmap>{
 
         ImageView imgView = (ImageView) findViewById(R.id.place_image);
 
@@ -72,6 +114,32 @@ public class PlaceActivity extends AbstractAsyncActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             imgView.setImageBitmap(bitmap);
+        }
+    }
+
+    private class ActivityHttpAsyncTask extends AsyncTask<Activity, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Activity... params) {
+            try {
+                String url = Constants.URL_BASE + "/place/addActivity";
+                Map<String, String> userMap = new HashMap<>();
+                SharedPreferences sp = getSharedPreferences(Constants.SP_NAME, MODE_PRIVATE);
+                userMap.put("username", sp.getString(getString(R.string.username), null));
+                RestTemplate template = new RestTemplate();
+                template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+
+                //TODO: vic entit v requestu
+                HttpEntity<Place> placeEntity = new HttpEntity<>(place, headers);
+                template.exchange(url, HttpMethod.POST, placeEntity, Void.class, userMap);
+            } catch (Exception e){
+                Log.e(TAG, "Error occured while trying to add user's activity");
+            }
+
+            return null;
         }
     }
 

@@ -1,5 +1,6 @@
 package cz.hanusova.fingerprint_game.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,7 +9,7 @@ import java.util.Set;
  *
  * Created by hanuska1 on 9.3.2016.
  */
-public class AppUser {
+public class AppUser implements Serializable{
 
     private Long idUser;
 
@@ -36,6 +37,8 @@ public class AppUser {
      * Set of user's roles
      */
     private Set<String> userRoles = new HashSet<>();
+
+    private Set<UserActivity> activities = new HashSet<>();
 
     public Long getIdUser() {
         return idUser;
@@ -83,5 +86,13 @@ public class AppUser {
 
     public void setUserRoles(Set<String> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    public Set<UserActivity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<UserActivity> activities) {
+        this.activities = activities;
     }
 }

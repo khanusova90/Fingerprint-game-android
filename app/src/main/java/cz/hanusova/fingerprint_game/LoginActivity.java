@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpAuthentication;
@@ -116,6 +117,16 @@ public class LoginActivity extends AbstractAsyncActivity {
         @Override
         protected void onPostExecute(AppUser user) {
             dismissProgressDialog();
+
+            if (user == null){
+                showLoginError();
+            } else {
+                startInfoActivity(user);
+            }
+
+        }
+
+        private void startInfoActivity(AppUser user){
             SharedPreferences sp = context.getSharedPreferences(Constants.SP_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
 
@@ -124,7 +135,13 @@ public class LoginActivity extends AbstractAsyncActivity {
             editor.commit();
 
             Intent info = new Intent(context, InfoActivity.class);
+            info.putExtra(Constants.EXTRA_USER, user);
             startActivity(info);
+        }
+
+        private void showLoginError(){
+            TextView errorText = (TextView) findViewById(R.id.login_error);
+            errorText.setText(getString(R.string.login_error));
         }
     }
 }

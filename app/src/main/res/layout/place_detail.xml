@@ -51,11 +51,27 @@
         android:layout_toRightOf="@+id/place_placeDescription_head"
         android:layout_toEndOf="@+id/place_placeDescription_head" />
 
+    <Spinner
+        android:id="@+id/spin_place_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_placeDescription"
+        android:layout_margin="10dp">
+    </Spinner>
+
+    <Button
+        android:id="@+id/btn_place_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/spin_place_activity"
+        android:layout_alignBottom="@id/spin_place_activity"
+        android:text="@string/btn_place_activity"/>
+
     <ImageView
         android:id="@+id/place_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/place_placeDescription"
+        android:layout_below="@id/spin_place_activity"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"/>
 

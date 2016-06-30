@@ -38,6 +38,8 @@
         <activity android:name=".QrActivity"/>
         <activity android:name=".PlaceActivity"
             android:label="@string/place_info"/>
+        <activity android:name=".MapActivity"
+            android:label="@string/map" />
     </application>
 
 </manifest>

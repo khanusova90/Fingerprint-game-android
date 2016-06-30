@@ -3,11 +3,13 @@ package cz.hanusova.fingerprint_game;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -16,6 +18,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
@@ -48,7 +52,12 @@ public class InfoActivity extends AbstractAsyncActivity {
         usernameTv.setText(username);
         stagnameTv.setText(stagname);
 
+        Bundle extras = getIntent().getExtras();
+        AppUser user = (AppUser) extras.get(Constants.EXTRA_USER);
+        showInventory(user);
+
         initQrBtn(this);
+        initMapButton();
     }
 
     @Override
@@ -59,17 +68,33 @@ public class InfoActivity extends AbstractAsyncActivity {
                     Barcode barcode = data.getParcelableExtra("Barcode");
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     url = barcode.displayValue;
-                    new HttpAsyncTask().execute();
+                    new PlaceAsyncTask().execute();
                 } else {
                     errorMessageTv.setText(R.string.info_scan_fail);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
-                errorMessageTv.setText(String.format(getString(R.string.info_scan_fail),
-                        CommonStatusCodes.getStatusCodeString(resultCode)));
+                String errorMsg = getString(R.string.info_scan_fail, CommonStatusCodes.getStatusCodeString(resultCode));
+                errorMessageTv.setText(errorMsg);
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void showInventory(AppUser user){
+        TextView header = (TextView) findViewById(R.id.info_inventory);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.layout_info);
+        setContentView(layout);
+        Resources res = getResources();
+        for (Inventory i : user.getInventory()){
+            TextView tv = new TextView(this);
+//            String materialId = "R.string" + i.getMaterial().toString().toLowerCase();
+//
+//            int stringId = res.getIdentifier(materialId, "string", getPackageName());
+//            tv.setText(getString(stringId) + ": " + i.getAmount());
+            tv.setText(i.getMaterial() + ": " + i.getAmount());
+            layout.addView(tv);
         }
     }
 
@@ -85,7 +110,18 @@ public class InfoActivity extends AbstractAsyncActivity {
         loginBtn.setOnClickListener(listener);
     }
 
-    private class HttpAsyncTask extends AsyncTask <Void, Void, Place>{
+    private void initMapButton(){
+        Button btnShowMap = (Button) findViewById(R.id.btn_info_show_map);
+        btnShowMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, MapActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
+    private class PlaceAsyncTask extends AsyncTask <Void, Void, Place>{
 
         @Override
         protected void onPreExecute() {

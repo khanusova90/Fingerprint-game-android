@@ -1,18 +1,19 @@
 package cz.hanusova.fingerprint_game.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by khanusova on 1.4.2016.
  */
-public class Inventory {
+public class Inventory implements Serializable{
 
     private Long idInventory;
 
-    /**
-     * Owner of the inventory
-     */
-    private AppUser user;
+//    /**
+//     * Owner of the inventory
+//     */
+//    private AppUser user;
 
     /**
      * {@link Material}
@@ -32,13 +33,13 @@ public class Inventory {
         this.idInventory = idInventory;
     }
 
-    public AppUser getUser() {
-        return user;
-    }
-
-    public void setUser(AppUser user) {
-        this.user = user;
-    }
+//    public AppUser getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(AppUser user) {
+//        this.user = user;
+//    }
 
     public String getMaterial() {
         return material;

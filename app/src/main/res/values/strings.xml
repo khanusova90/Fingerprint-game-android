@@ -2,18 +2,29 @@
     <string name="app_name">Fingerprint-game</string>
     <string name="ok">OK</string>
 
-    <string name="username">Uživatelské jméno</string>
-    <string name="stagname">Jméno ve stagu</string>
+    <string name="GOLD">Zlato</string>
+    <string name="STONE">Kámen</string>
+    <string name="FOOD">Jídlo</string>
+    <string name="WOOD">Dřevo</string>
+
+    <string name="map">Mapa</string>
     <string name="password">Heslo</string>
     <string name="sign_in">Přihlásit</string>
+    <string name="stagname">Jméno ve stagu</string>
+    <string name="username">Uživatelské jméno</string>
+
+    <string name="login_error">Chyba při přihlašování!</string>
 
     <string name="place_id">Místo ID %1$d</string>
     <string name="place_info">Informace o místě:</string>
     <string name="place_name">Název místa:</string>
+    <string name="btn_place_activity">Začít</string>
 
-    <string name="info_user">Informace o uživateli</string>
+    <string name="info_inventory">Inventář</string>
     <string name="info_scan">Načíst QR kód</string>
-    <string name="info_scan_fail">Došlo k chybě při scanování kódu</string>
+    <string name="info_scan_fail">Došlo k chybě při scanování kódu %1$s</string>
+    <string name="info_show_map">Ukázat mapu</string>
+    <string name="info_user">Informace o uživateli</string>
 
     <string name="no_camera_permission">Aplikace nemá povolení k používání fotoaparátu. Nyní bude aplikace ukončena.</string>
     <string name="low_storage_error">Nedostatek paměti</string>
