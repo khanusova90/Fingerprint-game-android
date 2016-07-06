@@ -49,7 +49,7 @@ public class MapActivity extends AbstractAsyncActivity {
                 URL url = new URL(Constants.IMG_URL_BASE + "J1NP.jpg");
                 bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
-                URL iconUrl = new URL("http://192.168.0.101:8080/fingerprint-game/disk-resources/money_icon.png");
+                URL iconUrl = new URL("http://192.168.0.103:8080/fingerprint-game/disk-resources/money_icon.png");
                 Bitmap icon = BitmapFactory.decodeStream(iconUrl.openConnection().getInputStream());
                 icons.add(icon);
             } catch (Exception e) {

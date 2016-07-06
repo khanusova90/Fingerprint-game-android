@@ -40,6 +40,8 @@ public class AppUser implements Serializable{
 
     private Set<UserActivity> activities = new HashSet<>();
 
+    private Character character;
+
     public Long getIdUser() {
         return idUser;
     }
@@ -94,5 +96,13 @@ public class AppUser implements Serializable{
 
     public void setActivities(Set<UserActivity> activities) {
         this.activities = activities;
+    }
+
+    public Character getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Character character) {
+        this.character = character;
     }
 }
