@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Character;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.utils.Constants;
@@ -83,10 +85,39 @@ public class InfoActivity extends AbstractAsyncActivity {
     }
 
     private void showInventory(AppUser user){
-        TextView header = (TextView) findViewById(R.id.info_inventory);
+//        TextView header = (TextView) findViewById(R.id.info_inventory);
         LinearLayout layout = (LinearLayout)findViewById(R.id.layout_info);
         setContentView(layout);
-        Resources res = getResources();
+
+        TextView charHeader = new TextView(this);
+        charHeader.setTypeface(Typeface.DEFAULT_BOLD);
+        charHeader.setPadding(0, 10, 0, 0);
+        charHeader.setText(getString(R.string.info_character));
+
+        layout.addView(charHeader);
+
+        Character character = user.getCharacter();
+
+        TextView charisma = new TextView(this);
+        charisma.setText(getString(R.string.character_charisma) + ": " + character.getCharisma());
+        layout.addView(charisma);
+
+        TextView power = new TextView(this);
+        power.setText(getString(R.string.character_power) + ": " + character.getPower());
+        layout.addView(power);
+
+        TextView xp = new TextView(this);
+        xp.setText(getString(R.string.character_xp) + ": " + character.getXp());
+        layout.addView(xp);
+
+//        Resources res = getResources();
+
+        TextView invHeader = new TextView(this);
+        invHeader.setTypeface(Typeface.DEFAULT_BOLD);
+        invHeader.setPadding(0, 10, 0, 0);
+        invHeader.setText(getString(R.string.info_inventory));
+        layout.addView(invHeader);
+
         for (Inventory i : user.getInventory()){
             TextView tv = new TextView(this);
 //            String materialId = "R.string" + i.getMaterial().toString().toLowerCase();

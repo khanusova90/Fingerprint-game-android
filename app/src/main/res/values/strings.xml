@@ -7,6 +7,10 @@
     <string name="FOOD">Jídlo</string>
     <string name="WOOD">Dřevo</string>
 
+    <string name="character_charisma">Charisma</string>
+    <string name="character_power">Síla</string>
+    <string name="character_xp">XP</string>
+
     <string name="map">Mapa</string>
     <string name="password">Heslo</string>
     <string name="sign_in">Přihlásit</string>
@@ -20,6 +24,7 @@
     <string name="place_name">Název místa:</string>
     <string name="btn_place_activity">Začít</string>
 
+    <string name="info_character">Charakter</string>
     <string name="info_inventory">Inventář</string>
     <string name="info_scan">Načíst QR kód</string>
     <string name="info_scan_fail">Došlo k chybě při scanování kódu %1$s</string>
