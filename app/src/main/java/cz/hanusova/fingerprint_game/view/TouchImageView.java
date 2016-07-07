@@ -15,6 +15,11 @@ import android.widget.ImageView;
  */
 public class TouchImageView extends ImageView {
 
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
+    private int mode = NONE;
+
     private Matrix matrix;
 
     private PointF lastPoint = new PointF();
@@ -22,7 +27,7 @@ public class TouchImageView extends ImageView {
 
     private ScaleGestureDetector detector;
 
-    public TouchImageView(Context context){
+    public TouchImageView(Context context) {
         super(context);
         initConstruct(context);
     }
@@ -32,7 +37,7 @@ public class TouchImageView extends ImageView {
         initConstruct(context);
     }
 
-    private void initConstruct(Context context){
+    private void initConstruct(Context context) {
         super.setClickable(true);
         detector = new ScaleGestureDetector(context, new MyScaleListener());
         matrix = new Matrix();
@@ -41,7 +46,7 @@ public class TouchImageView extends ImageView {
         initOnTouchListener();
     }
 
-    private void initOnTouchListener(){
+    private void initOnTouchListener() {
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -51,17 +56,20 @@ public class TouchImageView extends ImageView {
                 float currY = MotionEventCompat.getY(event, pointerIndex);
 
                 int action = MotionEventCompat.getActionMasked(event);
-                switch (action){
+                switch (action) {
                     case MotionEvent.ACTION_DOWN:
+                        mode = DRAG;
                         lastPoint.set(currX, currY);
                         startPoint.set(currX, currY);
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        float deltaX = currX - lastPoint.x;
-                        float deltaY = currY - lastPoint.y;
-                        matrix.postTranslate(deltaX, deltaY);
-                        lastPoint.set(currX, currY);
+                        if (mode == DRAG) {
+                            float deltaX = currX - lastPoint.x;
+                            float deltaY = currY - lastPoint.y;
+                            matrix.postTranslate(deltaX, deltaY);
+                            lastPoint.set(currX, currY);
+                        }
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -69,6 +77,7 @@ public class TouchImageView extends ImageView {
                         break;
 
                     case MotionEvent.ACTION_POINTER_UP:
+                        mode = NONE;
                         break;
                 }
                 setImageMatrix(matrix);
@@ -79,10 +88,11 @@ public class TouchImageView extends ImageView {
         });
     }
 
-    private class MyScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+    private class MyScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
+            mode = ZOOM;
             return true;
         }
 
@@ -90,7 +100,7 @@ public class TouchImageView extends ImageView {
         public boolean onScale(ScaleGestureDetector detector) {
             float scaleFactor = detector.getScaleFactor();
 
-            matrix.postScale(scaleFactor, scaleFactor, 0, 0);
+            matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
             return true;
         }
     }
