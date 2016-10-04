@@ -10,11 +10,8 @@ import java.io.Serializable;
 public class Activity implements Serializable {
 
     private Long idActivity;
-
-    /**
-     * Activity name
-     */
     private String name;
+    private Material material;
 
     public Long getIdActivity() {
         return idActivity;
@@ -30,5 +27,13 @@ public class Activity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 }

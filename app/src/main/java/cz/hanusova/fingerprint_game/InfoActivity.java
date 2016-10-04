@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +30,7 @@ import cz.hanusova.fingerprint_game.utils.Constants;
 /**
  * Created by khanusova on 4.4.2016.
  */
+@EActivity
 public class InfoActivity extends AbstractAsyncActivity {
     private static final String TAG = "InfoActivity";
 
@@ -36,6 +39,9 @@ public class InfoActivity extends AbstractAsyncActivity {
 
     private String url;
     private Context context;
+
+    @Extra
+    AppUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +61,8 @@ public class InfoActivity extends AbstractAsyncActivity {
         stagnameTv.setText(stagname);
 
         Bundle extras = getIntent().getExtras();
-        AppUser user = (AppUser) extras.get(Constants.EXTRA_USER);
+        if (user == null){
+        AppUser user = (AppUser) extras.get(Constants.EXTRA_USER);}
         showInventory(user);
 
         initQrBtn(this);
@@ -134,7 +141,7 @@ public class InfoActivity extends AbstractAsyncActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, QrActivity.class);
+                Intent intent = new Intent(context, QrActivity_.class);
                 startActivityForResult(intent, RC_BARCODE_CAPTURE);
             }
         };

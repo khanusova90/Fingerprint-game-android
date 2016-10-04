@@ -28,7 +28,8 @@ public class PlaceType implements Serializable{
     /**
      * List of {@link Activity} that are possible to do on this type of place
      */
-    private List<Activity> activities;
+//    private List<Activity> activities;
+    private Activity activity;
 
     /*
      * Getters and setters
@@ -60,11 +61,20 @@ public class PlaceType implements Serializable{
         this.imgUrl = imgUrl;
     }
 
-    public List<Activity> getActivities() {
-        return activities;
+//    public List<Activity> getActivities() {
+//        return activities;
+//    }
+//
+//    public void setActivities(List<Activity> activities) {
+//        this.activities = activities;
+//    }
+
+
+    public Activity getActivity() {
+        return activity;
     }
 
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 }

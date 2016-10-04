@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,8 @@ public class PlaceActivity extends AbstractAsyncActivity {
     }
 
     private void showActivities(){
-        List<Activity> activities = place.getPlaceType().getActivities();
+//        List<Activity> activities = place.getPlaceType().getActivities();
+        List<Activity> activities = new ArrayList<>();
 
         Spinner activitySpin = (Spinner) findViewById(R.id.spin_place_activity);
         final ArrayAdapter<Activity> adapter = new ActivitySpinAdapter(this, android.R.layout.simple_spinner_item, activities);
@@ -117,30 +119,30 @@ public class PlaceActivity extends AbstractAsyncActivity {
         }
     }
 
-    private class ActivityHttpAsyncTask extends AsyncTask<Activity, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Activity... params) {
-            try {
-                String url = Constants.URL_BASE + "/place/addActivity";
-                Map<String, String> userMap = new HashMap<>();
-                SharedPreferences sp = getSharedPreferences(Constants.SP_NAME, MODE_PRIVATE);
-                userMap.put("username", sp.getString(getString(R.string.username), null));
-                RestTemplate template = new RestTemplate();
-                template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-
-                //TODO: vic entit v requestu
-                HttpEntity<Place> placeEntity = new HttpEntity<>(place, headers);
-                template.exchange(url, HttpMethod.POST, placeEntity, Void.class, userMap);
-            } catch (Exception e){
-                Log.e(TAG, "Error occured while trying to add user's activity");
-            }
-
-            return null;
-        }
-    }
+//    private class ActivityHttpAsyncTask extends AsyncTask<Activity, Void, Void>{
+//
+//        @Override
+//        protected Void doInBackground(Activity... params) {
+//            try {
+//                String url = Constants.URL_BASE + "/place/addActivity";
+//                Map<String, String> userMap = new HashMap<>();
+//                SharedPreferences sp = getSharedPreferences(Constants.SP_NAME, MODE_PRIVATE);
+//                userMap.put("username", sp.getString(getString(R.string.username), null));
+//                RestTemplate template = new RestTemplate();
+//                template.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//                //TODO: vic entit v requestu
+//                HttpEntity<Place> placeEntity = new HttpEntity<>(place, headers);
+//                template.exchange(url, HttpMethod.POST, placeEntity, Void.class, userMap);
+//            } catch (Exception e){
+//                Log.e(TAG, "Error occured while trying to add user's activity");
+//            }
+//
+//            return null;
+//        }
+//    }
 
 }

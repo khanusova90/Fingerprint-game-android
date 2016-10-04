@@ -22,6 +22,8 @@ import android.graphics.RectF;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
+import cz.hanusova.fingerprint_game.model.Activity;
+
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
  * overlay view.
@@ -38,11 +40,14 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
             Color.GREEN
     };
 
+    private Byte color = 0;
+
     private static int mCurrentColorIndex = 0;
 
     private Paint mRectPaint;
     private Paint mTextPaint;
     private volatile Barcode mBarcode;
+    public static Activity activity;
 
     BarcodeGraphic(GraphicOverlay overlay) {
         super(overlay);
@@ -72,6 +77,10 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         return mBarcode;
     }
 
+//    public static void setActivity(Activity activity) {
+//        BarcodeGraphic.activity = activity;
+//    }
+
     /**
      * Updates the barcode instance from the detection of the most recent frame.  Invalidates the
      * relevant portions of the overlay to trigger a redraw.
@@ -91,15 +100,25 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
             return;
         }
 
-        // Draws the bounding box around the barcode.
         RectF rect = new RectF(barcode.getBoundingBox());
-        rect.left = translateX(rect.left);
-        rect.top = translateY(rect.top);
-        rect.right = translateX(rect.right);
-        rect.bottom = translateY(rect.bottom);
-        canvas.drawRect(rect, mRectPaint);
+        if (activity == null) {
+            // Draws the bounding box around the barcode.
+            rect.left = translateX(rect.left);
+            rect.top = translateY(rect.top);
+            rect.right = translateX(rect.right);
+            rect.bottom = translateY(rect.bottom);
+            canvas.drawRect(rect, mRectPaint);
 
-        // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
-        canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
+//        color++;
+//        Paint textColor = new Paint();
+//        textColor.setColor(Color.rgb(255, 255, color));
+//        textColor.setTextSize(36.0f);
+
+            // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
+            canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
+        }else {
+            canvas.drawText(activity.getName(), rect.left, rect.bottom, mTextPaint);
+        }
+
     }
 }

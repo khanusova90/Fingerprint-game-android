@@ -77,6 +77,12 @@
                 android:text="@string/sign_in"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/login_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TEST"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

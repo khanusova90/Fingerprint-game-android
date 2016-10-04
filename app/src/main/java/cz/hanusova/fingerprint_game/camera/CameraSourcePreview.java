@@ -28,6 +28,8 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.images.Size;
 
+import org.androidannotations.annotations.EViewGroup;
+
 import java.io.IOException;
 
 /**
@@ -35,6 +37,7 @@ import java.io.IOException;
  *
  * Based on https://github.com/googlesamples/android-vision/blob/master/visionSamples/barcode-reader/app/src/main/java/com/google/android/gms/samples/vision/barcodereader/ui/camera/CameraSourcePreview.java
  */
+@EViewGroup
 public class CameraSourcePreview extends ViewGroup {
 
     private static final String TAG = "CameraSourcePreview";

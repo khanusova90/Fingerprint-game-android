@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp">
+
+    <!--<TextView-->
+        <!--android:id="@+id/mine_activity_name"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:textStyle="bold"-->
+        <!--android:text="@string/mining"/>-->
+
+    <TextView
+        android:id="@+id/mine_free_workers_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/mine_free_workers"/>
+
+    <TextView
+        android:id="@+id/mine_free_workers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/mine_free_workers_name"
+        android:layout_marginLeft="5dp"
+        android:text="Počet pracovníků"/>
+
+    <SeekBar
+        android:id="@+id/mine_choose_workers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mine_free_workers_name"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:id="@+id/mine_workers_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/mine_choose_workers"
+        android:layout_centerHorizontal="true"
+        android:text="Vybráno"/>
+
+    <Button
+        android:id="@+id/mine_btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mine_workers_amount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/mine_start"/>
+
+</RelativeLayout>

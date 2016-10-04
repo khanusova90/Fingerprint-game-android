@@ -19,6 +19,8 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import cz.hanusova.fingerprint_game.model.Activity;
+
 /**
  * Generic tracker which is used for tracking or reading a barcode (and can really be used for
  * any type of item).  This is used to receive newly detected items, add a graphical representation
@@ -29,10 +31,12 @@ import com.google.android.gms.vision.barcode.Barcode;
  */
 public class BarcodeGraphicTracker extends Tracker<Barcode> {
 
-    private GraphicOverlay<BarcodeGraphic> mOverlay;
+    private GraphicOverlay<GraphicOverlay.Graphic> mOverlay;
     private BarcodeGraphic mGraphic;
+    private Barcode barcode;
+    private Activity activity;
 
-    BarcodeGraphicTracker(GraphicOverlay<BarcodeGraphic> overlay, BarcodeGraphic graphic) {
+    BarcodeGraphicTracker(GraphicOverlay<GraphicOverlay.Graphic> overlay, BarcodeGraphic graphic) {
         mOverlay = overlay;
         mGraphic = graphic;
     }
@@ -43,6 +47,7 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
     @Override
     public void onNewItem(int id, Barcode item) {
         mGraphic.setId(id);
+        this.barcode = item;
     }
 
     /**
@@ -50,7 +55,7 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
      */
     @Override
     public void onUpdate(Detector.Detections<Barcode> detectionResults, Barcode item) {
-        mOverlay.add(mGraphic);
+        mOverlay.add(mGraphic); //TODO: pridat activitu
         mGraphic.updateItem(item);
     }
 
@@ -70,6 +75,10 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
      */
     @Override
     public void onDone() {
-        mOverlay.remove(mGraphic);
+        mOverlay.clear();
+    }
+
+    public Barcode getBarcode() {
+        return barcode;
     }
 }

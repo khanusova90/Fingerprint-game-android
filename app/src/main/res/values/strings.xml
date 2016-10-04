@@ -6,6 +6,7 @@
     <string name="STONE">Kámen</string>
     <string name="FOOD">Jídlo</string>
     <string name="WOOD">Dřevo</string>
+    <string name="WORKER">Pracovník</string>
 
     <string name="character_charisma">Charisma</string>
     <string name="character_power">Síla</string>
@@ -34,5 +35,9 @@
     <string name="no_camera_permission">Aplikace nemá povolení k používání fotoaparátu. Nyní bude aplikace ukončena.</string>
     <string name="low_storage_error">Nedostatek paměti</string>
     <string name="permission_camera_rationale">Aplikace vyžaduje povolení k používání fotoaparátu</string>
+
+    <string name="mining">Těžba</string>
+    <string name="mine_free_workers">Pracovníci k dispozici</string>
+    <string name="mine_start">Spustit těžbu</string>
 
 </resources>

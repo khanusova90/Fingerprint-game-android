@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
@@ -31,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Character;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
@@ -38,10 +41,24 @@ import cz.hanusova.fingerprint_game.utils.Constants;
  * <p/>
  * Created by khanusova on 21.3.2016.
  */
+@EActivity
 public class LoginActivity extends AbstractAsyncActivity {
     private static final String TAG = "LoginActivity";
 
     protected Context context;
+
+    @Click(R.id.login_test)
+    public void loginTest(){
+        AppUser test = new AppUser();
+        test.setUsername("test");
+
+        Character character = new Character();
+        character.setCharisma(100);
+        character.setPower(100);
+        character.setXp(100);
+        test.setCharacter(character);
+        InfoActivity_.intent(this).user(test).start();
+    }
 
 
     @Override

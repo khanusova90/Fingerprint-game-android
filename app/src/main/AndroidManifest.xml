@@ -22,7 +22,7 @@
         android:debuggable="true"
         tools:ignore="HardcodedDebugMode">
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivity_"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,15 +31,16 @@
         </activity>
 
         <activity
-            android:name=".InfoActivity"
+            android:name=".InfoActivity_"
             android:label="@string/info_user">
         </activity>
 
-        <activity android:name=".QrActivity"/>
+        <activity android:name=".QrActivity_"/>
         <activity android:name=".PlaceActivity"
             android:label="@string/place_info"/>
         <activity android:name=".MapActivity"
             android:label="@string/map" />
+        <activity android:name=".MineActivity_" android:label="@string/mining" />
     </application>
 
 </manifest>

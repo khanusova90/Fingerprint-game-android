@@ -5,7 +5,7 @@ package cz.hanusova.fingerprint_game.model;
  */
 public enum Material {
 
-    GOLD("GOLD"), FOOD("FOOD"), WOOD("WOOD"), STONE("STONE");
+    GOLD("GOLD"), FOOD("FOOD"), WOOD("WOOD"), STONE("STONE"), WORKER("WORKER");
 
     private String name;
 

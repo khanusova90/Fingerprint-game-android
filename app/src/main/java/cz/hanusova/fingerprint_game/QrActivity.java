@@ -1,141 +1,185 @@
 package cz.hanusova.fingerprint_game;
 
-import android.Manifest;
+
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.rest.spring.annotations.RestService;
+
 import java.io.IOException;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
+import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
 import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
+import cz.hanusova.fingerprint_game.camera.ImageGraphic;
+import cz.hanusova.fingerprint_game.listener.ScaleListener;
+import cz.hanusova.fingerprint_game.model.Activity;
+import cz.hanusova.fingerprint_game.model.Place;
+import cz.hanusova.fingerprint_game.model.PlaceType;
+import cz.hanusova.fingerprint_game.rest.ActivityClient;
 
 /**
- * Created by khanusova on 24.4.2016.
- *
- * An Activity class for capturing QR codes
- *
- * Based on: https://github.com/googlesamples/android-vision/blob/master/visionSamples/barcode-reader/app/src/main/java/com/google/android/gms/samples/vision/barcodereader/BarcodeCaptureActivity.java
+ * Created by khanusova on 9.9.2016.
  */
-public class QrActivity extends AppCompatActivity{
-
-    private static final String TAG = "QRCodeReader";
+@EActivity(R.layout.qr_capture)
+public class QrActivity extends AppCompatActivity {
+    private static final String TAG = "QrActivity";
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
 
-    // permission request codes need to be < 256
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
+    @RestService
+    ActivityClient activityClient;
 
-    private CameraSourcePreview preview;
+    @ViewById(R.id.preview)
+    CameraSourcePreview preview;
+    @ViewById(R.id.graphicOverlay)
+    GraphicOverlay<GraphicOverlay.Graphic> overlay;
+
     private CameraSource cameraSource;
-    private GraphicOverlay<BarcodeGraphic> overlay;
+    private BarcodeTrackerFactory barcodeFactory;
 
-    // helper objects for detecting taps and pinches.
-    private ScaleGestureDetector scaleGestureDetector;
-    private GestureDetector gestureDetector;
+    private Place testPlace;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.qr_capture);
+    @AfterViews
+    public void init() {
+        //TODO: Check permission
+        createCameraSource(true, false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BarcodeGraphicTracker tracker = barcodeFactory.getTracker();
+                Place place = null;
+                while (place == null || testPlace == null) {
+                    while (tracker == null || tracker.getBarcode() == null || testPlace == null) {
+                        tracker = barcodeFactory.getTracker();
+                    }
+                    place = getPlaceInfo();
+                }
+                BarcodeGraphic.activity = place.getPlaceType().getActivity();
+            }
+        }).start();
+    }
 
-        preview = (CameraSourcePreview) findViewById(R.id.preview);
-        overlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+    @Click(R.id.qr_test)
+    public void qrTest(){
+        testPlace = new Place();
+        testPlace.setIdPlace(1l);
+        testPlace.setName("Naleziště");
 
-        boolean autoFocus = getIntent().getBooleanExtra("AutoFocus", true);
-        boolean useFlash = getIntent().getBooleanExtra("UseFlash", false);
+        PlaceType pt = new PlaceType();
+        pt.setIdPlaceType(1l);
 
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource(autoFocus, useFlash);
-        } else {
-            requestCameraPermission();
-        }
+        Activity ac = new Activity();
+        ac.setIdActivity(1l);
+        ac.setName("Těžit");
 
-        gestureDetector = new GestureDetector(this, new CaptureGestureListener());
-        scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
-
-        Snackbar.make(overlay, "Tap to capture. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG)
-                .show();
+        pt.setActivity(ac);
+        testPlace.setPlaceType(pt);
+        MineActivity_.intent(this).place(testPlace).start();
     }
 
     /**
-     * Handles the requesting of the camera permission.  This includes
-     * showing a "Snackbar" message of why the permission is needed then
-     * sending the request.
+     * Restarts the camera.
      */
-    private void requestCameraPermission() {
-        Log.w(TAG, "Camera permission is not granted. Requesting permission");
-
-        final String[] permissions = new String[]{Manifest.permission.CAMERA};
-
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_CAMERA_PERM);
-            return;
-        }
-
-        final Activity thisActivity = this;
-
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivityCompat.requestPermissions(thisActivity, permissions,
-                        RC_HANDLE_CAMERA_PERM);
-            }
-        };
-
-        Snackbar.make(overlay, R.string.permission_camera_rationale,
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, listener)
-                .show();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startCameraSource();
     }
 
+    /**
+     * Stops the camera.
+     */
     @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        boolean b = scaleGestureDetector.onTouchEvent(e);
+    protected void onPause() {
+        super.onPause();
+        if (preview != null) {
+            preview.stop();
+        }
+    }
 
-        boolean c = gestureDetector.onTouchEvent(e);
+    /**
+     * Releases the resources associated with the camera source, the associated detectors, and the
+     * rest of the processing pipeline.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (preview != null) {
+            preview.release();
+        }
+    }
 
-        return b || c || super.onTouchEvent(e);
+    private Place getPlaceInfo() {
+        BarcodeGraphic graphic = (BarcodeGraphic) overlay.getFirstGraphic();
+        if (graphic != null) {
+            Barcode barcode = graphic.getBarcode();
+            if (barcode != null) {
+                String url = barcode.displayValue;
+                String placeCode = url.substring(url.lastIndexOf("/") + 1);
+                Log.d(TAG, "Getting place with code " + placeCode);
+                Place place = activityClient.getPlaceByCode(placeCode);
+                return place;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Starts or restarts the camera source, if it exists.  If the camera source doesn't exist yet
+     * (e.g., because onResume was called before the camera source was created), this will be called
+     * again when the camera source is created.
+     */
+    private void startCameraSource() throws SecurityException {
+        // check that the device has play services available.
+        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
+                getApplicationContext());
+        if (code != ConnectionResult.SUCCESS) {
+            Dialog dlg =
+                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
+            dlg.show();
+        }
+
+        if (cameraSource != null) {
+            try {
+                preview.start(cameraSource, overlay);
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to start camera source.", e);
+                cameraSource.release();
+                cameraSource = null;
+            }
+        }
     }
 
     /**
      * Creates and starts the camera.  Note that this uses a higher resolution in comparison
      * to other detection examples to enable the barcode detector to detect small barcodes
      * at long distances.
-     *
+     * <p/>
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
      * the constant.
      */
@@ -148,7 +192,7 @@ public class QrActivity extends AppCompatActivity{
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(overlay);
+        barcodeFactory = new BarcodeTrackerFactory(overlay);
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());
 
@@ -194,205 +238,4 @@ public class QrActivity extends AppCompatActivity{
                 .build();
     }
 
-    /**
-     * Restarts the camera.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startCameraSource();
-    }
-
-    /**
-     * Stops the camera.
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (preview != null) {
-            preview.stop();
-        }
-    }
-
-    /**
-     * Releases the resources associated with the camera source, the associated detectors, and the
-     * rest of the processing pipeline.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (preview != null) {
-            preview.release();
-        }
-    }
-
-    /**
-     * Callback for the result from requesting permissions. This method
-     * is invoked for every call on {@link #requestPermissions(String[], int)}.
-     * <p>
-     * <strong>Note:</strong> It is possible that the permissions request interaction
-     * with the user is interrupted. In this case you will receive empty permissions
-     * and results arrays which should be treated as a cancellation.
-     * </p>
-     *
-     * @param requestCode  The request code passed in {@link #requestPermissions(String[], int)}.
-     * @param permissions  The requested permissions. Never null.
-     * @param grantResults The grant results for the corresponding permissions
-     *                     which is either {@link PackageManager#PERMISSION_GRANTED}
-     *                     or {@link PackageManager#PERMISSION_DENIED}. Never null.
-     * @see #requestPermissions(String[], int)
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode != RC_HANDLE_CAMERA_PERM) {
-            Log.d(TAG, "Got unexpected permission result: " + requestCode);
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            return;
-        }
-
-        if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Camera permission granted - initialize the camera source");
-            // we have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra("AutoFocus",false);
-            boolean useFlash = getIntent().getBooleanExtra("UseFlash", false);
-            createCameraSource(autoFocus, useFlash);
-            return;
-        }
-
-        Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
-                " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
-
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Multitracker sample")
-                .setMessage(R.string.no_camera_permission)
-                .setPositiveButton(R.string.ok, listener)
-                .show();
-    }
-
-    /**
-     * Starts or restarts the camera source, if it exists.  If the camera source doesn't exist yet
-     * (e.g., because onResume was called before the camera source was created), this will be called
-     * again when the camera source is created.
-     */
-    private void startCameraSource() throws SecurityException {
-        // check that the device has play services available.
-        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-                getApplicationContext());
-        if (code != ConnectionResult.SUCCESS) {
-            Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
-            dlg.show();
-        }
-
-        if (cameraSource != null) {
-            try {
-                preview.start(cameraSource, overlay);
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to start camera source.", e);
-                cameraSource.release();
-                cameraSource = null;
-            }
-        }
-    }
-
-    /**
-     * onTap is called to capture the oldest barcode currently detected and
-     * return it to the caller.
-     *
-     * @param rawX - the raw position of the tap
-     * @param rawY - the raw position of the tap.
-     * @return true if the activity is ending.
-     */
-    private boolean onTap(float rawX, float rawY) {
-
-        BarcodeGraphic graphic = overlay.getFirstGraphic();
-        Barcode barcode = null;
-        if (graphic != null) {
-            barcode = graphic.getBarcode();
-            if (barcode != null) {
-                Intent data = new Intent();
-                data.putExtra("Barcode", barcode);
-                setResult(CommonStatusCodes.SUCCESS, data);
-                finish();
-            }
-            else {
-                Log.d(TAG, "barcode data is null");
-            }
-        }
-        else {
-            Log.d(TAG,"no barcode detected");
-        }
-        return barcode != null;
-    }
-
-    private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-
-            return onTap(e.getRawX(), e.getRawY()) || super.onSingleTapConfirmed(e);
-        }
-    }
-
-    private class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
-
-        /**
-         * Responds to scaling events for a gesture in progress.
-         * Reported by pointer motion.
-         *
-         * @param detector The detector reporting the event - use this to
-         *                 retrieve extended info about event state.
-         * @return Whether or not the detector should consider this event
-         * as handled. If an event was not handled, the detector
-         * will continue to accumulate movement until an event is
-         * handled. This can be useful if an application, for example,
-         * only wants to update scaling factors if the change is
-         * greater than 0.01.
-         */
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            return false;
-        }
-
-        /**
-         * Responds to the beginning of a scaling gesture. Reported by
-         * new pointers going down.
-         *
-         * @param detector The detector reporting the event - use this to
-         *                 retrieve extended info about event state.
-         * @return Whether or not the detector should continue recognizing
-         * this gesture. For example, if a gesture is beginning
-         * with a focal point outside of a region where it makes
-         * sense, onScaleBegin() may return false to ignore the
-         * rest of the gesture.
-         */
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
-            return true;
-        }
-
-        /**
-         * Responds to the end of a scale gesture. Reported by existing
-         * pointers going up.
-         * <p/>
-         * Once a scale has ended, {@link ScaleGestureDetector#getFocusX()}
-         * and {@link ScaleGestureDetector#getFocusY()} will return focal point
-         * of the pointers remaining on the screen.
-         *
-         * @param detector The detector reporting the event - use this to
-         *                 retrieve extended info about event state.
-         */
-        @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
-            cameraSource.doZoom(detector.getScaleFactor());
-        }
-    }
 }
