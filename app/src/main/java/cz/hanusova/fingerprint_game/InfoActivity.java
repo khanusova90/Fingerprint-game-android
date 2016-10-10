@@ -29,7 +29,10 @@ import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 4.4.2016.
+ *
  */
+//Info activity nebude - jako uvodni stranka bude rovnou mapa
+@Deprecated
 @EActivity
 public class InfoActivity extends AbstractAsyncActivity {
     private static final String TAG = "InfoActivity";
@@ -153,7 +156,7 @@ public class InfoActivity extends AbstractAsyncActivity {
         btnShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, MapActivity.class);
+                Intent i = new Intent(context, MapActivity_.class);
                 startActivity(i);
             }
         });

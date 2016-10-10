@@ -11,4 +11,12 @@
         android:scaleType="fitXY"
         android:src="@drawable/map_layer_list"/>
 
+    <ImageButton
+        android:id="@+id/map_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_camera"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>

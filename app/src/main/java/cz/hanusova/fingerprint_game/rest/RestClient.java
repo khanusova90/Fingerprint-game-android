@@ -9,21 +9,25 @@ import org.androidannotations.rest.spring.annotations.Post;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
+import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 7.9.2016.
  *
- * Rest client for communication with server on user activities
+ * Rest client for communication with server
  */
-@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE)
-public interface ActivityClient {
+@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = AuthInterceptor.class)
+public interface RestClient {
+
+    @Post("/login?username={username}")
+    AppUser login(@Path String username);
 
     @Post("place/addActivity?username={username}")
     void addActivity(@Path String username, @Body Place place);
 
-    @Get("/qr/{code}") //TODO: nemel by byt v qr ulozen jen kod mista?
+    @Get("/qr/{code}") //TODO: v qr ulozen jen kod mista?
     Place getPlaceByCode(@Path String code);
 
 }

@@ -10,7 +10,6 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ScaleGestureDetector;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,7 +18,6 @@ import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -34,12 +32,10 @@ import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
-import cz.hanusova.fingerprint_game.camera.ImageGraphic;
-import cz.hanusova.fingerprint_game.listener.ScaleListener;
 import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
-import cz.hanusova.fingerprint_game.rest.ActivityClient;
+import cz.hanusova.fingerprint_game.rest.RestClient;
 
 /**
  * Created by khanusova on 9.9.2016.
@@ -52,7 +48,7 @@ public class QrActivity extends AppCompatActivity {
     private static final int RC_HANDLE_GMS = 9001;
 
     @RestService
-    ActivityClient activityClient;
+    RestClient activityClient;
 
     @ViewById(R.id.preview)
     CameraSourcePreview preview;

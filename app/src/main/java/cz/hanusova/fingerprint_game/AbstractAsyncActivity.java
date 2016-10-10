@@ -18,6 +18,9 @@ package cz.hanusova.fingerprint_game;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
+
 /**
  * Created by khanusova on 21.3.2016.
  *
@@ -27,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
  */
+@EActivity
 public abstract class AbstractAsyncActivity extends AppCompatActivity{
 
     private ProgressDialog progressDialog;
@@ -49,6 +53,7 @@ public abstract class AbstractAsyncActivity extends AppCompatActivity{
         showProgressDialog("Loading. Please wait...");
     }
 
+    @UiThread
     public void showProgressDialog(CharSequence message) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
@@ -59,6 +64,7 @@ public abstract class AbstractAsyncActivity extends AppCompatActivity{
         progressDialog.show();
     }
 
+    @UiThread
     public void dismissProgressDialog() {
         if (progressDialog != null && !destroyed) {
             progressDialog.dismiss();

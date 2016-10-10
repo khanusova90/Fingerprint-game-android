@@ -38,7 +38,7 @@
         <activity android:name=".QrActivity_"/>
         <activity android:name=".PlaceActivity"
             android:label="@string/place_info"/>
-        <activity android:name=".MapActivity"
+        <activity android:name=".MapActivity_"
             android:label="@string/map" />
         <activity android:name=".MineActivity_" android:label="@string/mining" />
     </application>

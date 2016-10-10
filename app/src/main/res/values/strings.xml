@@ -40,4 +40,7 @@
     <string name="mine_free_workers">Pracovníci k dispozici</string>
     <string name="mine_start">Spustit těžbu</string>
 
+    <string name="market">Tržiště</string>
+    <string name="market_buy">Směnit</string>
+
 </resources>

@@ -11,8 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.androidannotations.rest.spring.annotations.RestService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
@@ -34,6 +41,7 @@ import java.util.Collections;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Character;
+import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
@@ -41,11 +49,22 @@ import cz.hanusova.fingerprint_game.utils.Constants;
  * <p/>
  * Created by khanusova on 21.3.2016.
  */
-@EActivity
+@EActivity(R.layout.activity_login)
 public class LoginActivity extends AbstractAsyncActivity {
     private static final String TAG = "LoginActivity";
 
     protected Context context;
+
+    @Pref
+    Preferences_ preferences;
+
+    @RestService
+    RestClient restClient;
+
+    @ViewById(R.id.username)
+    EditText etUsername;
+    @ViewById(R.id.password)
+    EditText etPassword;
 
     @Click(R.id.login_test)
     public void loginTest(){
@@ -57,27 +76,28 @@ public class LoginActivity extends AbstractAsyncActivity {
         character.setPower(100);
         character.setXp(100);
         test.setCharacter(character);
-        InfoActivity_.intent(this).user(test).start();
+        MapActivity_.intent(context).start();
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initLoginBtn();
         context = this;
     }
 
-    private void initLoginBtn() {
-        Button loginBtn = (Button) findViewById(R.id.btn_sign_in);
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new LoginTask().execute();
-            }
-        };
-        loginBtn.setOnClickListener(listener);
+    @Background
+    @Click(R.id.btn_sign_in)
+    protected void signIn(){
+        showLoadingProgressDialog();
+        String username = etUsername.getText().toString();
+        preferences.username().put(username);
+        preferences.password().put(etPassword.getText().toString());
+        restClient.login(username);
+        dismissProgressDialog();
+
+        //TODO: vyresit chyby pri prihlasovani - 401 a 403
+        MapActivity_.intent(context).start();
     }
 
     /*
@@ -149,11 +169,19 @@ public class LoginActivity extends AbstractAsyncActivity {
 
             editor.putString(getString(R.string.username), user.getUsername());
             editor.putString(getString(R.string.stagname), user.getStagname());
+
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String userJson = mapper.writeValueAsString(user);
+                editor.putString("user", userJson);
+                // Staff obj = mapper.readValue(jsonInString, Staff.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             editor.commit();
 
-            Intent info = new Intent(context, InfoActivity.class);
-            info.putExtra(Constants.EXTRA_USER, user);
-            startActivity(info);
+//            InfoActivity_.intent(context).user(user).start();
+            MapActivity_.intent(context).start();
         }
 
         private void showLoginError(){

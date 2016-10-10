@@ -10,6 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,20 +22,29 @@ import cz.hanusova.fingerprint_game.view.TouchImageView;
 
 /**
  * Created by khanusova on 6.6.2016.
+ *
+ * Activity for displaying map
  */
+@EActivity(R.layout.map)
 public class MapActivity extends AbstractAsyncActivity {
 
     private List<Bitmap> icons = new ArrayList<>();
-    private Context context;
+//    private Context context;
 
     private static final String TAG = "MapActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
-        setContentView(R.layout.map);
+//        context = this;
+//        setContentView(R.layout.map);
+        //TODO: zobrazovat mapy z interni pameti?
         new MapAsyncTask().execute();
+    }
+
+    @Click(R.id.map_camera)
+    void startCamera(){
+        QrActivity_.intent(this).start();
     }
 
     private class MapAsyncTask extends AsyncTask<Void, Void, Bitmap> {
