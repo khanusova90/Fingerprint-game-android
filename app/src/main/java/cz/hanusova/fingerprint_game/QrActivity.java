@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Camera;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -57,31 +58,21 @@ public class QrActivity extends AppCompatActivity {
 
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
+    private CountDownTimer timer;
 
     private Place testPlace;
+    private Place place;
 
     @AfterViews
     public void init() {
         //TODO: Check permission
         createCameraSource(true, false);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                BarcodeGraphicTracker tracker = barcodeFactory.getTracker();
-                Place place = null;
-                while (place == null || testPlace == null) {
-                    while (tracker == null || tracker.getBarcode() == null || testPlace == null) {
-                        tracker = barcodeFactory.getTracker();
-                    }
-                    place = getPlaceInfo();
-                }
-                BarcodeGraphic.activity = place.getPlaceType().getActivity();
-            }
-        }).start();
+        createTimer();
+        startTracking();
     }
 
     @Click(R.id.qr_test)
-    public void qrTest(){
+    public void qrTest() {
         testPlace = new Place();
         testPlace.setIdPlace(1l);
         testPlace.setName("Naleziště");
@@ -130,17 +121,78 @@ public class QrActivity extends AppCompatActivity {
         }
     }
 
+    private void startTracking(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BarcodeGraphicTracker tracker = barcodeFactory.getTracker();
+                //TODO: vyresit tak, aby se opakovalo (znovu zavolani po odjeti z kodu apod.)
+                while (place == null) {
+                    while (tracker == null || tracker.getBarcode() == null) {
+                        tracker = barcodeFactory.getTracker();
+                    }
+                    place = getPlaceInfo();
+                }
+                timer.start();
+                BarcodeGraphic.activity = place.getPlaceType().getActivity();
+            }
+        }).start();
+    }
+
+    private void createTimer() {
+        timer = new CountDownTimer(10 * 1000, 1000) {
+            private Barcode barcode = null;
+
+            @Override
+            public void onTick(long millisLeft) {
+                if (barcode == null){
+                    Log.d(TAG, "Getting actual barcode");
+                    barcode = getActualBarcode();
+                }
+                Barcode actualBarcode = getActualBarcode();
+                if (barcode == null || actualBarcode == null || !barcode.displayValue.equals(actualBarcode.displayValue)){
+                    Log.i(TAG, "Barcode capturing stopped!");
+                    timer.cancel();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                Log.i(TAG, "Timer finished, starting activity");
+                //TODO: vyresit ruzne activity pro ruzna mista - ulozit nazev activity v DB?
+                if (place != null) {
+                    MineActivity_.intent(getBaseContext())
+                            .place(place)
+                            .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
+                            .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            .flags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .start();
+                }
+            }
+        };
+    }
+
     private Place getPlaceInfo() {
+        Barcode barcode = getActualBarcode();
+        if (barcode != null) {
+            String url = barcode.displayValue;
+            String placeCode = url.substring(url.lastIndexOf("/") + 1);
+            Log.d(TAG, "Getting place with code " + placeCode);
+            Place place = activityClient.getPlaceByCode(placeCode);
+            return place;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return {@link Barcode} that is being captured
+     */
+    private Barcode getActualBarcode() {
         BarcodeGraphic graphic = (BarcodeGraphic) overlay.getFirstGraphic();
         if (graphic != null) {
-            Barcode barcode = graphic.getBarcode();
-            if (barcode != null) {
-                String url = barcode.displayValue;
-                String placeCode = url.substring(url.lastIndexOf("/") + 1);
-                Log.d(TAG, "Getting place with code " + placeCode);
-                Place place = activityClient.getPlaceByCode(placeCode);
-                return place;
-            }
+            return graphic.getBarcode();
         }
         return null;
     }
@@ -175,7 +227,7 @@ public class QrActivity extends AppCompatActivity {
      * Creates and starts the camera.  Note that this uses a higher resolution in comparison
      * to other detection examples to enable the barcode detector to detect small barcodes
      * at long distances.
-     * <p/>
+     * <p>
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
      * the constant.
      */

@@ -14,7 +14,9 @@
         <!--android:id="@+id/map_layer_icon"-->
         <!--android:height="35dp"-->
         <!--android:width="35dp"-->
-        <!--android:top="15dp"-->
-        <!--android:left="25dp" />-->
+        <!--android:top="155dp"-->
+        <!--android:left="125dp"-->
+        <!--android:right="160dp"-->
+        <!--android:bottom="220dp"/>-->
 
 </layer-list>
