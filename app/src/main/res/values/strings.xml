@@ -43,4 +43,6 @@
     <string name="market">Tržiště</string>
     <string name="market_buy">Směnit</string>
 
+    <string name="qr_countdown">Start za %1$d s</string>
+
 </resources>

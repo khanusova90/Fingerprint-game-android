@@ -18,7 +18,7 @@ import cz.hanusova.fingerprint_game.utils.Constants;
  *
  * Rest client for communication with server
  */
-@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = AuthInterceptor.class)
+@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = {AuthInterceptor.class, LoggingInterceptor.class})
 public interface RestClient {
 
     @Post("/login?username={username}")

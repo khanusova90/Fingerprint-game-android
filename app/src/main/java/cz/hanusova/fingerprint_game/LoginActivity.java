@@ -71,6 +71,9 @@ public class LoginActivity extends AbstractAsyncActivity {
         AppUser test = new AppUser();
         test.setUsername("test");
 
+        preferences.username().put("zkouska");
+        preferences.password().put("zkouska");
+
         Character character = new Character();
         character.setCharisma(100);
         character.setPower(100);
@@ -92,8 +95,10 @@ public class LoginActivity extends AbstractAsyncActivity {
         showLoadingProgressDialog();
         String username = etUsername.getText().toString();
         preferences.username().put(username);
+//        preferences.password().put(BCrypt.hashpw(etPassword.getText().toString(), BCrypt.gensalt()));
         preferences.password().put(etPassword.getText().toString());
-        restClient.login(username);
+        AppUser user = restClient.login(username);
+        System.out.println(user.getUsername());
         dismissProgressDialog();
 
         //TODO: vyresit chyby pri prihlasovani - 401 a 403
