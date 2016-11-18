@@ -11,8 +11,13 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.MultiProcessor;
@@ -20,12 +25,16 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
+import java.util.Set;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -34,6 +43,10 @@ import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
 import cz.hanusova.fingerprint_game.model.Activity;
+import cz.hanusova.fingerprint_game.model.ActivityEnum;
+import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Inventory;
+import cz.hanusova.fingerprint_game.model.Material;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
 import cz.hanusova.fingerprint_game.rest.RestClient;
@@ -51,10 +64,17 @@ public class QrActivity extends AppCompatActivity {
     @RestService
     RestClient activityClient;
 
+    @Pref
+    Preferences_ preferences;
+
     @ViewById(R.id.preview)
     CameraSourcePreview preview;
     @ViewById(R.id.graphicOverlay)
     GraphicOverlay<GraphicOverlay.Graphic> overlay;
+    @ViewById(R.id.qr_countdown)
+    Button qrCountdown;
+    @ViewById(R.id.qr_choose_workers)
+    SeekBar seekWorkers;
 
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
@@ -69,6 +89,10 @@ public class QrActivity extends AppCompatActivity {
         createCameraSource(true, false);
         createTimer();
         startTracking();
+    }
+
+    private void hideSeekers(){
+        seekWorkers.setVisibility(View.GONE);
     }
 
     @Click(R.id.qr_test)
@@ -96,6 +120,7 @@ public class QrActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startCameraSource();
+        qrCountdown.setVisibility(View.GONE);
     }
 
     /**
@@ -107,6 +132,9 @@ public class QrActivity extends AppCompatActivity {
         if (preview != null) {
             preview.stop();
         }
+        qrCountdown.setVisibility(View.GONE);
+        timer.cancel();
+        hideSeekers();
     }
 
     /**
@@ -119,6 +147,7 @@ public class QrActivity extends AppCompatActivity {
         if (preview != null) {
             preview.release();
         }
+        qrCountdown.setVisibility(View.GONE);
     }
 
     private void startTracking(){
@@ -133,27 +162,45 @@ public class QrActivity extends AppCompatActivity {
                     }
                     place = getPlaceInfo();
                 }
+                changeCountdownVisibility();
+//                qrCountdown.setVisibility(View.VISIBLE);
                 timer.start();
                 BarcodeGraphic.activity = place.getPlaceType().getActivity();
             }
         }).start();
     }
 
+    @UiThread
+    public void changeCountdownVisibility(){
+        int visibility = qrCountdown.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+        qrCountdown.setVisibility(visibility);
+    }
+
+    @UiThread
+    public void updateCountdown(long millisLeft){
+        qrCountdown.setText(getString(R.string.qr_countdown, millisLeft / 1000));
+    }
+
     private void createTimer() {
+        Log.i(TAG, "Creating timer");
         timer = new CountDownTimer(10 * 1000, 1000) {
             private Barcode barcode = null;
 
             @Override
             public void onTick(long millisLeft) {
+                updateCountdown(millisLeft);
                 if (barcode == null){
                     Log.d(TAG, "Getting actual barcode");
                     barcode = getActualBarcode();
                 }
+                //TODO: zobrazit mozne cinnosti uz pri snimani
                 Barcode actualBarcode = getActualBarcode();
                 if (barcode == null || actualBarcode == null || !barcode.displayValue.equals(actualBarcode.displayValue)){
                     Log.i(TAG, "Barcode capturing stopped!");
-                    timer.cancel();
-                    finish();
+                    //TODO: pridat sipku pro navrat do predchozi activity
+                    qrCountdown.setVisibility(View.GONE);
+                    stopTimer();
+                    startTracking();
                 }
             }
 
@@ -161,6 +208,7 @@ public class QrActivity extends AppCompatActivity {
             public void onFinish() {
                 Log.i(TAG, "Timer finished, starting activity");
                 //TODO: vyresit ruzne activity pro ruzna mista - ulozit nazev activity v DB?
+                // Napr. fragment do activity
                 if (place != null) {
                     MineActivity_.intent(getBaseContext())
                             .place(place)
@@ -171,6 +219,46 @@ public class QrActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private void showActivity(ActivityEnum activity){
+        switch(activity){
+            case MINE:
+                AppUser user = getUser();
+                Inventory workers = getInventory(Material.WORKER, user);
+
+                seekWorkers.setMax(workers.getAmount().intValue());
+                seekWorkers.setVisibility(View.VISIBLE);
+                break;
+            default:
+                //TODO: informovat o nezname aktivite
+                break;
+        }
+    }
+
+    //TODO: vytvorit service
+    private AppUser getUser(){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(preferences.user().get(), AppUser.class);
+        } catch (IOException e){
+            Log.e(TAG, "Error occurred while trying to get actual user", e);
+            return null;
+        }
+    }
+
+    private Inventory getInventory(Material material, AppUser user){
+        Set <Inventory> inventorySet = user.getInventory();
+        for (Inventory inv : inventorySet){
+            if (inv.getMaterial().equals(material.name())){
+                return inv;
+            }
+        }
+        return null;
+    }
+
+    private void stopTimer(){
+        timer.cancel();
     }
 
     private Place getPlaceInfo() {

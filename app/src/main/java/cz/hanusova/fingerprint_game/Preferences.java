@@ -14,4 +14,7 @@ public interface Preferences {
 
     @DefaultString("")
     String password();
+
+    @DefaultString("")
+    String user();
 }

@@ -62,6 +62,9 @@ public class MapActivity extends AbstractAsyncActivity {
         Drawable smallIcon = new BitmapDrawable(getResources(), bitmap);
         //TODO: zkusit nacpat jen icon
         LayerDrawable iconLd = new LayerDrawable(new Drawable[]{map, smallIcon});
+//        new MapAsyncTask().execute();
+//        BitmapDrawable mozaika = new BitmapDrawable(getResources(), mozaikaDr);
+//        LayerDrawable iconLd = new LayerDrawable(new Drawable[]{mozaika, smallIcon});
         int width = map.getIntrinsicWidth();
         int height = map.getIntrinsicHeight();
 
@@ -105,6 +108,7 @@ public class MapActivity extends AbstractAsyncActivity {
             Bitmap bitmap = null;
             try {
                 URL url = new URL(Constants.IMG_URL_BASE + "J1NP.jpg");
+//                URL url = new URL(Constants.IMG_URL_BASE + "mozaika.jpg");
                 bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
                 URL iconUrl = new URL(Constants.IMG_URL_BASE + "money_icon.png");
@@ -143,8 +147,8 @@ public class MapActivity extends AbstractAsyncActivity {
                 drawables.add(drawable);
             }
 
-//            Drawable drawable = getResources().getDrawable(R.drawable.money_icon);
-//            drawables.add(drawable);
+            Drawable drawable = getResources().getDrawable(R.drawable.money_icon);
+            drawables.add(drawable);
 
             LayerDrawable ld = new LayerDrawable(drawables.toArray(new Drawable[drawables.size()]));
             ld.setLayerInset(1, 20, 30, 100, 120);

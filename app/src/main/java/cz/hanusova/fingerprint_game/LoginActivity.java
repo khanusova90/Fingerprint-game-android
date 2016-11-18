@@ -79,6 +79,12 @@ public class LoginActivity extends AbstractAsyncActivity {
         character.setPower(100);
         character.setXp(100);
         test.setCharacter(character);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            preferences.user().put(mapper.writeValueAsString(test));
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "Error occurred while trying to save user", e);
+        }
         MapActivity_.intent(context).start();
     }
 
@@ -95,9 +101,14 @@ public class LoginActivity extends AbstractAsyncActivity {
         showLoadingProgressDialog();
         String username = etUsername.getText().toString();
         preferences.username().put(username);
-//        preferences.password().put(BCrypt.hashpw(etPassword.getText().toString(), BCrypt.gensalt()));
         preferences.password().put(etPassword.getText().toString());
         AppUser user = restClient.login(username);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            preferences.user().put(mapper.writeValueAsString(user));
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "Error occurred while trying to save user", e);
+        }
         System.out.println(user.getUsername());
         dismissProgressDialog();
 
