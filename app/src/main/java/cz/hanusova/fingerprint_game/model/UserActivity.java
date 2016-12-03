@@ -9,13 +9,13 @@ public class UserActivity {
 
     private Long idUserActivity;
 
-    private Activity activity;
+    private ActivityEnum activity;
 
-    private Date startTime;
-
-    private String materialUsed;
+    private Material material;
 
     private Float materialAmount;
+
+    private Date startTime;
 
     public Long getIdUserActivity() {
         return idUserActivity;
@@ -25,20 +25,20 @@ public class UserActivity {
         this.idUserActivity = idUserActivity;
     }
 
-    // public AppUser getAppUser() {
-    // return appUser;
-    // }
-    //
-    // public void setAppUser(AppUser appUser) {
-    // this.appUser = appUser;
-    // }
-
-    public Activity getActivity() {
+    public ActivityEnum getActivity() {
         return activity;
     }
 
-    public void setActivity(Activity activity) {
+    public void setActivity(ActivityEnum activity) {
         this.activity = activity;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     public Date getStartTime() {
@@ -49,13 +49,6 @@ public class UserActivity {
         this.startTime = startTime;
     }
 
-    public String getMaterialUsed() {
-        return materialUsed;
-    }
-
-    public void setMaterialUsed(String materialUsed) {
-        this.materialUsed = materialUsed;
-    }
 
     public Float getMaterialAmount() {
         return materialAmount;

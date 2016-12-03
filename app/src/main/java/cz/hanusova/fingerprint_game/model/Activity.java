@@ -7,6 +7,7 @@ import java.io.Serializable;
  *
  * Created by khanusova on 11.5.2016.
  */
+@Deprecated
 public class Activity implements Serializable {
 
     private Long idActivity;

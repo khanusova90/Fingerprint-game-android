@@ -13,34 +13,34 @@ public class AppUser implements Serializable{
 
     private Long idUser;
 
-    /**
-     * Username - should be unique
-     */
     private String username;
 
-    /**
-     * Username in STAG
-     */
-    private String stagname;
-
-    /**
-     * Password
-     */
     private String password;
 
-    /**
-     * User's inventory
-     */
-    private Set<Inventory> inventory = new HashSet<>();
-
-    /**
-     * Set of user's roles
-     */
-    private Set<String> userRoles = new HashSet<>();
-
-    private Set<UserActivity> activities = new HashSet<>();
+    private String stagname;
 
     private Character character;
+
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @Column(name = "ID_USER")
+    // private Long idUser;
+    //
+    // @Column(name = "USERNAME")
+    // private String username;
+    //
+    // @Column(name = "STAGNAME", nullable = true)
+    // private String stagname;
+    //
+    // @Column(name = "PASSWORD")
+    // private String password;
+    //
+    private Set<Inventory> inventory = new HashSet<>();
+
+    // private Set<String> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
+
+    private Set<UserActivity> activities = new HashSet<>();
 
     public Long getIdUser() {
         return idUser;
@@ -58,6 +58,14 @@ public class AppUser implements Serializable{
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getStagname() {
         return stagname;
     }
@@ -66,12 +74,12 @@ public class AppUser implements Serializable{
         this.stagname = stagname;
     }
 
-    public String getPassword() {
-        return password;
+    public Character getCharacter() {
+        return character;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCharacter(Character character) {
+        this.character = character;
     }
 
     public Set<Inventory> getInventory() {
@@ -82,12 +90,12 @@ public class AppUser implements Serializable{
         this.inventory = inventory;
     }
 
-    public Set<String> getUserRoles() {
-        return userRoles;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setUserRoles(Set<String> userRoles) {
-        this.userRoles = userRoles;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Set<UserActivity> getActivities() {
@@ -98,11 +106,98 @@ public class AppUser implements Serializable{
         this.activities = activities;
     }
 
-    public Character getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(Character character) {
-        this.character = character;
-    }
+    //    private Long idUser;
+//
+//    /**
+//     * Username - should be unique
+//     */
+//    private String username;
+//
+//    /**
+//     * Username in STAG
+//     */
+//    private String stagname;
+//
+//    /**
+//     * Password
+//     */
+//    private String password;
+//
+//    /**
+//     * User's inventory
+//     */
+//    private Set<Inventory> inventory = new HashSet<>();
+//
+//    /**
+//     * Set of user's roles
+//     */
+//    private Set<String> userRoles = new HashSet<>();
+//
+//    private Set<UserActivity> activities = new HashSet<>();
+//
+//    private Character character;
+//
+//    public Long getIdUser() {
+//        return idUser;
+//    }
+//
+//    public void setIdUser(Long idUser) {
+//        this.idUser = idUser;
+//    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    public String getStagname() {
+//        return stagname;
+//    }
+//
+//    public void setStagname(String stagname) {
+//        this.stagname = stagname;
+//    }
+//
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    public Set<Inventory> getInventory() {
+//        return inventory;
+//    }
+//
+//    public void setInventory(Set<Inventory> inventory) {
+//        this.inventory = inventory;
+//    }
+//
+//    public Set<String> getUserRoles() {
+//        return userRoles;
+//    }
+//
+//    public void setUserRoles(Set<String> userRoles) {
+//        this.userRoles = userRoles;
+//    }
+//
+//    public Set<UserActivity> getActivities() {
+//        return activities;
+//    }
+//
+//    public void setActivities(Set<UserActivity> activities) {
+//        this.activities = activities;
+//    }
+//
+//    public Character getCharacter() {
+//        return character;
+//    }
+//
+//    public void setCharacter(Character character) {
+//        this.character = character;
+//    }
 }

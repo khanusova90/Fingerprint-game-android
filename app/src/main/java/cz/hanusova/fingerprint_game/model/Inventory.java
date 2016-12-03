@@ -18,7 +18,8 @@ public class Inventory implements Serializable{
     /**
      * {@link Material}
      */
-    private String material;
+//    private String material;
+    private Material material;
 
     /**
      * Amount of the material stored in inventory
@@ -33,19 +34,11 @@ public class Inventory implements Serializable{
         this.idInventory = idInventory;
     }
 
-//    public AppUser getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(AppUser user) {
-//        this.user = user;
-//    }
-
-    public String getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(Material material) {
         this.material = material;
     }
 

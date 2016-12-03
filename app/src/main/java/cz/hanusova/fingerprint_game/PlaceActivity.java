@@ -65,7 +65,7 @@ public class PlaceActivity extends AbstractAsyncActivity {
 
         idPlaceTv.setText(getString(R.string.place_id, place.getIdPlace()));
         placeNameTv.setText(place.getName());
-        descriptionTv.setText(place.getPlaceType().getDescription());
+        descriptionTv.setText(place.getDescription());
 
         new ImageHttpAsyncTask().execute(place.getPlaceType());
     }

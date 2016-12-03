@@ -4,6 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.Region;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -11,12 +14,15 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Touch;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.DrawableRes;
 
@@ -62,9 +68,7 @@ public class MapActivity extends AbstractAsyncActivity {
         Drawable smallIcon = new BitmapDrawable(getResources(), bitmap);
         //TODO: zkusit nacpat jen icon
         LayerDrawable iconLd = new LayerDrawable(new Drawable[]{map, smallIcon});
-//        new MapAsyncTask().execute();
-//        BitmapDrawable mozaika = new BitmapDrawable(getResources(), mozaikaDr);
-//        LayerDrawable iconLd = new LayerDrawable(new Drawable[]{mozaika, smallIcon});
+//        new MapAsyncTask().execute(); //TODO: stahnout ze serveru
         int width = map.getIntrinsicWidth();
         int height = map.getIntrinsicHeight();
 
@@ -76,7 +80,43 @@ public class MapActivity extends AbstractAsyncActivity {
 
         iconLd.setLayerInset(1, posX, posY, width - posX - iconW, height - posY - iconH); //TODO: for cyklus pro index kazde ikony -> od 1 do icons.size
         mapView.setImageDrawable(iconLd);
-        TouchImageView iv = (TouchImageView) findViewById(R.id.img_map);
+
+        mapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    float x = event.getX();
+                    float y = event.getY();
+
+                    Matrix m = mapView.getImageMatrix();
+                    float[] values = new float[9];
+                    m.getValues(values);
+                    float scaleX = values[Matrix.MSCALE_X];
+                    float scaleY = values[Matrix.MSCALE_Y];
+
+                    LayerDrawable ld = (LayerDrawable) mapView.getDrawable();
+
+                    for (int i = 0; i < ld.getNumberOfLayers(); i++){
+                        BitmapDrawable d = (BitmapDrawable) ld.getDrawable(i);
+                        Bitmap b = d.getBitmap();
+                        Region reg = d.getTransparentRegion();
+                        Rect r = d.getBounds();
+                        System.out.println("RECT left: " + r.left);
+                        System.out.println("RECT right: " + r.right);
+                        System.out.println("RECT top: " + r.top);
+                        System.out.println("RECT bot: " + r.bottom);
+
+                        if (r.contains((int)x, (int)y)){
+                            System.out.println("Icon at " + i + " position was clicked!");
+                            return true;
+                        }
+                    }
+                    System.out.println("NOTHING WAS CLICKED");
+                }
+                return false;
+            }
+        });
+
 //        iv.setImageDrawable(iconLd);
 //        Button btn = new Button(this);
 //        btn.setPadding(posX, posY, width - posX - iconW, height - posY - iconH);
@@ -89,6 +129,7 @@ public class MapActivity extends AbstractAsyncActivity {
 //        LayerDrawable ld = new LayerDrawable(new Drawable[]{map, d});
 //        iv.setImageDrawable(ld);
     }
+
 
     @Click(R.id.map_camera)
     void startCamera(){

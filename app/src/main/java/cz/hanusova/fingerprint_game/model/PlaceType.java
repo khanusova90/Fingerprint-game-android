@@ -18,7 +18,7 @@ public class PlaceType implements Serializable{
     /**
      * Description
      */
-    private String description;
+//    private String description;
 
     /**
      * Image URL (relative, see {@link cz.hanusova.fingerprint_game.utils.Constants#IMG_URL_BASE}
@@ -26,20 +26,18 @@ public class PlaceType implements Serializable{
     private String imgUrl;
 
     /**
-     * List of {@link Activity} that are possible to do on this type of place
+     * Activity available in this type of place
      */
-//    private List<Activity> activities;
-    private Activity activity;
-
+    private ActivityEnum activity;
     /*
      * Getters and setters
      */
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
     public Long getIdPlaceType() {
         return idPlaceType;
     }
@@ -61,20 +59,11 @@ public class PlaceType implements Serializable{
         this.imgUrl = imgUrl;
     }
 
-//    public List<Activity> getActivities() {
-//        return activities;
-//    }
-//
-//    public void setActivities(List<Activity> activities) {
-//        this.activities = activities;
-//    }
-
-
-    public Activity getActivity() {
+    public ActivityEnum getActivity() {
         return activity;
     }
 
-    public void setActivity(Activity activity) {
+    public void setActivity(ActivityEnum activity) {
         this.activity = activity;
     }
 }

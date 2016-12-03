@@ -10,9 +10,11 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Set;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
@@ -50,6 +53,7 @@ import cz.hanusova.fingerprint_game.model.Material;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
 import cz.hanusova.fingerprint_game.rest.RestClient;
+import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 9.9.2016.
@@ -104,11 +108,11 @@ public class QrActivity extends AppCompatActivity {
         PlaceType pt = new PlaceType();
         pt.setIdPlaceType(1l);
 
-        Activity ac = new Activity();
-        ac.setIdActivity(1l);
-        ac.setName("Těžit");
+//        Activity ac = new Activity();
+//        ac.setIdActivity(1l);
+//        ac.setName("Těžit");
 
-        pt.setActivity(ac);
+        pt.setActivity(ActivityEnum.MINE);
         testPlace.setPlaceType(pt);
         MineActivity_.intent(this).place(testPlace).start();
     }
@@ -165,7 +169,9 @@ public class QrActivity extends AppCompatActivity {
                 changeCountdownVisibility();
 //                qrCountdown.setVisibility(View.VISIBLE);
                 timer.start();
-                BarcodeGraphic.activity = place.getPlaceType().getActivity();
+                ActivityEnum activity = place.getPlaceType().getActivity();
+                BarcodeGraphic.activity = activity;
+                showActivity(activity);
             }
         }).start();
     }
@@ -210,6 +216,7 @@ public class QrActivity extends AppCompatActivity {
                 //TODO: vyresit ruzne activity pro ruzna mista - ulozit nazev activity v DB?
                 // Napr. fragment do activity
                 if (place != null) {
+                    //TODO: spustit aktivitu, vratit na MapActivity
                     MineActivity_.intent(getBaseContext())
                             .place(place)
                             .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
@@ -221,19 +228,25 @@ public class QrActivity extends AppCompatActivity {
         };
     }
 
-    private void showActivity(ActivityEnum activity){
+    private void showActivity(ActivityEnum activity){ //FIXME: prejmenovat
         switch(activity){
             case MINE:
                 AppUser user = getUser();
-                Inventory workers = getInventory(Material.WORKER, user);
-
-                seekWorkers.setMax(workers.getAmount().intValue());
-                seekWorkers.setVisibility(View.VISIBLE);
+                Inventory workers = getWorkers(user);
+                showWorkersSeek(workers);
+//                seekWorkers.setMax(workers.getAmount().intValue());
+//                seekWorkers.setVisibility(View.VISIBLE);
                 break;
             default:
                 //TODO: informovat o nezname aktivite
                 break;
         }
+    }
+
+    @UiThread
+    void showWorkersSeek(Inventory workers){
+        seekWorkers.setMax(workers.getAmount().intValue());
+        seekWorkers.setVisibility(View.VISIBLE);
     }
 
     //TODO: vytvorit service
@@ -247,10 +260,15 @@ public class QrActivity extends AppCompatActivity {
         }
     }
 
-    private Inventory getInventory(Material material, AppUser user){
+    /**
+     * Gets workers from user's inventory. If it does not find any, returns <code>null</code>
+     * @param user
+     * @return {@link Inventory} with workers
+     */
+    private Inventory getWorkers(AppUser user){
         Set <Inventory> inventorySet = user.getInventory();
         for (Inventory inv : inventorySet){
-            if (inv.getMaterial().equals(material.name())){
+            if (inv.getMaterial().getName().equals(Constants.MATERIAL_WORKER)){
                 return inv;
             }
         }

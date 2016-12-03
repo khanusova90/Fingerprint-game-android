@@ -23,6 +23,11 @@ public class Place implements Serializable{
     private String name;
 
     /**
+     * Place description
+     */
+    private String description;
+
+    /**
      * Type of place
      */
     private PlaceType placeType;
@@ -45,7 +50,6 @@ public class Place implements Serializable{
     /**
      * List of {@link Resource}s available on this place
      */
-    private List<Resource> resources;
 
     /*
      * Getters and setters
@@ -66,13 +70,6 @@ public class Place implements Serializable{
         this.code = code;
     }
 
-    public List<Resource> getResources() {
-        return resources;
-    }
-
-    public void setResources(List<Resource> resources) {
-        this.resources = resources;
-    }
 
     public String getName() {
         return name;
@@ -80,6 +77,14 @@ public class Place implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public PlaceType getPlaceType() {
