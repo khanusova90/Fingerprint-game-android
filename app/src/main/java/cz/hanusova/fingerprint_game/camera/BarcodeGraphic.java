@@ -78,10 +78,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         return mBarcode;
     }
 
-//    public static void setActivity(Activity activity) {
-//        BarcodeGraphic.activity = activity;
-//    }
-
     /**
      * Updates the barcode instance from the detection of the most recent frame.  Invalidates the
      * relevant portions of the overlay to trigger a redraw.

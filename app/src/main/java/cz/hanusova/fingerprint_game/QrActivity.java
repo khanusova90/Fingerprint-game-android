@@ -10,13 +10,10 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +24,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.App;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
@@ -36,7 +33,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Set;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
@@ -45,11 +41,9 @@ import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
-import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
-import cz.hanusova.fingerprint_game.model.Material;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
 import cz.hanusova.fingerprint_game.rest.RestClient;
@@ -66,7 +60,7 @@ public class QrActivity extends AppCompatActivity {
     private static final int RC_HANDLE_GMS = 9001;
 
     @RestService
-    RestClient activityClient;
+    RestClient restClient;
 
     @Pref
     Preferences_ preferences;
@@ -167,7 +161,6 @@ public class QrActivity extends AppCompatActivity {
                     place = getPlaceInfo();
                 }
                 changeCountdownVisibility();
-//                qrCountdown.setVisibility(View.VISIBLE);
                 timer.start();
                 ActivityEnum activity = place.getPlaceType().getActivity();
                 BarcodeGraphic.activity = activity;
@@ -199,7 +192,6 @@ public class QrActivity extends AppCompatActivity {
                     Log.d(TAG, "Getting actual barcode");
                     barcode = getActualBarcode();
                 }
-                //TODO: zobrazit mozne cinnosti uz pri snimani
                 Barcode actualBarcode = getActualBarcode();
                 if (barcode == null || actualBarcode == null || !barcode.displayValue.equals(actualBarcode.displayValue)){
                     Log.i(TAG, "Barcode capturing stopped!");
@@ -213,12 +205,10 @@ public class QrActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 Log.i(TAG, "Timer finished, starting activity");
-                //TODO: vyresit ruzne activity pro ruzna mista - ulozit nazev activity v DB?
-                // Napr. fragment do activity
                 if (place != null) {
-                    //TODO: spustit aktivitu, vratit na MapActivity
-                    MineActivity_.intent(getBaseContext())
-                            .place(place)
+                    startActivity();
+                    //TODO: zobrazit novou aktivitu na mape
+                    MapActivity_.intent(getBaseContext())
                             .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
                             .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             .flags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -228,14 +218,17 @@ public class QrActivity extends AppCompatActivity {
         };
     }
 
+    @Background
+    public void startActivity(){
+        restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+    }
+
     private void showActivity(ActivityEnum activity){ //FIXME: prejmenovat
         switch(activity){
             case MINE:
                 AppUser user = getUser();
                 Inventory workers = getWorkers(user);
                 showWorkersSeek(workers);
-//                seekWorkers.setMax(workers.getAmount().intValue());
-//                seekWorkers.setVisibility(View.VISIBLE);
                 break;
             default:
                 //TODO: informovat o nezname aktivite
@@ -245,7 +238,9 @@ public class QrActivity extends AppCompatActivity {
 
     @UiThread
     void showWorkersSeek(Inventory workers){
-        seekWorkers.setMax(workers.getAmount().intValue());
+        int workersAmount = workers.getAmount().intValue();
+        seekWorkers.setMax(workersAmount);
+        seekWorkers.setProgress(workersAmount / 2);
         seekWorkers.setVisibility(View.VISIBLE);
     }
 
@@ -285,7 +280,7 @@ public class QrActivity extends AppCompatActivity {
             String url = barcode.displayValue;
             String placeCode = url.substring(url.lastIndexOf("/") + 1);
             Log.d(TAG, "Getting place with code " + placeCode);
-            Place place = activityClient.getPlaceByCode(placeCode);
+            Place place = restClient.getPlaceByCode(placeCode);
             return place;
         }
         return null;
