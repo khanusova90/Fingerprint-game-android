@@ -16,11 +16,6 @@ public class PlaceType implements Serializable{
     private String placeType;
 
     /**
-     * Description
-     */
-//    private String description;
-
-    /**
      * Image URL (relative, see {@link cz.hanusova.fingerprint_game.utils.Constants#IMG_URL_BASE}
      */
     private String imgUrl;
@@ -32,12 +27,6 @@ public class PlaceType implements Serializable{
     /*
      * Getters and setters
      */
-//    public String getDescription() {
-//        return description;
-//    }
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
     public Long getIdPlaceType() {
         return idPlaceType;
     }

@@ -10,15 +10,9 @@ public class Inventory implements Serializable{
 
     private Long idInventory;
 
-//    /**
-//     * Owner of the inventory
-//     */
-//    private AppUser user;
-
     /**
      * {@link Material}
      */
-//    private String material;
     private Material material;
 
     /**

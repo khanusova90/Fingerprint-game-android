@@ -1,5 +1,7 @@
 package cz.hanusova.fingerprint_game.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -15,7 +17,13 @@ public class UserActivity {
 
     private Float materialAmount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date stopTime;
+
+    private Place place;
 
     public Long getIdUserActivity() {
         return idUserActivity;
@@ -56,5 +64,21 @@ public class UserActivity {
 
     public void setMaterialAmount(Float materialAmount) {
         this.materialAmount = materialAmount;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
+    public Date getStopTime() {
+        return stopTime;
+    }
+
+    public void setStopTime(Date stopTime) {
+        this.stopTime = stopTime;
     }
 }

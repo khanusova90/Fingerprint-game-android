@@ -30,7 +30,7 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor{
         ClientHttpResponse response = execution.execute(request, body);
 
         //Logging response
-        Log.i(TAG, "Response: " + response.getStatusCode() + " (" + response.getStatusText() + ")");
+        Log.i(TAG, "Response: " + response.getStatusCode() + " (" + response.getStatusText() + ")"); //TODO: zachytavat kody pro prihlasovani a starou verzi systemu
         Log.i(TAG, "Header: " + response.getHeaders());
         Log.i(TAG, "Body: " + response.getBody().toString()); //TODO: log response
         return response;

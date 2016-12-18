@@ -25,6 +25,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
@@ -33,7 +34,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
-import java.util.Set;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -47,7 +47,8 @@ import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
 import cz.hanusova.fingerprint_game.rest.RestClient;
-import cz.hanusova.fingerprint_game.utils.Constants;
+import cz.hanusova.fingerprint_game.service.UserService;
+import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 
 /**
  * Created by khanusova on 9.9.2016.
@@ -61,6 +62,9 @@ public class QrActivity extends AppCompatActivity {
 
     @RestService
     RestClient restClient;
+
+    @Bean(UserServiceImpl.class)
+    UserService userService;
 
     @Pref
     Preferences_ preferences;
@@ -207,7 +211,7 @@ public class QrActivity extends AppCompatActivity {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
                     startActivity();
-                    //TODO: zobrazit novou aktivitu na mape
+                    //TODO: zobrazit novou aktivitu na mape -> ActivityForResult
                     MapActivity_.intent(getBaseContext())
                             .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
                             .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -226,9 +230,11 @@ public class QrActivity extends AppCompatActivity {
     private void showActivity(ActivityEnum activity){ //FIXME: prejmenovat
         switch(activity){
             case MINE:
-                AppUser user = getUser();
-                Inventory workers = getWorkers(user);
+                Inventory workers = userService.getWorkers();
                 showWorkersSeek(workers);
+                break;
+            case BUILD:
+
                 break;
             default:
                 //TODO: informovat o nezname aktivite
@@ -242,32 +248,6 @@ public class QrActivity extends AppCompatActivity {
         seekWorkers.setMax(workersAmount);
         seekWorkers.setProgress(workersAmount / 2);
         seekWorkers.setVisibility(View.VISIBLE);
-    }
-
-    //TODO: vytvorit service
-    private AppUser getUser(){
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(preferences.user().get(), AppUser.class);
-        } catch (IOException e){
-            Log.e(TAG, "Error occurred while trying to get actual user", e);
-            return null;
-        }
-    }
-
-    /**
-     * Gets workers from user's inventory. If it does not find any, returns <code>null</code>
-     * @param user
-     * @return {@link Inventory} with workers
-     */
-    private Inventory getWorkers(AppUser user){
-        Set <Inventory> inventorySet = user.getInventory();
-        for (Inventory inv : inventorySet){
-            if (inv.getMaterial().getName().equals(Constants.MATERIAL_WORKER)){
-                return inv;
-            }
-        }
-        return null;
     }
 
     private void stopTimer(){

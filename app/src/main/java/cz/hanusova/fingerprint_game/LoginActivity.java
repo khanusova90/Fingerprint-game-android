@@ -112,7 +112,6 @@ public class LoginActivity extends AbstractAsyncActivity {
         System.out.println(user.getUsername());
         dismissProgressDialog();
 
-        //TODO: vyresit chyby pri prihlasovani - 401 a 403
         MapActivity_.intent(context).start();
     }
 

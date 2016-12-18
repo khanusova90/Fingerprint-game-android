@@ -47,10 +47,6 @@ public class Place implements Serializable{
      */
     private Integer yCoord;
 
-    /**
-     * List of {@link Resource}s available on this place
-     */
-
     /*
      * Getters and setters
      */
