@@ -25,6 +25,7 @@ import org.androidannotations.annotations.res.DrawableRes;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.utils.Constants;
@@ -63,7 +64,25 @@ public class MapActivity extends AbstractAsyncActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
     void init(){
-        Bitmap bitmap = ((BitmapDrawable)icon).getBitmap();
+        try {
+            Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("J1NP.jpg").get();
+
+            //TODO: ziskat ikoncy
+            LayerDrawable ld = new LayerDrawable(new Drawable[]{new BitmapDrawable(getResources(), bitmap)});
+            mapView.setImageDrawable(ld);
+
+            //TODO: pridat onTouchListener
+        } catch (InterruptedException e) {
+            e.printStackTrace(); //TODO: handle exceptions
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void showMap() {
+        Bitmap bitmap = ((BitmapDrawable) icon).getBitmap();
         Drawable smallIcon = new BitmapDrawable(getResources(), bitmap);
         //TODO: zkusit nacpat jen icon
         LayerDrawable iconLd = new LayerDrawable(new Drawable[]{map, smallIcon});
@@ -83,7 +102,7 @@ public class MapActivity extends AbstractAsyncActivity {
         mapView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     float x = event.getX();
                     float y = event.getY();
 
@@ -95,7 +114,7 @@ public class MapActivity extends AbstractAsyncActivity {
 
                     LayerDrawable ld = (LayerDrawable) mapView.getDrawable();
 
-                    for (int i = 0; i < ld.getNumberOfLayers(); i++){
+                    for (int i = 0; i < ld.getNumberOfLayers(); i++) {
                         BitmapDrawable d = (BitmapDrawable) ld.getDrawable(i);
                         Bitmap b = d.getBitmap();
                         Region reg = d.getTransparentRegion();
@@ -105,7 +124,7 @@ public class MapActivity extends AbstractAsyncActivity {
                         System.out.println("RECT top: " + r.top);
                         System.out.println("RECT bot: " + r.bottom);
 
-                        if (r.contains((int)x, (int)y)){
+                        if (r.contains((int) x, (int) y)) {
                             System.out.println("Icon at " + i + " position was clicked!");
                             return true;
                         }
