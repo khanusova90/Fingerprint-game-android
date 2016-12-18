@@ -2,9 +2,7 @@ package cz.hanusova.fingerprint_game.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * User of the application
@@ -28,6 +26,8 @@ public class AppUser implements Serializable{
     private List<Role> roles = new ArrayList<>();
 
     private List<UserActivity> activities = new ArrayList<>();
+
+    private List<Place> places = new ArrayList<>();
 
     public Long getIdUser() {
         return idUser;
@@ -93,4 +93,11 @@ public class AppUser implements Serializable{
         this.activities = activities;
     }
 
+    public List<Place> getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(List<Place> places) {
+        this.places = places;
+    }
 }
