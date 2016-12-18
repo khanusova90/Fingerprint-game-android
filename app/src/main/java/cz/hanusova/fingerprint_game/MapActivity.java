@@ -1,7 +1,6 @@
 package cz.hanusova.fingerprint_game;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -12,17 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Touch;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.DrawableRes;
 
@@ -30,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.utils.Constants;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
@@ -41,6 +38,8 @@ import cz.hanusova.fingerprint_game.view.TouchImageView;
 @EActivity(R.layout.map)
 public class MapActivity extends AbstractAsyncActivity {
     private static final String TAG = "MapActivity";
+
+    private static final int REQ_CODE_QR = 1;
 
 //    @ViewById(R.id.map_floor_1)
 //    Button btnFloor1;
@@ -133,7 +132,13 @@ public class MapActivity extends AbstractAsyncActivity {
 
     @Click(R.id.map_camera)
     void startCamera(){
-        QrActivity_.intent(this).start();
+        QrActivity_.intent(this).startForResult(REQ_CODE_QR);
+    }
+
+    @OnActivityResult(REQ_CODE_QR)
+    void showActivitiesUpdate(int resultCode, @OnActivityResult.Extra(value = Constants.EXTRA_ACTIVITIES) ArrayList<UserActivity> activities) {
+        //TODO: zobrazit aktivity
+        System.out.println("ZOBRAZOVANI AKTIVIT");
     }
 
     //TODO: externalizovat

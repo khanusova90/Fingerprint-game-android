@@ -1,8 +1,5 @@
 package cz.hanusova.fingerprint_game.rest;
 
-import android.app.Activity;
-import android.app.IntentService;
-
 import org.androidannotations.rest.spring.annotations.Body;
 import org.androidannotations.rest.spring.annotations.Get;
 import org.androidannotations.rest.spring.annotations.Path;
@@ -10,9 +7,11 @@ import org.androidannotations.rest.spring.annotations.Post;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
-import cz.hanusova.fingerprint_game.model.ActivityEnum;
+import java.util.ArrayList;
+
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Place;
+import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
@@ -26,13 +25,10 @@ public interface RestClient {
     @Post("/login?username={username}")
     AppUser login(@Path String username);
 
-    @Post("place/addActivity?username={username}")
-    void addActivity(@Path String username, @Body Place place);
-
-    @Get("/qr/{code}") //TODO: v qr ulozen jen kod mista?
+    @Get("/qr/{code}")
     Place getPlaceByCode(@Path String code);
 
     @Post("/activity/start?materialAmount={materialAmount}")
-    void startActivity( @Path Integer materialAmount, @Body Place place);
+    ArrayList<UserActivity> startActivity(@Path Integer materialAmount, @Body Place place);
 
 }

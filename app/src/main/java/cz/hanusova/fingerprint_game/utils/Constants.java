@@ -23,6 +23,7 @@ public final class Constants {
 
     public static final String EXTRA_PLACE = "place"; //TODO: pouziva se?
     public static final String EXTRA_USER = "user";
+    public static final String EXTRA_ACTIVITIES = "activities";
 
     public static final String MATERIAL_WORKER = "WORKER";
 

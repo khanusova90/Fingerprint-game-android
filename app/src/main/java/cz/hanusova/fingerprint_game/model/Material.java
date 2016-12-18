@@ -1,10 +1,11 @@
 package cz.hanusova.fingerprint_game.model;
 
+import java.io.Serializable;
+
 /**
  * Created by khanusova on 29.4.2016.
  */
-public class Material {
-
+public class Material implements Serializable {
     private Long idMaterial;
 
     /**

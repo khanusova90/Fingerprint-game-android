@@ -2,12 +2,13 @@ package cz.hanusova.fingerprint_game.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by khanusova on 26.6.2016.
  */
-public class UserActivity {
+public class UserActivity implements Serializable {
 
     private Long idUserActivity;
 

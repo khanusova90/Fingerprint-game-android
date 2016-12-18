@@ -2,6 +2,7 @@ package cz.hanusova.fingerprint_game;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +15,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.MultiProcessor;
@@ -26,14 +27,15 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SeekBarProgressChange;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -42,13 +44,13 @@ import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
-import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
-import cz.hanusova.fingerprint_game.model.PlaceType;
+import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 9.9.2016.
@@ -77,12 +79,13 @@ public class QrActivity extends AppCompatActivity {
     Button qrCountdown;
     @ViewById(R.id.qr_choose_workers)
     SeekBar seekWorkers;
+    @ViewById(R.id.qr_seek_value)
+    TextView workAmountText;
 
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
     private CountDownTimer timer;
 
-    private Place testPlace;
     private Place place;
 
     @AfterViews
@@ -95,24 +98,7 @@ public class QrActivity extends AppCompatActivity {
 
     private void hideSeekers(){
         seekWorkers.setVisibility(View.GONE);
-    }
-
-    @Click(R.id.qr_test)
-    public void qrTest() {
-        testPlace = new Place();
-        testPlace.setIdPlace(1l);
-        testPlace.setName("Naleziště");
-
-        PlaceType pt = new PlaceType();
-        pt.setIdPlaceType(1l);
-
-//        Activity ac = new Activity();
-//        ac.setIdActivity(1l);
-//        ac.setName("Těžit");
-
-        pt.setActivity(ActivityEnum.MINE);
-        testPlace.setPlaceType(pt);
-        MineActivity_.intent(this).place(testPlace).start();
+        workAmountText.setVisibility(View.GONE);
     }
 
     /**
@@ -224,7 +210,11 @@ public class QrActivity extends AppCompatActivity {
 
     @Background
     public void startActivity(){
-        restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+        ArrayList<UserActivity> activities = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+        Intent i = new Intent();
+        i.putExtra(Constants.EXTRA_ACTIVITIES, activities);
+        setResult(Activity.RESULT_OK, i);
+        finish();
     }
 
     private void showActivity(ActivityEnum activity){ //FIXME: prejmenovat
@@ -248,6 +238,12 @@ public class QrActivity extends AppCompatActivity {
         seekWorkers.setMax(workersAmount);
         seekWorkers.setProgress(workersAmount / 2);
         seekWorkers.setVisibility(View.VISIBLE);
+        workAmountText.setVisibility(View.VISIBLE);
+    }
+
+    @SeekBarProgressChange(R.id.qr_choose_workers)
+    void updateAmountText() {
+        workAmountText.setText(String.valueOf(seekWorkers.getProgress()));
     }
 
     private void stopTimer(){
@@ -265,6 +261,7 @@ public class QrActivity extends AppCompatActivity {
         }
         return null;
     }
+
 
     /**
      *
