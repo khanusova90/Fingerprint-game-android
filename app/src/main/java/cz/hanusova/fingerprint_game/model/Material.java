@@ -18,6 +18,8 @@ public class Material implements Serializable {
      */
     private Integer defaultAmount;
 
+    private String iconName;
+
     public Long getIdMaterial() {
         return idMaterial;
     }
@@ -43,5 +45,13 @@ public class Material implements Serializable {
 
     public void setDefaultAmount(Integer defaultAmount) {
         this.defaultAmount = defaultAmount;
+    }
+
+    public String getIconName() {
+        return iconName;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 }

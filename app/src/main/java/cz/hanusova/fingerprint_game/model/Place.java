@@ -1,7 +1,6 @@
 package cz.hanusova.fingerprint_game.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by khanusova on 27.4.2016.
@@ -31,6 +30,11 @@ public class Place implements Serializable{
      * Type of place
      */
     private PlaceType placeType;
+
+    /**
+     * Material that could be found on the place
+     */
+    private Material material;
 
     /**
      * Floor
@@ -89,6 +93,14 @@ public class Place implements Serializable{
 
     public void setPlaceType(PlaceType placeType) {
         this.placeType = placeType;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     public Integer getFloor() {

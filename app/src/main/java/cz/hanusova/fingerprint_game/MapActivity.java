@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
@@ -27,7 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
+import cz.hanusova.fingerprint_game.service.UserService;
+import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.utils.Constants;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
@@ -41,6 +46,10 @@ public class MapActivity extends AbstractAsyncActivity {
     private static final String TAG = "MapActivity";
 
     private static final int REQ_CODE_QR = 1;
+    private static final int ICON_SIZE = 32;
+
+    @Bean(UserServiceImpl.class)
+    UserService userService;
 
 //    @ViewById(R.id.map_floor_1)
 //    Button btnFloor1;
@@ -54,8 +63,10 @@ public class MapActivity extends AbstractAsyncActivity {
     @ViewById(R.id.img_map)
     TouchImageView mapView;
 
+    @Deprecated
     @DrawableRes(R.drawable.j4np)
     Drawable map;
+    @Deprecated
     @DrawableRes(R.drawable.money_icon)
     Drawable icon;
 
@@ -66,10 +77,13 @@ public class MapActivity extends AbstractAsyncActivity {
     void init(){
         try {
             Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("J1NP.jpg").get();
+            Drawable mapDrawable = new BitmapDrawable(getResources(), bitmap);
 
-            //TODO: ziskat ikoncy
-            LayerDrawable ld = new LayerDrawable(new Drawable[]{new BitmapDrawable(getResources(), bitmap)});
-            mapView.setImageDrawable(ld);
+            AppUser user = userService.getActualUser();
+            List<Drawable> icons = getIcons(user.getPlaces());
+
+            LayerDrawable layers = createLayers(mapDrawable, icons);
+            changeIconPosition(mapDrawable, user.getPlaces(), layers);
 
             //TODO: pridat onTouchListener
         } catch (InterruptedException e) {
@@ -77,8 +91,51 @@ public class MapActivity extends AbstractAsyncActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
 
+    private List<Drawable> getIcons(List<Place> places) {
+        List<Drawable> icons = new ArrayList<>();
+        for (Place p : places) {
+            try {
+                String iconName = p.getPlaceType().getImgUrl();
+                if (iconName == null) {
+                    iconName = p.getMaterial().getIconName();
+                }
+                Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute(iconName).get();
+                Drawable icon = new BitmapDrawable(getResources(), bitmap);
+                icons.add(icon);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        return icons;
+    }
 
+    private LayerDrawable createLayers(Drawable mapDrawable, List<Drawable> icons) {
+//        LayerDrawable ld = new LayerDrawable(new Drawable[]{map});
+        Drawable[] layers = new Drawable[icons.size() + 1];
+        layers[0] = mapDrawable;
+        for (int i = 0; i < icons.size(); i++) {
+            Drawable icon = icons.get(i);
+            layers[i + 1] = icon;
+        }
+        return new LayerDrawable(layers);
+//        mapView.setImageDrawable(ld);
+    }
+
+    private void changeIconPosition(Drawable mapDrawable, List<Place> places, LayerDrawable ld) {
+        int width = mapDrawable.getIntrinsicWidth();
+        int height = mapDrawable.getIntrinsicHeight();
+
+        for (int i = 0; i < places.size(); i++) {
+            Place p = places.get(i);
+            int x = p.getxCoord();
+            int y = p.getyCoord();
+            ld.setLayerInset(i + 1, x, y, width - x - ICON_SIZE, height - y - ICON_SIZE);
+        }
+        mapView.setImageDrawable(ld);
     }
 
     private void showMap() {
