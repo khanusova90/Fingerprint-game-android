@@ -13,7 +13,6 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.DrawableRes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,21 +55,11 @@ public class MapActivity extends AbstractAsyncActivity {
     @ViewById(R.id.img_map)
     TouchImageView mapView;
 
-    @Deprecated
-    @DrawableRes(R.drawable.j4np)
-    Drawable map;
-    @Deprecated
-    @DrawableRes(R.drawable.money_icon)
-    Drawable icon;
-
-    private List<Bitmap> icons = new ArrayList<>();
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
     void init(){
         try {
-            Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("J1NP.jpg").get();
-//            Drawable mapDrawable = new BitmapDrawable(getResources(), bitmap);
+            Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("1NP.jpg").get();
             Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, MAP_WIDTH, MAP_HEIGHT, true));
             AppUser user = userService.getActualUser();
             List<Drawable> icons = getIcons(user.getPlaces());

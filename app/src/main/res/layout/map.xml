@@ -51,4 +51,13 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/map_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_person"
+        android:layout_above="@id/map_camera"
+        android:layout_alignLeft="@id/map_camera"
+        android:layout_marginBottom="24dp" />
+
 </RelativeLayout>
