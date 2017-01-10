@@ -44,3 +44,5 @@ captures/
 # Intellij
 *.iml
 
+gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-wrapper.jar
