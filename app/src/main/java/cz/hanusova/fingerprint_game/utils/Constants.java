@@ -26,6 +26,11 @@ public final class Constants {
     public static final String EXTRA_ACTIVITIES = "activities";
 
     public static final String MATERIAL_WORKER = "WORKER";
+    public static final String MATERIAL_WOOD = "WOOD";
+    public static final String MATERIAL_STONE = "STONE";
+
+    public static final int BUILD_WOOD = 10;
+    public static final int BUILD_STONE = 10;
 
     private Constants() {
     }

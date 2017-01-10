@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -224,7 +225,11 @@ public class QrActivity extends AppCompatActivity {
                 showWorkersSeek(workers);
                 break;
             case BUILD:
-
+                Inventory wood = userService.getInventory(Constants.MATERIAL_WOOD);
+                Inventory stone = userService.getInventory(Constants.MATERIAL_STONE);
+                int woodAmount = wood.getAmount().intValue() / Constants.BUILD_WOOD;
+                int stoneAmount = stone.getAmount().intValue() / Constants.BUILD_STONE;
+                showSeekBar(Math.min(woodAmount, stoneAmount));
                 break;
             default:
                 //TODO: informovat o nezname aktivite
@@ -237,6 +242,14 @@ public class QrActivity extends AppCompatActivity {
         int workersAmount = workers.getAmount().intValue();
         seekWorkers.setMax(workersAmount);
         seekWorkers.setProgress(workersAmount / 2);
+        seekWorkers.setVisibility(View.VISIBLE);
+        workAmountText.setVisibility(View.VISIBLE);
+    }
+
+    @UiThread
+    void showSeekBar(int maxValue){
+        seekWorkers.setMax(maxValue);
+        seekWorkers.setProgress(maxValue/2);
         seekWorkers.setVisibility(View.VISIBLE);
         workAmountText.setVisibility(View.VISIBLE);
     }
