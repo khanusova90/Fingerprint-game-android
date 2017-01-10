@@ -2,6 +2,7 @@ package cz.hanusova.fingerprint_game;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -58,19 +59,20 @@ public class MapActivity extends AbstractAsyncActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
     void init(){
-        try {
-            Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("1NP.jpg").get();
+//        try {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.j1np);
+//            Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("1NP.jpg").get();
             Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, MAP_WIDTH, MAP_HEIGHT, true));
             AppUser user = userService.getActualUser();
             List<Drawable> icons = getIcons(user.getPlaces());
 
             LayerDrawable layers = createLayers(mapDrawable, icons);
             changeIconPosition(mapDrawable, user.getPlaces(), layers);
-        } catch (InterruptedException e) {
-            e.printStackTrace(); //TODO: handle exceptions
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace(); //TODO: handle exceptions
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private List<Drawable> getIcons(List<Place> places) {
