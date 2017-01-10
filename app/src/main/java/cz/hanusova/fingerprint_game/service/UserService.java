@@ -17,6 +17,13 @@ public interface UserService {
     Inventory getWorkers();
 
     /**
+     * Gets inventory from user's inventory list. If it does not find any, returns <code>null</code>
+     * @param materialName Name of material in inventory
+     * @return {@link Inventory} with given material name or null
+     */
+    Inventory getInventory(String materialName);
+
+    /**
      *
      * @return Currently logged in {@link AppUser}
      */

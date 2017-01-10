@@ -40,6 +40,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Inventory getInventory(String materialName){
+        AppUser user = getActualUser();
+        List<Inventory> inventorySet = user.getInventory();
+        for (Inventory inv : inventorySet){
+            if (inv.getMaterial().getName().equals(materialName)){
+                return inv;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public AppUser getActualUser(){
         try {
             ObjectMapper mapper = new ObjectMapper();
