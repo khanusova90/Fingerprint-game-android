@@ -36,6 +36,7 @@ import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -47,7 +48,10 @@ import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
+import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
 import cz.hanusova.fingerprint_game.rest.RestClient;
+import cz.hanusova.fingerprint_game.scan.DeviceInformation;
+import cz.hanusova.fingerprint_game.scan.SensorScanner;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.utils.Constants;
@@ -197,12 +201,12 @@ public class QrActivity extends AppCompatActivity {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
                     startActivity();
-                    //TODO: zobrazit novou aktivitu na mape -> ActivityForResult
-                    MapActivity_.intent(getBaseContext())
-                            .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
-                            .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .flags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .start();
+//                    //TODO: zobrazit novou aktivitu na mape -> ActivityForResult
+//                    MapActivity_.intent(getBaseContext())
+//                            .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
+//                            .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                            .flags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                            .start();
                 }
             }
         };
@@ -260,6 +264,21 @@ public class QrActivity extends AppCompatActivity {
             return place;
         }
         return null;
+    }
+
+    private Fingerprint createFingerprint() {
+        Fingerprint p = new Fingerprint();
+        //TODO: naplnit fingerprint
+//        p.setWifiScans(wifiScans);
+//        p.setBleScans(bleScans); // naplnime daty z Bluetooth
+//        p.setCellScans(cellScans);
+//        new SensorScanner(this).fillPosition(p); // naplnime daty ze senzoru
+//        new DeviceInformation(this).fillPosition(p); // naplnime infomacemi o zarizeni
+//        p.setCreatedDate(FormatDate.dateToStringServer(new Date()));
+//        p.setLevel(floor);
+//        p.setX(x);
+//        p.setY(y);
+        return p;
     }
 
 

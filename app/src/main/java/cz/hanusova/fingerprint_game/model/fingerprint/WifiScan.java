@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.fingerprint;
+package cz.hanusova.fingerprint_game.model.fingerprint;
 
 /**
  * Created by khanusova on 10.1.2017.

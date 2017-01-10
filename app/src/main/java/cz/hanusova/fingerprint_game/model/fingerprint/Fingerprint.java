@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.fingerprint;
+package cz.hanusova.fingerprint_game.model.fingerprint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +176,7 @@ public class Fingerprint {
                 ",\"brand\":" + "\"" + brand + "\"" +
                 ",\"device\":" + "\"" + device + "\"" +
                 ",\"display\":" + "\"" + display + "\"" +
-                ",\"fingerprint\":" + "\"" + fingerprint + "\"" +
+                ",\"cz.hanusova.fingerprint_game.model.fingerprint\":" + "\"" + fingerprint + "\"" +
                 ",\"hardware\":" + "\"" + hardware + "\"" +
                 ",\"host\":" + "\"" + host + "\"" +
                 ",\"osId\":" + "\"" + osId + "\"" +
