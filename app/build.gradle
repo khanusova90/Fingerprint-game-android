@@ -51,7 +51,7 @@ dependencies {
     compile 'org.androidannotations:androidannotations-api:4.1.0'
     compile "org.androidannotations:rest-spring-api:4.1.0"
     apt "org.androidannotations:rest-spring:4.1.0"
-}
+    compile 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'}
 
 apt {
     arguments {
