@@ -39,7 +39,7 @@ import cz.hanusova.fingerprint_game.view.TouchImageView;
 public class MapActivity extends AbstractAsyncActivity {
     private static final String TAG = "MapActivity";
     private static final int REQ_CODE_QR = 1;
-    private static final int ICON_SIZE = 32;
+    private static final int ICON_SIZE = 3;
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
     //TODO: fix gonna be in version solving ticket
