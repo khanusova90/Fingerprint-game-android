@@ -74,9 +74,11 @@ public class LoginActivity extends AbstractAsyncActivity {
     @Click(R.id.btn_sign_in)
     protected void signIn(){
         showLoadingProgressDialog();
-        String username = etUsername.getText().toString();
+        //String username = etUsername.getText().toString();
+        String username = "zkouska", password = "zkouska";
         preferences.username().put(username);
-        preferences.password().put(etPassword.getText().toString());
+        preferences.password().put(password);
+        //preferences.password().put(etPassword.getText().toString());
         AppUser user = restClient.login(username);
         ObjectMapper mapper = new ObjectMapper();
         try {

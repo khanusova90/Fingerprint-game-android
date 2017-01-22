@@ -43,7 +43,7 @@ public class MapActivity extends AbstractAsyncActivity {
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
     //TODO: fix gonna be in version solving ticket
-    private int APP_VERSION = 1;
+    private int APP_VERSION = 2;
     private String CURRENT_FLOOR = "1NP.jpg";
 
 
@@ -58,7 +58,7 @@ public class MapActivity extends AbstractAsyncActivity {
     void init() {
         Bitmap bitmap = null;
         try {
-            bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(false, CURRENT_FLOOR, this.getApplicationContext(), APP_VERSION)
+            bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(CURRENT_FLOOR, this.getApplicationContext(), APP_VERSION)
                     .execute().get();
         } catch (InterruptedException e) {
             //TODO: handle
@@ -84,7 +84,7 @@ public class MapActivity extends AbstractAsyncActivity {
                 if (iconName == null) {
                     iconName = p.getMaterial().getIconName();
                 }
-                Bitmap bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(false, iconName, this.getApplicationContext(), APP_VERSION)
+                Bitmap bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(iconName, this.getApplicationContext(), APP_VERSION)
                         .execute()
                         .get();
 
