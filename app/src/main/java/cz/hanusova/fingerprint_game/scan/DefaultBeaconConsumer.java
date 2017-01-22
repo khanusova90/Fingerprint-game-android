@@ -6,6 +6,12 @@ import android.content.ServiceConnection;
 import android.os.RemoteException;
 import android.util.Log;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
 import java.util.Collection;
 
 
@@ -13,6 +19,8 @@ import java.util.Collection;
  * Created by Matej on 8.11.2015.
  */
 public class DefaultBeaconConsumer implements org.altbeacon.beacon.BeaconConsumer{
+    protected static final String TAG = "BLE consumer";
+
     Context context;
     Scanner scanner;
     BeaconManager beaconManager;
@@ -47,7 +55,7 @@ public class DefaultBeaconConsumer implements org.altbeacon.beacon.BeaconConsume
         try {
             beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
         } catch (RemoteException e) {
-            Log.e(C.LOG_BLESCAN, "Error while conducting a BLE Scan", e);
+            Log.e(TAG, "Error while conducting a BLE Scan", e);
         }
     }
 

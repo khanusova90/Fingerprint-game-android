@@ -26,11 +26,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.altbeacon.beacon.Beacon;
+import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.UiThread;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
 import cz.hanusova.fingerprint_game.model.fingerprint.CellScan;
 import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
@@ -40,7 +45,9 @@ import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
  * Pri pouziti je nutne vzdy v onPause aktivity ukoncovat skenovani (stopScan()) aby nedochazelo k leakovani receiveru a padu aplikace
  * Created by Matej Danicek on 7.11.2015.
  */
+@EBean
 public class Scanner {
+    private static final String TAG = "Scanner";
     Context context;
 
     List<BleScan> bleScans = new ArrayList<>();
@@ -65,8 +72,6 @@ public class Scanner {
     Timer timer;
     CountDownTimer cdt;
 
-    //StepDetector stepDetector;
-
     /**
      * zdali je scan dokoncen, slouzi pro snimaci aktivitu
      */
@@ -89,7 +94,7 @@ public class Scanner {
         wifiBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(C.LOG_WIFISCAN, "Number of wifi networks scanned: " + wm.getScanResults().size() + ", " + (running ? "Scanning again" : "Finished scanning"));
+                Log.d(TAG, "Number of wifi networks scanned: " + wm.getScanResults().size() + ", " + (running ? "Scanning again" : "Finished scanning"));
                 wifiScans.addAll(convertWifiResults(wm.getScanResults()));
                 if (cont) {
                     wm.startScan();
@@ -104,11 +109,10 @@ public class Scanner {
      *
      * @param time               - jak dlouho ma byt sken spusten
      * @param scanResultListener - listener, ktery ma byt informovan o dokonceni skenovani a obdrzet vysledky
-     * @param frakce1 - jestli dany hrac patri do frakce1
      * @return - zda bylo skenovani uspesne spusteno. False kdyz jsou nektere adaptery vypnute nebo skenovani uz bezi
      */
-    public boolean startScan(int time, ScanResultListener scanResultListener, boolean frakce1, ViewGroup root) {
-        return startScan(time, true, true, true, scanResultListener, frakce1, root);
+    public boolean startScan(int time, ScanResultListener scanResultListener) {
+        return startScan(time, true, true, true, scanResultListener);
     }
 
     /**
@@ -121,7 +125,7 @@ public class Scanner {
      * @param scanResultListener - listener, ktery ma byt informovan o dokonceni skenovani a obdrzet vysledky. Pro adaptery, na kterych nemelo byt skenovano vraci prazdny list a ne null
      * @return - zda bylo skenovani uspesne spusteno. False kdyz jsou nektere adaptery vypnute nebo skenovani uz bezi
      */
-    public boolean startScan(final int time, boolean wifi, boolean ble, boolean cell, final ScanResultListener scanResultListener, boolean frakce1, ViewGroup root) {
+    public boolean startScan(final int time, boolean wifi, boolean ble, boolean cell, final ScanResultListener scanResultListener) {
         ble = ble && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE); //vyradime ble pokud ho zarizeni nema.
         if (running || !enableHW(wifi, ble)) {
             return false; //pokud jeste nedobehlo probihajici skenovani (nebo problemy pri zapinani HW), NEstartuj nove a vrat false
@@ -130,7 +134,7 @@ public class Scanner {
         cont = true; //nastav aby se synchronni skenovani cyklicky spoustela znovu
 
         scanFinished = false;
-        progressDialog = showProgressDialogFlag(frakce1, root);
+//        progressDialog = showProgressDialogFlag(frakce1, root);
 
         wifiScans.clear();
         bleScans.clear();
@@ -158,7 +162,7 @@ public class Scanner {
                                 cancel();
                             }
                         }
-                    }, 0, C.SCAN_FINDER_TIME);
+                    }, 0, 5000);
         }
 
         //casovac ukonceni skenovani
@@ -188,28 +192,29 @@ public class Scanner {
         if (ble) { //pokud nas zajima zapnuti BT
             final BluetoothAdapter btAdapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
             if (btAdapter != null && !btAdapter.isEnabled()) {
-                CustomDialog.showAlertDialog(context, "BT je vypnut. Pro zabírání musí být zapnut. Zapínám", new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        if (!btAdapter.enable()) {
-                            Toast.makeText(context, "Chyba při zapínání BT", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                //TODO: informovat uzivatele?
+//                CustomDialog.showAlertDialog(context, "BT je vypnut. Pro zabírání musí být zapnut. Zapínám", new DialogInterface.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(DialogInterface dialogInterface) {
+//                        if (!btAdapter.enable()) {
+//                            Toast.makeText(context, "Chyba při zapínání BT", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
                 return false; //zajima nas zapnuti BT ale ten je off -> navrat false protoze se musi pockat na jeho asynchronni zapnuti
             }
         }
         if (wifi) { //zajima nas zapnuti wifi
             if (wm.isWifiEnabled()) {
-                return true; //wifi je zapla a ok
+                return true;
             } else {
-                if (!wm.setWifiEnabled(true)) {
-                    Toast.makeText(context, "Chyba při zapínání WiFi", Toast.LENGTH_SHORT).show();
-                }
+//                if (!wm.setWifiEnabled(true)) {
+//                    Toast.makeText(context, "Chyba při zapínání WiFi", Toast.LENGTH_SHORT).show();
+//                }
                 return false;
             }
         }
-        return true; //chceme zapnout jen bt -> ktery je zaply protoze jsme dosli az sem
+        return true;
     }
 
     /**
@@ -246,7 +251,7 @@ public class Scanner {
             wifiScan.setTime(SystemClock.uptimeMillis() - startTime);
 
             wifiScans.add(wifiScan);
-            Log.d(C.LOG_WIFISCAN, scan.toString());
+            Log.d(TAG, scan.toString());
         }
         return wifiScans;
     }
@@ -265,7 +270,7 @@ public class Scanner {
         bleScan.setMinor(scan.getId3().toInt());
         bleScan.setTime(SystemClock.uptimeMillis() - startTime);
         bleScans.add(bleScan);
-        Log.d(C.LOG_BLESCAN, bleScan.toString());
+        Log.d(TAG, bleScan.toString());
     }
 
     /**
@@ -285,78 +290,8 @@ public class Scanner {
             cellScan.setLac(cellResult.getLac());
             cellScan.setPsc(cellResult.getPsc());
             cellScans.add(cellScan);
-            Log.d(C.LOG_CELLSCAN, cellScan.toString());
+            Log.d(TAG, cellScan.toString());
         }
         return cellScans;
-    }
-
-    /**
-     * Vytvori a zobrazi progressDialog s animaci zabirani vlajky
-     *
-     * @return zobrazeny progressDialog
-     */
-    private ProgressDialog showProgressDialogFlag(boolean frakce1, ViewGroup root) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View layout = inflater.inflate(R.layout.flags,
-        root);
-
-        ImageView imageView = (ImageView) layout.findViewById(R.id.imageView4);
-        TextView textView = (TextView) layout.findViewById(R.id.textViewTime);
-
-        progressDialog = new ProgressDialog(context);
-
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-
-        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        progressDialog.setContentView(layout);
-        AlphaAnimation animation;
-
-        if (frakce1) {
-            animation = new AlphaAnimation(1.0f, 0.0f);
-        } else {
-            animation = new AlphaAnimation(0.0f, 1.0f);
-        }
-        animation.setDuration(C.SCAN_COLLECTOR_TIME);
-        animation.setFillAfter(true);
-        imageView.startAnimation(animation);
-
-
-        updateProgressDialogFlag(textView);
-        return progressDialog;
-    }
-
-    /**
-     * Updatuje zobrazovane hodnoty v progressDialogu pokud ten neni null.
-     */
-    private void updateProgressDialogFlag(final TextView textView) {
-        if (progressDialog != null) {
-            ((Activity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //stepDetector.enableStepDetector(true);
-                    cdt = new CountDownTimer(C.SCAN_COLLECTOR_TIME, 1) {
-
-                        public void onTick(long millisUntilFinished) {
-                           /* if (stepDetector.move()) {
-                                stopScan();
-                                CustomDialog.showAlertDialog(context, "Příliš jsi se pohl!");
-                            } else {*/
-                                // 1000L zajisti ze to bude v s a celociselne
-                                textView.setText("Do zabrání zbývá: " + millisUntilFinished/1000L + ", nehýbej se.");
-                           // }
-                        }
-
-                        public void onFinish() {
-                            textView.setText("Hotovo!");
-                        }
-                    };
-                    cdt.start();
-                }
-            });
-        }
     }
 }

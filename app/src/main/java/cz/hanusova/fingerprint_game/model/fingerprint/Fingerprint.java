@@ -1,6 +1,9 @@
 package cz.hanusova.fingerprint_game.model.fingerprint;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -8,15 +11,14 @@ import java.util.List;
  */
 public class Fingerprint {
 
-    //FIXME: CODE REFACTOR NEEDED!
-    String level;
+    private String level;
 
-    int x;
-    int y;
-    String description;
-    List<WifiScan> wifiScans = new ArrayList<>();
-    List<BleScan> bleScans = new ArrayList<>();
-    List<CellScan> cellScans = new ArrayList<>();
+    private int x;
+    private int y;
+    private String description;
+    private List<WifiScan> wifiScans = new ArrayList<>();
+    private List<BleScan> bleScans = new ArrayList<>();
+    private List<CellScan> cellScans = new ArrayList<>();
 
     // other recorded stuff...
     private float accX, accY, accZ, gyroX, gyroY, gyroZ, magX, magY, magZ;
@@ -26,7 +28,8 @@ public class Fingerprint {
 
     private Float lat, lon;
 
-    String createdDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdDate;
 
     public Fingerprint() {
     }
@@ -43,7 +46,7 @@ public class Fingerprint {
         this.level = level;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 

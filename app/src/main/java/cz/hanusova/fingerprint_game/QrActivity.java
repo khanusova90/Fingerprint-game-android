@@ -37,6 +37,7 @@ import org.androidannotations.rest.spring.annotations.RestService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -44,13 +45,18 @@ import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
+import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
+import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
+import cz.hanusova.fingerprint_game.model.fingerprint.CellScan;
 import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
+import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scan.DeviceInformation;
+import cz.hanusova.fingerprint_game.scan.Scanner;
 import cz.hanusova.fingerprint_game.scan.SensorScanner;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
@@ -89,6 +95,7 @@ public class QrActivity extends AppCompatActivity {
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
     private CountDownTimer timer;
+    private Scanner scanner;
 
     private Place place;
 
@@ -98,6 +105,7 @@ public class QrActivity extends AppCompatActivity {
         createCameraSource(true, false);
         createTimer();
         startTracking();
+        scanner = new Scanner(this);
     }
 
     private void hideSeekers(){
@@ -127,6 +135,7 @@ public class QrActivity extends AppCompatActivity {
         qrCountdown.setVisibility(View.GONE);
         timer.cancel();
         hideSeekers();
+        scanner.stopScan();
     }
 
     /**
@@ -156,6 +165,14 @@ public class QrActivity extends AppCompatActivity {
                 }
                 changeCountdownVisibility();
                 timer.start();
+                scanner.startScan(10000, new ScanResultListener() {
+                    @Override
+                    public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
+                        Log.d(TAG, "Received onScanfinish, wifi = " + wifiScans.size() + ", ble = " + bleScans.size() + ", gsm = " + cellScans.size());
+                        createFingerprint(wifiScans, bleScans, cellScans, 100, 100, place); //FIXME: vzit x a y z lokalizace
+                        //TODO: odeslat fingerprint na server
+                    }
+                });
                 ActivityEnum activity = place.getPlaceType().getActivity();
                 BarcodeGraphic.activity = activity;
                 showActivity(activity);
@@ -193,6 +210,7 @@ public class QrActivity extends AppCompatActivity {
                     qrCountdown.setVisibility(View.GONE);
                     stopTimer();
                     startTracking();
+                    scanner.stopScan();
                 }
             }
 
@@ -200,6 +218,7 @@ public class QrActivity extends AppCompatActivity {
             public void onFinish() {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
+                    scanner.stopScan();
                     startActivity();
 //                    //TODO: zobrazit novou aktivitu na mape -> ActivityForResult
 //                    MapActivity_.intent(getBaseContext())
@@ -266,18 +285,18 @@ public class QrActivity extends AppCompatActivity {
         return null;
     }
 
-    private Fingerprint createFingerprint() {
+    //TODO: refactor (napr. DTO)
+    private Fingerprint createFingerprint(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans, int x, int y, Place place) {
         Fingerprint p = new Fingerprint();
-        //TODO: naplnit fingerprint
-//        p.setWifiScans(wifiScans);
-//        p.setBleScans(bleScans); // naplnime daty z Bluetooth
-//        p.setCellScans(cellScans);
-//        new SensorScanner(this).fillPosition(p); // naplnime daty ze senzoru
-//        new DeviceInformation(this).fillPosition(p); // naplnime infomacemi o zarizeni
-//        p.setCreatedDate(FormatDate.dateToStringServer(new Date()));
-//        p.setLevel(floor);
-//        p.setX(x);
-//        p.setY(y);
+        p.setWifiScans(wifiScans);
+        p.setBleScans(bleScans); // naplnime daty z Bluetooth
+        p.setCellScans(cellScans);
+        new SensorScanner(this).fillPosition(p); // naplnime daty ze senzoru
+        new DeviceInformation(this).fillPosition(p); // naplnime infomacemi o zarizeni
+        p.setCreatedDate(new Date());
+        p.setLevel(String.valueOf(place.getFloor()));
+        p.setX(x);
+        p.setY(y);
         return p;
     }
 

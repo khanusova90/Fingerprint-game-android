@@ -51,6 +51,7 @@ dependencies {
     compile 'org.androidannotations:androidannotations-api:4.1.0'
     compile "org.androidannotations:rest-spring-api:4.1.0"
     apt "org.androidannotations:rest-spring:4.1.0"
+    compile 'org.altbeacon:android-beacon-library:2.7'
 }
 
 apt {
