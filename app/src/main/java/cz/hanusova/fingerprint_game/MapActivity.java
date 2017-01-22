@@ -1,12 +1,15 @@
 package cz.hanusova.fingerprint_game;
 
 import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.os.Bundle;
+import android.util.LruCache;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -29,50 +32,48 @@ import cz.hanusova.fingerprint_game.view.TouchImageView;
 
 /**
  * Created by khanusova on 6.6.2016.
- *
+ * <p>
  * Activity for displaying map
  */
 @EActivity(R.layout.map)
 public class MapActivity extends AbstractAsyncActivity {
     private static final String TAG = "MapActivity";
-
     private static final int REQ_CODE_QR = 1;
     private static final int ICON_SIZE = 32;
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
+    //TODO: fix gonna be in version solving ticket
+    private int APP_VERSION = 1;
+    private String CURRENT_FLOOR = "1NP.jpg";
+
 
     @Bean(UserServiceImpl.class)
     UserService userService;
-
-//    @ViewById(R.id.map_floor_1)
-//    Button btnFloor1;
-//    @ViewById(R.id.map_floor_2)
-//    Button btnFloor2;
-//    @ViewById(R.id.map_floor_3)
-//    Button btnFloor3;
-//    @ViewById(R.id.map_floor_4)
-//    Button btnFloor4;
 
     @ViewById(R.id.img_map)
     TouchImageView mapView;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
-    void init(){
-//        try {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.j1np);
-//            Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute("1NP.jpg").get();
-            Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, MAP_WIDTH, MAP_HEIGHT, true));
-            AppUser user = userService.getActualUser();
-            List<Drawable> icons = getIcons(user.getPlaces());
+    void init() {
+        Bitmap bitmap = null;
+        try {
+            bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(false, CURRENT_FLOOR, this.getApplicationContext(), APP_VERSION)
+                    .execute().get();
+        } catch (InterruptedException e) {
+            //TODO: handle
+            e.printStackTrace();
 
-            LayerDrawable layers = createLayers(mapDrawable, icons);
-            changeIconPosition(mapDrawable, user.getPlaces(), layers);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace(); //TODO: handle exceptions
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, MAP_WIDTH, MAP_HEIGHT, true));
+        AppUser user = userService.getActualUser();
+        List<Drawable> icons = getIcons(user.getPlaces());
+        LayerDrawable layers = createLayers(mapDrawable, icons);
+        changeIconPosition(mapDrawable, user.getPlaces(), layers);
+
     }
 
     private List<Drawable> getIcons(List<Place> places) {
@@ -83,7 +84,10 @@ public class MapActivity extends AbstractAsyncActivity {
                 if (iconName == null) {
                     iconName = p.getMaterial().getIconName();
                 }
-                Bitmap bitmap = new cz.hanusova.fingerprint_game.task.MapAsyncTask().execute(iconName).get();
+                Bitmap bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(false, iconName, this.getApplicationContext(), APP_VERSION)
+                        .execute()
+                        .get();
+
                 Drawable icon = new BitmapDrawable(getResources(), bitmap);
                 icons.add(icon);
             } catch (InterruptedException e) {
@@ -118,8 +122,9 @@ public class MapActivity extends AbstractAsyncActivity {
         mapView.setImageDrawable(ld);
     }
 
+
     @Click(R.id.map_camera)
-    void startCamera(){
+    void startCamera() {
         QrActivity_.intent(this).startForResult(REQ_CODE_QR);
     }
 
