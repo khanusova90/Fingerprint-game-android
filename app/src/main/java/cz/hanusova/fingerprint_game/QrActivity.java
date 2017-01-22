@@ -4,10 +4,12 @@ package cz.hanusova.fingerprint_game;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Camera;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -99,8 +101,17 @@ public class QrActivity extends AppCompatActivity {
 
     private Place place;
 
+    private boolean wasBTEnabled, wasWifiEnabled;
+    private WifiManager wm;
+    private BluetoothAdapter bluetoothAdapter;
+
     @AfterViews
     public void init() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wasBTEnabled = bluetoothAdapter.isEnabled();
+        wasWifiEnabled = wm.isWifiEnabled();
+        changeBTWifiState(true);
         //TODO: Check permission
         createCameraSource(true, false);
         createTimer();
@@ -136,6 +147,7 @@ public class QrActivity extends AppCompatActivity {
         timer.cancel();
         hideSeekers();
         scanner.stopScan();
+        changeBTWifiState(false);
     }
 
     /**
@@ -149,6 +161,32 @@ public class QrActivity extends AppCompatActivity {
             preview.release();
         }
         qrCountdown.setVisibility(View.GONE);
+    }
+
+    /**
+     * Zapne BT a Wifi pokud je aktivita aktivni. Pokud bylo BT nebo Wifi zaple, zustane zaple.
+     *
+     * @param enable jestli se ma bt a wifi zapnout/vypnout
+     * @return true
+     */
+    public boolean changeBTWifiState(boolean enable) {
+        if (enable) {
+            if (!wasBTEnabled && !wasWifiEnabled) {
+                wm.setWifiEnabled(true);
+                return bluetoothAdapter.enable();
+            } else if (!wasBTEnabled) {
+                return bluetoothAdapter.enable();
+            } else
+                return wasWifiEnabled || wm.setWifiEnabled(true);
+        } else {
+            if (!wasBTEnabled && !wasWifiEnabled) {
+                wm.setWifiEnabled(false);
+                return bluetoothAdapter.disable();
+            } else if (!wasBTEnabled) {
+                return bluetoothAdapter.disable();
+            } else
+                return wasWifiEnabled || wm.setWifiEnabled(false);
+        }
     }
 
     private void startTracking(){
@@ -220,12 +258,6 @@ public class QrActivity extends AppCompatActivity {
                 if (place != null) {
                     scanner.stopScan();
                     startActivity();
-//                    //TODO: zobrazit novou aktivitu na mape -> ActivityForResult
-//                    MapActivity_.intent(getBaseContext())
-//                            .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
-//                            .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                            .flags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                            .start();
                 }
             }
         };
@@ -297,6 +329,7 @@ public class QrActivity extends AppCompatActivity {
         p.setLevel(String.valueOf(place.getFloor()));
         p.setX(x);
         p.setY(y);
+        System.out.println(p.toString());
         return p;
     }
 

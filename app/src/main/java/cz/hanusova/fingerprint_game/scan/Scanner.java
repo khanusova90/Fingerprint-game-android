@@ -45,7 +45,6 @@ import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
  * Pri pouziti je nutne vzdy v onPause aktivity ukoncovat skenovani (stopScan()) aby nedochazelo k leakovani receiveru a padu aplikace
  * Created by Matej Danicek on 7.11.2015.
  */
-@EBean
 public class Scanner {
     private static final String TAG = "Scanner";
     Context context;
