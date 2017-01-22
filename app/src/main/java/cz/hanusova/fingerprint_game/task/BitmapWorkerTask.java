@@ -26,7 +26,6 @@ import cz.hanusova.fingerprint_game.utils.Constants;
 public class BitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
 
     private String DIR_NAME = "testDir";
-    private Boolean initNeeded;
     private DiskLruCache diskLruCache;
     private String bitmapName;
     private File cacheDir;
@@ -37,8 +36,7 @@ public class BitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
     /**
      * To pass various objects easily
      */
-    public BitmapWorkerTask(Boolean initNeeded, String bitmapName, Context context, int appVersion) {
-        this.initNeeded = initNeeded;
+    public BitmapWorkerTask(String bitmapName, Context context, int appVersion) {
         this.bitmapName = bitmapName;
         this.context = context;
         this.appVersion = appVersion;
