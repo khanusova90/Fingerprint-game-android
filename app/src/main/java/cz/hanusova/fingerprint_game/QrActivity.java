@@ -4,11 +4,13 @@ package cz.hanusova.fingerprint_game;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +39,8 @@ import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -44,11 +48,19 @@ import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
+import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
+import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
+import cz.hanusova.fingerprint_game.model.fingerprint.CellScan;
+import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
+import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
 import cz.hanusova.fingerprint_game.rest.RestClient;
+import cz.hanusova.fingerprint_game.scan.DeviceInformation;
+import cz.hanusova.fingerprint_game.scan.Scanner;
+import cz.hanusova.fingerprint_game.scan.SensorScanner;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.utils.Constants;
@@ -86,15 +98,26 @@ public class QrActivity extends AppCompatActivity {
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
     private CountDownTimer timer;
+    private Scanner scanner;
 
     private Place place;
 
+    private boolean wasBTEnabled, wasWifiEnabled;
+    private WifiManager wm;
+    private BluetoothAdapter bluetoothAdapter;
+
     @AfterViews
     public void init() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wasBTEnabled = bluetoothAdapter.isEnabled();
+        wasWifiEnabled = wm.isWifiEnabled();
+        changeBTWifiState(true);
         //TODO: Check permission
         createCameraSource(true, false);
         createTimer();
         startTracking();
+        scanner = new Scanner(this);
     }
 
     private void hideSeekers(){
@@ -124,6 +147,8 @@ public class QrActivity extends AppCompatActivity {
         qrCountdown.setVisibility(View.GONE);
         timer.cancel();
         hideSeekers();
+        scanner.stopScan();
+        changeBTWifiState(false);
     }
 
     /**
@@ -137,6 +162,32 @@ public class QrActivity extends AppCompatActivity {
             preview.release();
         }
         qrCountdown.setVisibility(View.GONE);
+    }
+
+    /**
+     * Zapne BT a Wifi pokud je aktivita aktivni. Pokud bylo BT nebo Wifi zaple, zustane zaple.
+     *
+     * @param enable jestli se ma bt a wifi zapnout/vypnout
+     * @return true
+     */
+    public boolean changeBTWifiState(boolean enable) {
+        if (enable) {
+            if (!wasBTEnabled && !wasWifiEnabled) {
+                wm.setWifiEnabled(true);
+                return bluetoothAdapter.enable();
+            } else if (!wasBTEnabled) {
+                return bluetoothAdapter.enable();
+            } else
+                return wasWifiEnabled || wm.setWifiEnabled(true);
+        } else {
+            if (!wasBTEnabled && !wasWifiEnabled) {
+                wm.setWifiEnabled(false);
+                return bluetoothAdapter.disable();
+            } else if (!wasBTEnabled) {
+                return bluetoothAdapter.disable();
+            } else
+                return wasWifiEnabled || wm.setWifiEnabled(false);
+        }
     }
 
     private void startTracking(){
@@ -153,6 +204,13 @@ public class QrActivity extends AppCompatActivity {
                 }
                 changeCountdownVisibility();
                 timer.start();
+                scanner.startScan(10000, new ScanResultListener() {
+                    @Override
+                    public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
+                        Log.d(TAG, "Received onScanfinish, wifi = " + wifiScans.size() + ", ble = " + bleScans.size() + ", gsm = " + cellScans.size());
+                        createFingerprint(wifiScans, bleScans, cellScans, 100, 100, place); //FIXME: vzit x a y z lokalizace
+                    }
+                });
                 ActivityEnum activity = place.getPlaceType().getActivity();
                 BarcodeGraphic.activity = activity;
                 showActivity(activity);
@@ -190,6 +248,7 @@ public class QrActivity extends AppCompatActivity {
                     qrCountdown.setVisibility(View.GONE);
                     stopTimer();
                     startTracking();
+                    scanner.stopScan();
                 }
             }
 
@@ -198,12 +257,6 @@ public class QrActivity extends AppCompatActivity {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
                     startActivity();
-                    //TODO: zobrazit novou aktivitu na mape -> ActivityForResult
-                    MapActivity_.intent(getBaseContext())
-                            .flags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
-                            .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .flags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .start();
                 }
             }
         };
@@ -273,6 +326,21 @@ public class QrActivity extends AppCompatActivity {
             return place;
         }
         return null;
+    }
+
+    private Fingerprint createFingerprint(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans, int x, int y, Place place) {
+        Fingerprint p = new Fingerprint();
+        p.setWifiScans(wifiScans);
+        p.setBleScans(bleScans); // naplnime daty z Bluetooth
+        p.setCellScans(cellScans);
+        new SensorScanner(this).fillPosition(p); // naplnime daty ze senzoru
+        new DeviceInformation(this).fillPosition(p); // naplnime infomacemi o zarizeni
+        p.setCreatedDate(new Date());
+        p.setLevel(String.valueOf(place.getFloor()));
+        p.setX(x);
+        p.setY(y);
+        Log.d(TAG, "New fingerprint: " + p.toString());
+        return p;
     }
 
 
