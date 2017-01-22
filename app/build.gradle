@@ -54,6 +54,7 @@ dependencies {
     compile 'org.altbeacon:android-beacon-library:2.7'
 }
 
+
 apt {
     arguments {
         androidManifestFile variant.outputs[0]?.processResources?.manifestFile
