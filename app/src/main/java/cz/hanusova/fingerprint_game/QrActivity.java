@@ -208,7 +208,6 @@ public class QrActivity extends AppCompatActivity {
                     public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
                         Log.d(TAG, "Received onScanfinish, wifi = " + wifiScans.size() + ", ble = " + bleScans.size() + ", gsm = " + cellScans.size());
                         createFingerprint(wifiScans, bleScans, cellScans, 100, 100, place); //FIXME: vzit x a y z lokalizace
-                        //TODO: odeslat fingerprint na server
                     }
                 });
                 ActivityEnum activity = place.getPlaceType().getActivity();
@@ -256,7 +255,6 @@ public class QrActivity extends AppCompatActivity {
             public void onFinish() {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
-                    scanner.stopScan();
                     startActivity();
                 }
             }
@@ -317,7 +315,6 @@ public class QrActivity extends AppCompatActivity {
         return null;
     }
 
-    //TODO: refactor (napr. DTO)
     private Fingerprint createFingerprint(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans, int x, int y, Place place) {
         Fingerprint p = new Fingerprint();
         p.setWifiScans(wifiScans);
@@ -329,7 +326,7 @@ public class QrActivity extends AppCompatActivity {
         p.setLevel(String.valueOf(place.getFloor()));
         p.setX(x);
         p.setY(y);
-        System.out.println(p.toString());
+        Log.d(TAG, "New fingerprint: " + p.toString());
         return p;
     }
 

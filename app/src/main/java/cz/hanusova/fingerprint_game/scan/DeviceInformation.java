@@ -12,7 +12,7 @@ import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
  * Dominik Matoulek 2015
  */
 public class DeviceInformation {
-    Context context;
+    private Context context;
 
     /**
      * Inicializuje DeviceInformation
