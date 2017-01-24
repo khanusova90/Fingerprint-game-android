@@ -208,7 +208,7 @@ public class QrActivity extends AppCompatActivity {
                     @Override
                     public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
                         Log.d(TAG, "Received onScanfinish, wifi = " + wifiScans.size() + ", ble = " + bleScans.size() + ", gsm = " + cellScans.size());
-                        createFingerprint(wifiScans, bleScans, cellScans, 100, 100, place); //FIXME: vzit x a y z lokalizace
+                        createFingerprint(wifiScans, bleScans, cellScans, place);
                     }
                 });
                 ActivityEnum activity = place.getPlaceType().getActivity();
@@ -328,7 +328,16 @@ public class QrActivity extends AppCompatActivity {
         return null;
     }
 
-    private Fingerprint createFingerprint(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans, int x, int y, Place place) {
+    /**
+     * Creates new fingerprint
+     *
+     * @param wifiScans
+     * @param bleScans
+     * @param cellScans
+     * @param place
+     * @return {@link Fingerprint} filled with information about scans
+     */
+    private Fingerprint createFingerprint(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans, Place place) {
         Fingerprint p = new Fingerprint();
         p.setWifiScans(wifiScans);
         p.setBleScans(bleScans); // naplnime daty z Bluetooth
@@ -337,8 +346,8 @@ public class QrActivity extends AppCompatActivity {
         new DeviceInformation(this).fillPosition(p); // naplnime infomacemi o zarizeni
         p.setCreatedDate(new Date());
         p.setLevel(String.valueOf(place.getFloor()));
-        p.setX(x);
-        p.setY(y);
+        p.setX(place.getxCoord());
+        p.setY(place.getyCoord());
         Log.d(TAG, "New fingerprint: " + p.toString());
         return p;
     }
