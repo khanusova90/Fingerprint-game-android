@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
+import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
@@ -30,5 +31,8 @@ public interface RestClient {
 
     @Post("/activity/start?materialAmount={materialAmount}")
     ArrayList<UserActivity> startActivity(@Path Integer materialAmount, @Body Place place);
+
+    @Post("/fingerprint/save")
+    void sendFingerprint(@Body Fingerprint fingerprint);
 
 }
