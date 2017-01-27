@@ -208,7 +208,8 @@ public class QrActivity extends AppCompatActivity {
                     @Override
                     public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
                         Log.d(TAG, "Received onScanfinish, wifi = " + wifiScans.size() + ", ble = " + bleScans.size() + ", gsm = " + cellScans.size());
-                        createFingerprint(wifiScans, bleScans, cellScans, place);
+                        Fingerprint fingerprint = createFingerprint(wifiScans, bleScans, cellScans, place);
+                        restClient.sendFingerprint(fingerprint);
                     }
                 });
                 ActivityEnum activity = place.getPlaceType().getActivity();
