@@ -273,6 +273,7 @@ public class QrActivity extends AppCompatActivity {
     }
 
     private void showActivity(ActivityEnum activity){ //FIXME: prejmenovat
+        //TODO: upravit, pokud uz uzivatel na danem miste ma spustenou aktivitu -> ukazat aktualni pocet
         switch(activity){
             case MINE:
                 Inventory workers = userService.getWorkers();

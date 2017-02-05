@@ -224,7 +224,9 @@ public class Scanner {
             return;
         }
         cont = false;
-        timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+        }
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
@@ -237,6 +239,7 @@ public class Scanner {
         beaconConsumer.unBind();
         running = false;
     }
+
     /**
      * Prevede list ScanResultu na list WifiScanu (custom trida) s prevodem timestampu vzhledem k pocatku skenovani. Nepridava do celkoveho Listu skenu
      *
