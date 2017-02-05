@@ -29,6 +29,11 @@ public class AppUser implements Serializable{
 
     private List<Place> places = new ArrayList<>();
 
+    private List<Item> items = new ArrayList<>();
+
+    /*
+     * Getters and setters
+     */
     public Long getIdUser() {
         return idUser;
     }
@@ -99,5 +104,13 @@ public class AppUser implements Serializable{
 
     public void setPlaces(List<Place> places) {
         this.places = places;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }
