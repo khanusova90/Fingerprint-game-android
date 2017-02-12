@@ -286,6 +286,9 @@ public class QrActivity extends AppCompatActivity {
                 int stoneAmount = stone.getAmount().intValue() / Constants.BUILD_STONE;
                 showSeekBar(Math.min(woodAmount, stoneAmount));
                 break;
+            case BUY:
+
+                break;
             default:
                 //TODO: informovat o nezname aktivite
                 break;

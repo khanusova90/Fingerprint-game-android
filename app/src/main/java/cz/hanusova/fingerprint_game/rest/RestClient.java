@@ -10,6 +10,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import java.util.ArrayList;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
@@ -34,5 +35,8 @@ public interface RestClient {
 
     @Post("/fingerprint/save")
     void sendFingerprint(@Body Fingerprint fingerprint);
+
+    @Post("/activity/buy")
+    AppUser buyItem(@Body Item item);
 
 }

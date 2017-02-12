@@ -11,6 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.LruCache;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
@@ -56,6 +59,7 @@ public class MapActivity extends AbstractAsyncActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
     void init() {
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
         Bitmap bitmap = null;
         try {
             bitmap = new cz.hanusova.fingerprint_game.task.BitmapWorkerTask(CURRENT_FLOOR, this.getApplicationContext(), APP_VERSION)

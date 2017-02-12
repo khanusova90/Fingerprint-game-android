@@ -40,20 +40,21 @@ apply plugin: 'android-apt'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
     compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
     compile 'org.mindrot:jbcrypt:0.3m'
-    compile 'com.google.android.gms:play-services-vision:8.4.0'
-    apt 'org.androidannotations:androidannotations:4.1.0'
+    compile 'com.google.android.gms:play-services-vision:10.0.1'
     compile 'org.androidannotations:androidannotations-api:4.1.0'
-    compile "org.androidannotations:rest-spring-api:4.1.0"
-    apt "org.androidannotations:rest-spring:4.1.0"
+    compile 'org.androidannotations:rest-spring-api:4.1.0'
     compile 'org.altbeacon:android-beacon-library:2.7'
     compile 'com.jakewharton:disklrucache:2.0.2'
-
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    testCompile 'junit:junit:4.12'
+    apt 'org.androidannotations:androidannotations:4.1.0'
+    apt 'org.androidannotations:rest-spring:4.1.0'
 }
 
 
@@ -70,3 +71,5 @@ apt {
         // logFile '/var/log/aa.log'
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
