@@ -53,6 +53,7 @@ dependencies {
     apt "org.androidannotations:rest-spring:4.1.0"
     compile 'org.altbeacon:android-beacon-library:2.7'
     compile 'com.jakewharton:disklrucache:2.0.2'
+    compile 'com.github.clans:fab:1.6.4'
 
 }
 
