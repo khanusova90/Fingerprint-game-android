@@ -1,12 +1,11 @@
 package cz.hanusova.fingerprint_game.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by khanusova on 11.5.2016.
  */
-public class PlaceType implements Serializable{
+public class PlaceType implements Serializable {
 
     private Long idPlaceType;
 
@@ -24,18 +23,22 @@ public class PlaceType implements Serializable{
      * Activity available in this type of place
      */
     private ActivityEnum activity;
+
     /*
      * Getters and setters
      */
     public Long getIdPlaceType() {
         return idPlaceType;
     }
+
     public void setIdPlaceType(Long idPlaceType) {
         this.idPlaceType = idPlaceType;
     }
+
     public String getPlaceType() {
         return placeType;
     }
+
     public void setPlaceType(String placeType) {
         this.placeType = placeType;
     }

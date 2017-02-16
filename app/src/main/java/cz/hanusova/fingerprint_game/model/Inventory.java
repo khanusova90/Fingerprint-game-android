@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 /**
  * Created by khanusova on 1.4.2016.
  */
-public class Inventory implements Serializable{
+public class Inventory implements Serializable {
 
     private Long idInventory;
 

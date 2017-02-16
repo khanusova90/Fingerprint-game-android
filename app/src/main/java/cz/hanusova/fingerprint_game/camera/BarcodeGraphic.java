@@ -22,33 +22,28 @@ import android.graphics.RectF;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
-import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
  * overlay view.
- *
+ * <p>
  * Source: https://github.com/googlesamples/android-vision/blob/master/visionSamples/barcode-reader/app/src/main/java/com/google/android/gms/samples/vision/barcodereader/BarcodeGraphic.java
  */
 public class BarcodeGraphic extends GraphicOverlay.Graphic {
-
-    private int mId;
 
     private static final int COLOR_CHOICES[] = {
             Color.BLUE,
             Color.CYAN,
             Color.GREEN
     };
-
-    private Byte color = 0;
-
+    public static ActivityEnum activity;
     private static int mCurrentColorIndex = 0;
-
+    private int mId;
+    private Byte color = 0;
     private Paint mRectPaint;
     private Paint mTextPaint;
     private volatile Barcode mBarcode;
-    public static ActivityEnum activity;
 
     BarcodeGraphic(GraphicOverlay overlay) {
         super(overlay);
@@ -113,7 +108,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
             // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
             canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
-        }else {
+        } else {
             canvas.drawText(activity.toString(), rect.left, rect.bottom, mTextPaint);
         }
 

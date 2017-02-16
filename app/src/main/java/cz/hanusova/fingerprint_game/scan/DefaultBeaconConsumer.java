@@ -18,7 +18,7 @@ import java.util.Collection;
 /**
  * Created by Matej on 8.11.2015.
  */
-public class DefaultBeaconConsumer implements org.altbeacon.beacon.BeaconConsumer{
+public class DefaultBeaconConsumer implements org.altbeacon.beacon.BeaconConsumer {
     protected static final String TAG = "BLE consumer";
 
     Context context;
@@ -34,11 +34,11 @@ public class DefaultBeaconConsumer implements org.altbeacon.beacon.BeaconConsume
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
     }
 
-    public void bind(){
+    public void bind() {
         beaconManager.bind(this);
     }
 
-    public void unBind(){
+    public void unBind() {
         beaconManager.unbind(this);
     }
 

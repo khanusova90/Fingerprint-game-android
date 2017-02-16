@@ -3,8 +3,6 @@ package cz.hanusova.fingerprint_game.view;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
@@ -76,7 +74,6 @@ public class TouchImageView extends ImageView {
                 screenWidth = v.getWidth();
                 screenHeight = v.getHeight();
 
-
                 origW = (((ImageView) v).getDrawable().getIntrinsicWidth());
                 origH = (((ImageView) v).getDrawable().getIntrinsicHeight());
 
@@ -96,9 +93,7 @@ public class TouchImageView extends ImageView {
                         if (mode == TAP) {
                             LayerDrawable ld = (LayerDrawable) getDrawable();
                             for (int i = 1; i < ld.getNumberOfLayers(); i++) {
-
-                                BitmapDrawable d = (BitmapDrawable) ld.getDrawable(i);
-                                Rect r = d.getBounds();
+                                // System.out.println(ld.getDrawable(i));
 
                                 if (ld.getDrawable(i).getBounds().contains(currX, currY)) {
                                     System.out.println("Icon at " + i + " position was clicked!");

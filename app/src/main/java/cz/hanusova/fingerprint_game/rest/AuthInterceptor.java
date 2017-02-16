@@ -16,12 +16,12 @@ import cz.hanusova.fingerprint_game.Preferences_;
 
 /**
  * Created by khanusova on 10.10.2016.
- *
+ * <p>
  * Interceptor for handling security requests <br />
  * Adds authentication information to request header
  */
 @EBean(scope = EBean.Scope.Singleton)
-public class AuthInterceptor implements ClientHttpRequestInterceptor{
+public class AuthInterceptor implements ClientHttpRequestInterceptor {
 
     @Pref
     Preferences_ preferences;
