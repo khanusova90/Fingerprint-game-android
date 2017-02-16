@@ -7,9 +7,9 @@ public class WifiScan {
 
     //FIXME: refactor
 
+    long time;
     private String SSID, MAC, technology;
     private int frequency, channel, strength;
-    long time;
 
     public WifiScan(String SSID, String MAC, int strength, int frequency) {
         this.SSID = SSID;
@@ -28,7 +28,7 @@ public class WifiScan {
         return "{" +
                 "\"SSID\":" + "\"" + SSID + "\"" +
                 ",\"MAC\":" + "\"" + MAC + "\"" +
-                ",\"technology\":" +"\"802.11" + technology + "\"" +
+                ",\"technology\":" + "\"802.11" + technology + "\"" +
                 ",\"frequency\":" + frequency +
                 ",\"channel\":" + channel +
                 ",\"strength\":" + strength +

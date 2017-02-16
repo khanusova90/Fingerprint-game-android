@@ -6,10 +6,10 @@ import java.util.List;
 
 /**
  * User of the application
- *
+ * <p>
  * Created by hanuska1 on 9.3.2016.
  */
-public class AppUser implements Serializable{
+public class AppUser implements Serializable {
 
     private Long idUser;
 
@@ -31,11 +31,11 @@ public class AppUser implements Serializable{
 
     private List<Item> items = new ArrayList<>();
 
-    public List<Place> getPlacesByFloor(int currentFloor){
+    public List<Place> getPlacesByFloor(int currentFloor) {
         // TODO: maybe fix this shit with a filter
         List<Place> places = new ArrayList<>();
-        for (Place p: this.getPlaces()) {
-            if (p.getFloor() == currentFloor){
+        for (Place p : this.getPlaces()) {
+            if (p.getFloor() == currentFloor) {
                 places.add(p);
             }
         }

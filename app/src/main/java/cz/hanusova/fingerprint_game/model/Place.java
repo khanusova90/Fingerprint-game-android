@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 /**
  * Created by khanusova on 27.4.2016.
- *
+ * <p>
  * Class representing place in the game
  */
-public class Place implements Serializable{
+public class Place implements Serializable {
 
     private Long idPlace;
 

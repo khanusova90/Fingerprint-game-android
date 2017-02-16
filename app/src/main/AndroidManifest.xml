@@ -40,10 +40,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InfoActivity_"
-            android:label="@string/info_user" />
-        <activity android:name=".QrActivity_" />
-        <activity
             android:name=".PlaceActivity"
             android:label="@string/place_info" />
         <activity android:name=".MapActivity_" />
@@ -53,7 +49,14 @@
         <activity
             android:name=".MarketActivity_"
             android:label="@string/market" />
-
+        <activity
+            android:name=".UserDetailActivity_"
+            android:label="@string/title_activity_user_detail"
+            android:parentActivityName=".MapActivity_">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.hanusova.fingerprint_game.MapActivity_" />
+        </activity>
     </application>
 
 </manifest>

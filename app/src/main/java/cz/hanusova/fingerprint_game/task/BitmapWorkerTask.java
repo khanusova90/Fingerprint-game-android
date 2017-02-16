@@ -104,7 +104,7 @@ public class BitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
         } finally {
             if (editor != null)
                 diskLruCache.flush();
-                editor.commit();
+            editor.commit();
         }
     }
 

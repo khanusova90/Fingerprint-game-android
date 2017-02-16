@@ -58,7 +58,7 @@ public class ImmediateBeaconConsumer extends DefaultBeaconConsumer {
     /**
      * Create simplified beacon without UUID, Major, Minor numbers,
      * only RSSI and MAC address are populated, the rest is set to ""
-     *
+     * <p>
      * This method reduces computational complexity
      * in contrast to BeaconParser
      *

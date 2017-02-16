@@ -12,7 +12,7 @@ import cz.hanusova.fingerprint_game.model.Activity;
 /**
  * Created by khanusova on 7.9.2016.
  */
-public class ImageGraphic extends GraphicOverlay.Graphic{
+public class ImageGraphic extends GraphicOverlay.Graphic {
     //TODO: absraktni predek
     private Paint textPaint;
     private volatile Barcode barcode;
@@ -30,10 +30,10 @@ public class ImageGraphic extends GraphicOverlay.Graphic{
 
     @Override
     public void draw(Canvas canvas) {
-        if (barcode == null){
+        if (barcode == null) {
             return;
         }
-        if (activity == null){
+        if (activity == null) {
             return;
         }
 

@@ -2,14 +2,12 @@ package cz.hanusova.fingerprint_game.listener;
 
 import android.view.ScaleGestureDetector;
 
-import org.androidannotations.annotations.EBean;
-
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 
 /**
  * Created by khanusova on 9.9.2016.
  */
-public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener{
+public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
 
     private CameraSource cameraSource;
 

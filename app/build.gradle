@@ -54,6 +54,7 @@ dependencies {
     compile 'org.altbeacon:android-beacon-library:2.7'
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'com.daimajia.numberprogressbar:library:1.2@aar'
 
 }
 
