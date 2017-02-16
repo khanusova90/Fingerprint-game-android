@@ -31,6 +31,17 @@ public class AppUser implements Serializable{
 
     private List<Item> items = new ArrayList<>();
 
+    public List<Place> getPlacesByFloor(int currentFloor){
+        // TODO: maybe fix this shit with a filter
+        List<Place> places = new ArrayList<>();
+        for (Place p: this.getPlaces()) {
+            if (p.getFloor() == currentFloor){
+                places.add(p);
+            }
+        }
+        return places.size() > 0 ? places : null;
+    }
+
     /*
      * Getters and setters
      */

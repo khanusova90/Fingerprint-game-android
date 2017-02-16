@@ -8,4 +8,27 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--<style name="actionButtonStyle">
+        <item name="fab:fab_colorNormal">@color/colorPrimary</item>
+        <item name="fab:fab_colorPressed">@color/colorRed</item>
+        <item name="fab:fab_colorRipple">@color/colorAccent</item>
+        <item name="app:fab_size">normal</item>
+        <item name="app:fab_showShadow">true</item>
+        <item name="app:fab_shadowColor">#66000000"</item>
+        <item name="app:fab_shadowRadius">4dp</item>
+        <item name="app:fab_shadowXOffset">1dp</item>
+        <item name="app:fab_shadowYOffset">3dp</item>
+        <item name="app:fab_showAnimation">@anim/fab_scale_up</item>
+        <item name="app:fab_hideAnimation">@anim/fab_scale_down</item>
+    </style>-->
+
 </resources>
