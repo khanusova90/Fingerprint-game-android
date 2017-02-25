@@ -50,6 +50,7 @@ import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
 import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
+import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
@@ -265,7 +266,9 @@ public class QrActivity extends AppCompatActivity {
 
     @Background
     public void startActivity(){
-        ArrayList<UserActivity> activities = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+//        ArrayList<UserActivity> activities = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place);
+        AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+        ArrayList<UserActivity> activities = (ArrayList<UserActivity>) user.getActivities();
         Intent i = new Intent();
         i.putExtra(Constants.EXTRA_ACTIVITIES, activities);
         setResult(Activity.RESULT_OK, i);
