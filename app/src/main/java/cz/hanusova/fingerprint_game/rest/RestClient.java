@@ -4,6 +4,7 @@ import org.androidannotations.rest.spring.annotations.Body;
 import org.androidannotations.rest.spring.annotations.Get;
 import org.androidannotations.rest.spring.annotations.Path;
 import org.androidannotations.rest.spring.annotations.Post;
+import org.androidannotations.rest.spring.annotations.Put;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
@@ -30,9 +31,9 @@ public interface RestClient {
     Place getPlaceByCode(@Path String code);
 
     @Post("/activity/start?materialAmount={materialAmount}")
-    ArrayList<UserActivity> startActivity(@Path Integer materialAmount, @Body Place place);
+    AppUser startActivity(@Path Integer materialAmount, @Body Place place);
 
-    @Post("/fingerprint/save")
+    @Put("/fingerprint/save")
     void sendFingerprint(@Body Fingerprint fingerprint);
 
 }
