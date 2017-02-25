@@ -29,7 +29,7 @@ public class MineActivity extends AppCompatActivity {
     Place place;
 
     @AfterViews
-    public void init(){
+    public void init() {
         //TODO: zobrazit pocet pracovniku k dispozici
         //TODO: nastavit podle poctu pracovniku k dispozici
         //TODO: zobrazit, o jakou surovinu se jedná
@@ -38,7 +38,7 @@ public class MineActivity extends AppCompatActivity {
     }
 
     @SeekBarProgressChange(R.id.mine_choose_workers)
-    public void changeWorkersAmount(){
+    public void changeWorkersAmount() {
         tvWorkersAmount.setText(String.valueOf(seekWorkers.getProgress()));
     }
 }

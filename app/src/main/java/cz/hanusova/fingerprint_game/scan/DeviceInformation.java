@@ -16,6 +16,7 @@ public class DeviceInformation {
 
     /**
      * Inicializuje DeviceInformation
+     *
      * @param context context
      */
     public DeviceInformation(Context context) {
@@ -24,11 +25,11 @@ public class DeviceInformation {
 
     /**
      * Naplni fingerprint daty o zarizeni, ktere fingerprint delalo
+     *
      * @param p fingerprint vhodny k naplneni daty
      * @return fingerprint s naplenynmi daty
      */
-    public Fingerprint fillPosition(Fingerprint p)
-    {
+    public Fingerprint fillPosition(Fingerprint p) {
         p.setSupportsBLE(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE));
         p.setDeviceID(((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
         p.setBoard(Build.BOARD);

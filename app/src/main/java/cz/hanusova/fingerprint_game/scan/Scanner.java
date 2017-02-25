@@ -1,16 +1,13 @@
 package cz.hanusova.fingerprint_game.scan;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
@@ -18,17 +15,8 @@ import android.os.SystemClock;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,34 +35,29 @@ import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
  */
 public class Scanner {
     private static final String TAG = "Scanner";
-    Context context;
-
-    List<BleScan> bleScans = new ArrayList<>();
-    List<WifiScan> wifiScans = new ArrayList<>();
-    List<CellScan> cellScans = new ArrayList<>();
-
-    long startTime;
     /**
      * zda prave probiha sken
      */
     public boolean running;
     /**
-     * zda ma byt znovu spusteno cyklicke synchronni skenovani (wifi a gsm)
-     */
-    boolean cont = false;
-
-    DefaultBeaconConsumer beaconConsumer;
-    WifiManager wm;
-    BroadcastReceiver wifiBroadcastReceiver;
-
-    ProgressDialog progressDialog;
-    Timer timer;
-    CountDownTimer cdt;
-
-    /**
      * zdali je scan dokoncen, slouzi pro snimaci aktivitu
      */
     public boolean scanFinished;
+    Context context;
+    List<BleScan> bleScans = new ArrayList<>();
+    List<WifiScan> wifiScans = new ArrayList<>();
+    List<CellScan> cellScans = new ArrayList<>();
+    long startTime;
+    /**
+     * zda ma byt znovu spusteno cyklicke synchronni skenovani (wifi a gsm)
+     */
+    boolean cont = false;
+    DefaultBeaconConsumer beaconConsumer;
+    WifiManager wm;
+    BroadcastReceiver wifiBroadcastReceiver;
+    ProgressDialog progressDialog;
+    Timer timer;
+    CountDownTimer cdt;
 
     public Scanner(Context context) {
         this.context = context;

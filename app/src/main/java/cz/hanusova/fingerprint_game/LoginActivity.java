@@ -42,7 +42,7 @@ public class LoginActivity extends AbstractAsyncActivity {
     EditText etPassword;
 
     @Click(R.id.login_test)
-    public void loginTest(){
+    public void loginTest() {
         AppUser test = new AppUser();
         test.setUsername("test");
 
@@ -72,7 +72,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 
     @Background
     @Click(R.id.btn_sign_in)
-    protected void signIn(){
+    protected void signIn() {
         showLoadingProgressDialog();
         String username = etUsername.getText().toString();
         preferences.username().put(username);

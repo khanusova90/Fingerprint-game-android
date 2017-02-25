@@ -26,7 +26,7 @@ import cz.hanusova.fingerprint_game.model.Activity;
  * any type of item).  This is used to receive newly detected items, add a graphical representation
  * to an overlay, update the graphics as the item changes, and remove the graphics when the item
  * goes away.
- *
+ * <p>
  * Source: https://github.com/googlesamples/android-vision/blob/master/visionSamples/barcode-reader/app/src/main/java/com/google/android/gms/samples/vision/barcodereader/BarcodeGraphicTracker.java
  */
 public class BarcodeGraphicTracker extends Tracker<Barcode> {

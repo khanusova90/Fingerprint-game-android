@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Kachna on 4.7.2016.
  */
-public class Character implements Serializable{
+public class Character implements Serializable {
 
     private Long idCharacter;
 
