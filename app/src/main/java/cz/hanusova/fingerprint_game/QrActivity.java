@@ -51,6 +51,8 @@ import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
+import cz.hanusova.fingerprint_game.model.Item;
+import cz.hanusova.fingerprint_game.model.ItemType;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
@@ -273,6 +275,12 @@ public class QrActivity extends AppCompatActivity {
         finish();
     }
 
+    @Background
+    void buyItem(Item item){
+        AppUser user = restClient.buyItem(item); //Prida item do DB a vrati aktualizovaneho uzivatele
+        finish();
+    }
+
     private void showActivity(ActivityEnum activity) { //FIXME: prejmenovat
         //TODO: upravit, pokud uz uzivatel na danem miste ma spustenou aktivitu -> ukazat aktualni pocet
         switch (activity) {
@@ -287,6 +295,13 @@ public class QrActivity extends AppCompatActivity {
                 int stoneAmount = stone.getAmount().intValue() / Constants.BUILD_STONE;
                 showSeekBar(Math.min(woodAmount, stoneAmount));
                 break;
+            case BUY:
+                List<Item> items = restClient.getPossibleItems();
+                for (Item item : items){
+                    String imageName = item.getImgUrl();
+                    //Zobrazit vsechny polozky
+                    //Po vybrani zavolat buyItem(item)
+                }
             default:
                 //TODO: informovat o nezname aktivite
                 break;
