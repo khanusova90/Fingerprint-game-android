@@ -63,6 +63,8 @@
     <string name="activities">Probíhající aktivity</string>
     <string name="places">Objevená místa</string>
     <string name="lvl">Level</string>
+    <string name="place_type">Druh místa</string>
+    <string name="place_time">Čas počátku</string>
 
 
 

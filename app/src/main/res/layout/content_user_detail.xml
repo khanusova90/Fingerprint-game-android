@@ -51,8 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/common_plus_signin_btn_text_dark_disabled" />
+            android:layout_marginTop="5dp"/>
+            <!--android:background="@color/common_plus_signin_btn_text_dark_disabled"-->
         <TextView
             android:id="@+id/text_activities"
             android:layout_width="wrap_content"

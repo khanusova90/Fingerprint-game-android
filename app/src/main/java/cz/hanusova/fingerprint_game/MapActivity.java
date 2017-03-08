@@ -1,6 +1,7 @@
 package cz.hanusova.fingerprint_game;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment;
+import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment_;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.service.UserService;
@@ -45,10 +48,10 @@ import cz.hanusova.fingerprint_game.view.TouchImageView;
 @OptionsMenu(R.menu.map_toolbar_menu)
 public class MapActivity extends AppCompatActivity {
     private static final int REQ_CODE_QR = 1;
-    private static final int ICON_SIZE = 16;
+    private static final int ICON_SIZE = 8;
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
-    private static final int APP_VERSION = 5;
+    private static final int APP_VERSION = 6;
     @Bean(UserServiceImpl.class)
     UserService userService;
     @ViewById(R.id.img_map)
@@ -70,6 +73,7 @@ public class MapActivity extends AppCompatActivity {
     private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
     private Drawable[] layers;
     private Bitmap[] mapField = new Bitmap[4];
+    private List<Place> places;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
@@ -93,7 +97,7 @@ public class MapActivity extends AppCompatActivity {
             }
         }
         Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
-        List<Place> places = userService.getActualUser().getPlacesByFloor(currentFloor);
+        places = userService.getActualUser().getPlacesByFloor(currentFloor);
         List<Drawable> icons = getIcons(places);
         changeIconPosition(mapDrawable, places, createLayers(mapDrawable, icons));
         buttonFloorDown.setEnabled(!(currentFloor == 1));
@@ -144,6 +148,8 @@ public class MapActivity extends AppCompatActivity {
         return new LayerDrawable(layers);
     }
 
+
+
     private void changeIconPosition(Drawable mapDrawable, List<Place> places, LayerDrawable ld) {
         if (places == null) {
             mapView.setImageDrawable(ld);
@@ -156,6 +162,10 @@ public class MapActivity extends AppCompatActivity {
             ld.setLayerInset(i + 1, x, y, mapDrawable.getIntrinsicWidth() - x + ICON_SIZE, mapDrawable.getIntrinsicHeight() - y + ICON_SIZE);
         }
         mapView.setImageDrawable(ld);
+        mapView.setPlaces(places);
+        mapView.setFragmentManager(getSupportFragmentManager());
+
+
     }
 
 

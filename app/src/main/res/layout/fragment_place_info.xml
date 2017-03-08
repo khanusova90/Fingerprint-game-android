@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PlaceInfoFragment_">
+    <ImageView
+        android:id="@+id/fragment_place_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5pt"
+        app:srcCompat="@drawable/cast_ic_mini_controller_stop_large" />
+
+
+    <TextView
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:text="Typ naleziště"
+        android:textAlignment="center"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:id="@+id/fragment_place_name"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:text="xxx"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:text="Začátek"
+        android:textAlignment="center"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:id="@+id/fragment_place_time"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:text="xx"
+        android:textAlignment="center"
+        android:layout_marginBottom="5pt"
+
+        android:textSize="18sp" />
+</LinearLayout>
