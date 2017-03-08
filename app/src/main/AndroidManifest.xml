@@ -50,6 +50,8 @@
             android:name=".MarketActivity_"
             android:label="@string/market" />
 
+        <activity android:name=".QrActivity_"/>
+
         <activity
             android:name=".UserDetailActivity_"
             android:label="@string/title_activity_user_detail"
