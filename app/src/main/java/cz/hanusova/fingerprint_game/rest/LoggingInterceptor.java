@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by khanusova on 3.11.2016.
  */
 @EBean(scope = EBean.Scope.Singleton)
-public class LoggingInterceptor implements ClientHttpRequestInterceptor{
+public class LoggingInterceptor implements ClientHttpRequestInterceptor {
 
     private static final String TAG = "LoggingInterceptor";
 

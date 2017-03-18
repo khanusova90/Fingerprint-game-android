@@ -44,13 +44,13 @@ import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
 
 /**
  * Created by khanusova on 24.4.2016.
- *
+ * <p>
  * An Activity class for capturing QR codes
- *
+ * <p>
  * Based on: https://github.com/googlesamples/android-vision/blob/master/visionSamples/barcode-reader/app/src/main/java/com/google/android/gms/samples/vision/barcodereader/BarcodeCaptureActivity.java
  */
 @EActivity
-public class QrActivityOld extends AppCompatActivity{
+public class QrActivityOld extends AppCompatActivity {
 
     private static final String TAG = "QRCodeReader";
 
@@ -153,7 +153,7 @@ public class QrActivityOld extends AppCompatActivity{
      * Creates and starts the camera.  Note that this uses a higher resolution in comparison
      * to other detection examples to enable the barcode detector to detect small barcodes
      * at long distances.
-     *
+     * <p>
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
      * the constant.
      */
@@ -273,7 +273,7 @@ public class QrActivityOld extends AppCompatActivity{
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra("AutoFocus",false);
+            boolean autoFocus = getIntent().getBooleanExtra("AutoFocus", false);
             boolean useFlash = getIntent().getBooleanExtra("UseFlash", false);
             createCameraSource(autoFocus, useFlash);
             return;
@@ -343,13 +343,11 @@ public class QrActivityOld extends AppCompatActivity{
                 //TODO: po vraceni dat ze serveru zobrazit obrazek/text
                 setResult(CommonStatusCodes.SUCCESS, data);
                 finish();
-            }
-            else {
+            } else {
                 Log.d(TAG, "barcode data is null");
             }
-        }
-        else {
-            Log.d(TAG,"no barcode detected");
+        } else {
+            Log.d(TAG, "no barcode detected");
         }
         return barcode != null;
     }

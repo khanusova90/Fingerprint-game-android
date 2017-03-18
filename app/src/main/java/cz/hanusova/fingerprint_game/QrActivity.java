@@ -8,7 +8,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -50,6 +49,7 @@ import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
 import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
+import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
@@ -120,7 +120,7 @@ public class QrActivity extends AppCompatActivity {
         scanner = new Scanner(this);
     }
 
-    private void hideSeekers(){
+    private void hideSeekers() {
         seekWorkers.setVisibility(View.GONE);
         workAmountText.setVisibility(View.GONE);
     }
@@ -190,7 +190,7 @@ public class QrActivity extends AppCompatActivity {
         }
     }
 
-    private void startTracking(){
+    private void startTracking() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -220,13 +220,13 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @UiThread
-    public void changeCountdownVisibility(){
+    public void changeCountdownVisibility() {
         int visibility = qrCountdown.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
         qrCountdown.setVisibility(visibility);
     }
 
     @UiThread
-    public void updateCountdown(long millisLeft){
+    public void updateCountdown(long millisLeft) {
         qrCountdown.setText(getString(R.string.qr_countdown, millisLeft / 1000));
     }
 
@@ -238,12 +238,12 @@ public class QrActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisLeft) {
                 updateCountdown(millisLeft);
-                if (barcode == null){
+                if (barcode == null) {
                     Log.d(TAG, "Getting actual barcode");
                     barcode = getActualBarcode();
                 }
                 Barcode actualBarcode = getActualBarcode();
-                if (barcode == null || actualBarcode == null || !barcode.displayValue.equals(actualBarcode.displayValue)){
+                if (barcode == null || actualBarcode == null || !barcode.displayValue.equals(actualBarcode.displayValue)) {
                     Log.i(TAG, "Barcode capturing stopped!");
                     //TODO: pridat sipku pro navrat do predchozi activity
                     qrCountdown.setVisibility(View.GONE);
@@ -265,16 +265,17 @@ public class QrActivity extends AppCompatActivity {
 
     @Background
     public void startActivity(){
-        ArrayList<UserActivity> activities = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+        AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+        ArrayList<UserActivity> activities = (ArrayList<UserActivity>) user.getActivities();
         Intent i = new Intent();
         i.putExtra(Constants.EXTRA_ACTIVITIES, activities);
         setResult(Activity.RESULT_OK, i);
         finish();
     }
 
-    private void showActivity(ActivityEnum activity){ //FIXME: prejmenovat
+    private void showActivity(ActivityEnum activity) { //FIXME: prejmenovat
         //TODO: upravit, pokud uz uzivatel na danem miste ma spustenou aktivitu -> ukazat aktualni pocet
-        switch(activity){
+        switch (activity) {
             case MINE:
                 Inventory workers = userService.getWorkers();
                 showWorkersSeek(workers);
@@ -296,7 +297,7 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @UiThread
-    void showWorkersSeek(Inventory workers){
+    void showWorkersSeek(Inventory workers) {
         int workersAmount = workers.getAmount().intValue();
         seekWorkers.setMax(workersAmount);
         seekWorkers.setProgress(workersAmount / 2);
@@ -305,9 +306,9 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @UiThread
-    void showSeekBar(int maxValue){
+    void showSeekBar(int maxValue) {
         seekWorkers.setMax(maxValue);
-        seekWorkers.setProgress(maxValue/2);
+        seekWorkers.setProgress(maxValue / 2);
         seekWorkers.setVisibility(View.VISIBLE);
         workAmountText.setVisibility(View.VISIBLE);
     }
@@ -317,7 +318,7 @@ public class QrActivity extends AppCompatActivity {
         workAmountText.setText(String.valueOf(seekWorkers.getProgress()));
     }
 
-    private void stopTimer(){
+    private void stopTimer() {
         timer.cancel();
     }
 
@@ -359,7 +360,6 @@ public class QrActivity extends AppCompatActivity {
 
 
     /**
-     *
      * @return {@link Barcode} that is being captured
      */
     private Barcode getActualBarcode() {

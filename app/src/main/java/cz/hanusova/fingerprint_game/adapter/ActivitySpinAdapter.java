@@ -18,7 +18,7 @@ public class ActivitySpinAdapter extends ArrayAdapter<Activity> {
     private List<Activity> activities;
     private Context context;
 
-    public ActivitySpinAdapter(Context context, int resource, List <Activity> objects) {
+    public ActivitySpinAdapter(Context context, int resource, List<Activity> objects) {
         super(context, resource, objects);
         this.context = context;
         this.activities = objects;

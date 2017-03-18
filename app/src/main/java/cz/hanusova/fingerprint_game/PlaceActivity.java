@@ -1,6 +1,5 @@
 package cz.hanusova.fingerprint_game;
 
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,19 +12,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cz.hanusova.fingerprint_game.adapter.ActivitySpinAdapter;
 import cz.hanusova.fingerprint_game.model.Activity;
@@ -55,9 +45,9 @@ public class PlaceActivity extends AbstractAsyncActivity {
         addStartBtnListener();
     }
 
-    private void setPlaceInfo(){
+    private void setPlaceInfo() {
         Bundle extras = getIntent().getExtras();
-        place = (Place)extras.get(Constants.EXTRA_PLACE);
+        place = (Place) extras.get(Constants.EXTRA_PLACE);
 
         TextView idPlaceTv = (TextView) findViewById(R.id.place_placeId);
         TextView placeNameTv = (TextView) findViewById(R.id.place_name);
@@ -70,7 +60,7 @@ public class PlaceActivity extends AbstractAsyncActivity {
         new ImageHttpAsyncTask().execute(place.getPlaceType());
     }
 
-    private void showActivities(){
+    private void showActivities() {
 //        List<Activity> activities = place.getPlaceType().getActivities();
         List<Activity> activities = new ArrayList<>();
 
@@ -80,13 +70,13 @@ public class PlaceActivity extends AbstractAsyncActivity {
         activitySpin.setAdapter(adapter);
     }
 
-    private void addStartBtnListener(){
+    private void addStartBtnListener() {
         Button btnStart = (Button) findViewById(R.id.btn_place_activity);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Spinner spinner = (Spinner) findViewById(R.id.spin_place_activity);
-                Activity activity = (Activity)spinner.getSelectedItem();
+                Activity activity = (Activity) spinner.getSelectedItem();
                 System.out.println("CHOSEN ACTIVITY: " + activity.getName() + ", ID: " + activity.getIdActivity());
             }
         });
@@ -95,7 +85,7 @@ public class PlaceActivity extends AbstractAsyncActivity {
     /**
      * AsyncTask for obtaining place image
      */
-    private class ImageHttpAsyncTask extends AsyncTask<PlaceType, Void, Bitmap>{
+    private class ImageHttpAsyncTask extends AsyncTask<PlaceType, Void, Bitmap> {
 
         ImageView imgView = (ImageView) findViewById(R.id.place_image);
 

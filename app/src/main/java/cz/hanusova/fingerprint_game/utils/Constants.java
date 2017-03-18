@@ -2,7 +2,7 @@ package cz.hanusova.fingerprint_game.utils;
 
 /**
  * Util class with constants for application
- *
+ * <p>
  * Created by khanusova on 21.3.2016.
  */
 public final class Constants {

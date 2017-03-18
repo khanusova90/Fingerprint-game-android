@@ -24,6 +24,8 @@ public class TouchImageViewOld extends ImageView {
     private static final int ZOOM = 2;
     private static final int CLICK = 3;
     int mode = NONE;
+    float lastX = -1;
+    float lastY = -1;
     private OverScroller overScroller;
     private int activePointerId = 200;
     private Matrix matrix;
@@ -36,17 +38,12 @@ public class TouchImageViewOld extends ImageView {
     private float[] m;
     private float posX = 0;
     private float posY = 0;
-
     private int viewWidth;
     private int viewHeight;
     private float origWidth;
     private float origHeight;
     private int oldMeasuredWidth;
     private int oldMeasuredHeight;
-
-    float lastX = -1;
-    float lastY = -1;
-
     private ScaleGestureDetector detector;
     private Context context;
 
@@ -150,7 +147,7 @@ public class TouchImageViewOld extends ImageView {
                         lastY = y;
                         activePointerId = MotionEventCompat.getPointerId(event, pointerIndex);
                         System.out.println("Scrolling: " + x + ", " + y);
-                        scrollBy((int)posX, (int)posY);
+                        scrollBy((int) posX, (int) posY);
                         break;
 
                     case MotionEvent.ACTION_POINTER_UP:
