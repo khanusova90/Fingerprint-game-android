@@ -9,9 +9,11 @@ import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Item;
+import cz.hanusova.fingerprint_game.model.ItemType;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
@@ -37,7 +39,12 @@ public interface RestClient {
     @Put("/fingerprint/save")
     void sendFingerprint(@Body Fingerprint fingerprint);
 
+    @Get("/update/itemType")
+    List<Item> getItemTypes();
+
+    @Get("/activity/getItems")
+    List<Item> getPossibleItems();
+
     @Post("/activity/buy")
     AppUser buyItem(@Body Item item);
-
 }

@@ -30,6 +30,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SeekBarProgressChange;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
@@ -51,6 +53,8 @@ import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
+import cz.hanusova.fingerprint_game.model.Item;
+import cz.hanusova.fingerprint_game.model.ItemType;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
@@ -63,6 +67,8 @@ import cz.hanusova.fingerprint_game.scan.Scanner;
 import cz.hanusova.fingerprint_game.scan.SensorScanner;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
+import cz.hanusova.fingerprint_game.utils.AppUtils;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
@@ -74,6 +80,7 @@ public class QrActivity extends AppCompatActivity {
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
+    private static final int REQ_CODE_MARKET = 2;
 
     @RestService
     RestClient restClient;
@@ -105,9 +112,12 @@ public class QrActivity extends AppCompatActivity {
     private boolean wasBTEnabled, wasWifiEnabled;
     private WifiManager wm;
     private BluetoothAdapter bluetoothAdapter;
+    private Context context;
+    private ArrayList<Item> possibleItems = new ArrayList<>();
 
     @AfterViews
     public void init() {
+        context = this;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wasBTEnabled = bluetoothAdapter.isEnabled();
@@ -257,7 +267,16 @@ public class QrActivity extends AppCompatActivity {
             public void onFinish() {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
-                    startActivity();
+                    switch(place.getPlaceType().getActivity()){
+                        case BUILD:
+                        case MINE:
+                            startActivity();
+                            break;
+
+                        case BUY:
+                            MarketActivity_.intent(context).items(possibleItems).startForResult(REQ_CODE_MARKET);
+                            //TODO: zachytavat result
+                    }
                 }
             }
         };
@@ -270,6 +289,19 @@ public class QrActivity extends AppCompatActivity {
         Intent i = new Intent();
         i.putExtra(Constants.EXTRA_ACTIVITIES, activities);
         setResult(Activity.RESULT_OK, i);
+        finish();
+    }
+
+    @OnActivityResult(REQ_CODE_MARKET)
+    public void returnToMap(){
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    @Background
+    void buyItem(Item item){
+        AppUser user = restClient.buyItem(item); //Prida item do DB a vrati aktualizovaneho uzivatele
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -288,7 +320,16 @@ public class QrActivity extends AppCompatActivity {
                 showSeekBar(Math.min(woodAmount, stoneAmount));
                 break;
             case BUY:
-
+                possibleItems = (ArrayList<Item>) restClient.getPossibleItems();
+                for (Item item : possibleItems){
+                    String itemUrl = item.getImgUrl();
+                    try {
+                        new BitmapWorkerTask(itemUrl, this.getApplicationContext(), AppUtils.getVersionCode(context)).execute().get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        Log.e(TAG, "Could not download image", e);
+                    }
+                }
+                //TODO: poslat do nove aktivity
                 break;
             default:
                 //TODO: informovat o nezname aktivite
