@@ -119,7 +119,7 @@ public class QrActivity extends AppCompatActivity {
     public void init() {
         context = this;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wasBTEnabled = bluetoothAdapter.isEnabled();
         wasWifiEnabled = wm.isWifiEnabled();
         changeBTWifiState(true);
@@ -272,10 +272,9 @@ public class QrActivity extends AppCompatActivity {
                         case MINE:
                             startActivity();
                             break;
-
                         case BUY:
                             MarketActivity_.intent(context).items(possibleItems).startForResult(REQ_CODE_MARKET);
-                            //TODO: zachytavat result
+                            break;
                     }
                 }
             }
