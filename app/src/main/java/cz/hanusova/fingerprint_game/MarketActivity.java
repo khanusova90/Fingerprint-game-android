@@ -14,11 +14,13 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.model.Item;
+import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 import cz.hanusova.fingerprint_game.utils.AppUtils;
 
@@ -35,17 +37,23 @@ public class MarketActivity extends AppCompatActivity {
     @Extra
     ArrayList<Item> items;
 
+    @RestService
+    RestClient restClient;
+
     @AfterViews
     public void init() {
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
-        for (Item item : items){ //TODO: pokusit se znovu stahnout, pokud je list prazdny
+        if (items == null || items.isEmpty()){
+            items = (ArrayList<Item>) restClient.getPossibleItems();
+        }
+        for (Item item : items){
             View imageLayout = inflater.inflate(R.layout.image_item, null);
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.item_bitmap);
             try {
                 Bitmap bitmap = new BitmapWorkerTask(item.getImgUrl(), this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
                 imageView.setImageBitmap(bitmap);
-                itemLayout.addView(imageLayout);
+                itemLayout.addView(imageLayout); //TODO: onClickListener
             } catch (InterruptedException | ExecutionException e) {
                 Log.e(TAG, "Could not download item image", e);
             }
