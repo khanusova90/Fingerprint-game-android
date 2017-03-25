@@ -3,6 +3,8 @@
  */
 package cz.hanusova.fingerprint_game.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 
@@ -20,6 +22,9 @@ public class Item implements Serializable {
     private Integer level;
 
     private String imgUrl;
+
+    @JsonIgnore
+    private boolean selected = false;
 
     /**
      * @return the idItem
@@ -91,4 +96,11 @@ public class Item implements Serializable {
         this.imgUrl = imgUrl;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

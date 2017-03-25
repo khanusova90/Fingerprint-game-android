@@ -50,7 +50,7 @@
             android:name=".MarketActivity_"
             android:label="@string/market" />
 
-        <activity android:name=".QrActivity_"/>
+        <activity android:name=".QrActivity_" />
 
         <activity
             android:name=".UserDetailActivity_"
@@ -60,6 +60,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.hanusova.fingerprint_game.MapActivity_" />
         </activity>
+
+        <service android:name=".firebase.FirebaseMsgService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".firebase.FirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
