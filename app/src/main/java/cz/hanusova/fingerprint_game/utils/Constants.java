@@ -17,6 +17,9 @@ public final class Constants {
     //prod
     public static final String URL_BASE = "http://beacon.uhk.cz/fingerprint-game/android/1.0";
     public static final String IMG_URL_BASE = "http://beacon.uhk.cz/fingerprint-game/disk-resources/";
+    public static final String STAG_API_BASE_URL = "https://stagws.uhk.cz/ws/services/rest/";
+
+
 
     //Name of app for SharedPreferences
     public static final String SP_NAME = "fingerprint_game";
