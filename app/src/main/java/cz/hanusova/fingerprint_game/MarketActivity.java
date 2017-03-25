@@ -1,6 +1,7 @@
 package cz.hanusova.fingerprint_game;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,7 @@ import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 import cz.hanusova.fingerprint_game.utils.AppUtils;
+import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 7.10.2016.
@@ -42,18 +44,24 @@ public class MarketActivity extends AppCompatActivity {
 
     @AfterViews
     public void init() {
-        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
-        if (items == null || items.isEmpty()){
+        if (items == null || items.isEmpty()) {
             items = (ArrayList<Item>) restClient.getPossibleItems();
         }
-        for (Item item : items){
+        for (final Item item : items) {
             View imageLayout = inflater.inflate(R.layout.image_item, null);
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.item_bitmap);
             try {
                 Bitmap bitmap = new BitmapWorkerTask(item.getImgUrl(), this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
                 imageView.setImageBitmap(bitmap);
-                itemLayout.addView(imageLayout); //TODO: onClickListener
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        item.setSelected(!item.isSelected());
+                    }
+                });
+                itemLayout.addView(imageLayout);
             } catch (InterruptedException | ExecutionException e) {
                 Log.e(TAG, "Could not download item image", e);
             }
@@ -61,8 +69,16 @@ public class MarketActivity extends AppCompatActivity {
     }
 
     @Click(R.id.market_buy)
-    public void buy(){
-        setResult(RESULT_OK);
+    public void buy() {
+        ArrayList<Item> boughtItems = new ArrayList<>();
+        for (Item item : items) {
+            if (item.isSelected()) {
+                boughtItems.add(item);
+            }
+        }
+        Intent i = new Intent();
+        i.putExtra(Constants.EXTRA_ITEMS, boughtItems);
+        setResult(RESULT_OK, i);
         finish();
     }
 }

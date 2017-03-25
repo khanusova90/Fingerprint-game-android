@@ -283,7 +283,7 @@ public class QrActivity extends AppCompatActivity {
 
     @Background
     public void startActivity(){
-        AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place); //TODO: vyresit moznost, ze seekbar neni pouzity
+        AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place);
         ArrayList<UserActivity> activities = (ArrayList<UserActivity>) user.getActivities();
         Intent i = new Intent();
         i.putExtra(Constants.EXTRA_ACTIVITIES, activities);
@@ -292,14 +292,15 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @OnActivityResult(REQ_CODE_MARKET)
-    public void returnToMap(){
+    public void returnToMap(@OnActivityResult.Extra(value = Constants.EXTRA_ITEMS) ArrayList<Item> items){
+        buyItems(items);
         setResult(Activity.RESULT_OK);
-        finish();
+//        finish();
     }
 
     @Background
-    void buyItem(Item item){
-        AppUser user = restClient.buyItem(item); //Prida item do DB a vrati aktualizovaneho uzivatele
+    void buyItems(List<Item> items){
+        AppUser user = restClient.buyItem(items); //Prida item do DB a vrati aktualizovaneho uzivatele
         setResult(Activity.RESULT_OK);
         finish();
     }

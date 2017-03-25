@@ -46,5 +46,5 @@ public interface RestClient {
     List<Item> getPossibleItems();
 
     @Post("/activity/buy")
-    AppUser buyItem(@Body Item item);
+    AppUser buyItem(@Body List<Item> items);
 }
