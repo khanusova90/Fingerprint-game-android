@@ -1,5 +1,7 @@
 package cz.hanusova.fingerprint_game.rest;
 
+import android.util.Base64;
+
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.springframework.http.HttpAuthentication;
@@ -29,7 +31,9 @@ public class AuthInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         HttpHeaders headers = request.getHeaders();
-        HttpAuthentication auth = new HttpBasicAuthentication(preferences.username().get(), preferences.password().get());
+        HttpAuthentication auth = new HttpBasicAuthentication(preferences.user().get(),
+                preferences.password().get());
+
         headers.setAuthorization(auth);
         return execution.execute(request, body);
     }

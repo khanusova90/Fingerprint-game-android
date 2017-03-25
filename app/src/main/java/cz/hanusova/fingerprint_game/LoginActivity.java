@@ -15,9 +15,14 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 
+import java.util.List;
+
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Character;
+import cz.hanusova.fingerprint_game.model.StagTimetable;
+import cz.hanusova.fingerprint_game.model.StagUser;
 import cz.hanusova.fingerprint_game.rest.RestClient;
+import cz.hanusova.fingerprint_game.rest.StagRestClient;
 
 /**
  * https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
@@ -35,6 +40,11 @@ public class LoginActivity extends AbstractAsyncActivity {
 
     @RestService
     RestClient restClient;
+
+    @RestService
+    StagRestClient stagRestClient;
+
+
 
     @ViewById(R.id.username)
     EditText etUsername;
@@ -77,6 +87,10 @@ public class LoginActivity extends AbstractAsyncActivity {
         String username = etUsername.getText().toString();
         preferences.username().put(username);
         preferences.password().put(etPassword.getText().toString());
+        List<StagUser> cisla = stagRestClient.getUserNumberForLogin(username);
+        if (cisla != null && cisla.size() > 0){
+            List<StagTimetable> timetable = stagRestClient.getTimetableToAuthorize(cisla.get(0).getUserNumbers().get(0));
+        }
         AppUser user = restClient.login(username);
         ObjectMapper mapper = new ObjectMapper();
         try {
