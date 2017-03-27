@@ -24,7 +24,6 @@ import org.androidannotations.rest.spring.annotations.RestService;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.rest.RestClient;
-import cz.hanusova.fingerprint_game.rest.StagRestClient;
 import cz.hanusova.fingerprint_game.utils.Constants;
 import cz.hanusova.fingerprint_game.utils.ValidationUtils;
 
@@ -49,8 +48,6 @@ public class LoginActivity extends AbstractAsyncActivity {
     @RestService
     RestClient restClient;
 
-    @RestService
-    StagRestClient stagRestClient;
 
     @Extra(value = Constants.EXTRA_ERROR)
     boolean showError;
