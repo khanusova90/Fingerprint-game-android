@@ -64,7 +64,7 @@ public class LoginActivity extends AbstractAsyncActivity {
         context = this;
         String username = preferences.username().get();
         if (!TextUtils.isEmpty(username) && !showError) {
-            signIn(username);
+//            signIn(username);
         }
     }
 
@@ -87,11 +87,11 @@ public class LoginActivity extends AbstractAsyncActivity {
     @Background
     protected void signIn(String username) {
         showLoadingProgressDialog();
-        List<StagUser> cisla = stagRestClient.getUserNumberForLogin(username);
+//        List<StagUser> cisla = stagRestClient.getUserNumberForLogin(username);
         try {
-            if (cisla != null && cisla.size() > 0) {
-                List<StagTimetable> timetable = stagRestClient.getTimetableToAuthorize(cisla.get(0).getUserNumbers().get(0));
-            }
+//            if (cisla != null && cisla.size() > 0) {
+//                List<StagTimetable> timetable = stagRestClient.getTimetableToAuthorize(cisla.get(0).getUserNumbers().get(0));
+//            }
             AppUser user = restClient.login(username);
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -99,11 +99,11 @@ public class LoginActivity extends AbstractAsyncActivity {
             } catch (JsonProcessingException e) {
                 Log.e(TAG, "Error occurred while trying to save user", e);
             }
-            dismissProgressDialog();
             MapActivity_.intent(context).start();
         } catch (Exception e) {
-            Log.w(TAG, "Exception while getting timetable");
+            Log.w(TAG, "Exception while getting timetable", e);
         }
+        dismissProgressDialog();
         finish();
     }
 }

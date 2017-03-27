@@ -42,14 +42,12 @@ public class AuthInterceptor implements ClientHttpRequestInterceptor {
         String credentials = preferences.username().get() + ":" + preferences.password().get();
         final String basic =
                 "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-        headers.add("Authorization", basic);
+        headers.add("authorization", basic);
         ClientHttpResponse response =  execution.execute(request, body);
         if (response == null || response.getStatusCode() == null){
             return response;
         }
         switch (response.getStatusCode().value()){
-//            case 200:
-//                return response;
             case 401:
                 Log.d(TAG, "401 from server");
                 LoginActivity_.intent(FingerprintApplication.getContext())
