@@ -19,6 +19,9 @@ import android.view.View;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
@@ -43,6 +46,7 @@ import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
+import cz.hanusova.fingerprint_game.utils.AppUtils;
 import cz.hanusova.fingerprint_game.utils.Constants;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
@@ -58,7 +62,7 @@ public class MapActivity extends AppCompatActivity {
     private static final int ICON_SIZE = 8;
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
-    private static final int APP_VERSION = 6;
+//    private static final int APP_VERSION = 6;
     @Bean(UserServiceImpl.class)
     UserService userService;
     @ViewById(R.id.img_map)
@@ -98,7 +102,7 @@ public class MapActivity extends AppCompatActivity {
         this.setTitle(currentFloor + ". patro");
         if (mapField[currentFloor - 1] == null) {
             try {
-                mapField[currentFloor - 1] = new BitmapWorkerTask(getFloorName(currentFloor), this.getApplicationContext(), APP_VERSION)
+                mapField[currentFloor - 1] = new BitmapWorkerTask(getFloorName(currentFloor), this.getApplicationContext(), AppUtils.getVersionCode(this))
                         .execute().get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -148,7 +152,7 @@ public class MapActivity extends AppCompatActivity {
                 if (iconName == null) {
                     iconName = p.getMaterial().getIconName();
                 }
-                Bitmap bitmap = new BitmapWorkerTask(iconName, this.getApplicationContext(), APP_VERSION).execute().get();
+                Bitmap bitmap = new BitmapWorkerTask(iconName, this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
                 Drawable icon = new BitmapDrawable(getResources(), bitmap);
                 icons.add(icon);
             } catch (InterruptedException e) {

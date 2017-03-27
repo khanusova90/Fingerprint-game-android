@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "737527738741",
+    "firebase_url": "https://fingerprint-game-android.firebaseio.com",
+    "project_id": "fingerprint-game-android",
+    "storage_bucket": "fingerprint-game-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737527738741:android:037519d83b12add1",
+        "android_client_info": {
+          "package_name": "cz.hanusova.fingerprint_game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737527738741-60t99c67uo7a1dreuslok33ki5bqj0r7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.hanusova.fingerprint_game",
+            "certificate_hash": "B82FAB211C2BCA98D7B9B553806A495A0706E7FD"
+          }
+        },
+        {
+          "client_id": "737527738741-qb525hbfnqejo423ljapra1qkfb5l5g4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS2ljYOgJRZaiFdFRGEEjaz20taxnh_NI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737527738741-qb525hbfnqejo423ljapra1qkfb5l5g4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
