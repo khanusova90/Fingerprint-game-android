@@ -2,15 +2,19 @@ package cz.hanusova.fingerprint_game;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -24,11 +28,14 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import cz.hanusova.fingerprint_game.fragment.AlertDialogFragment;
+import cz.hanusova.fingerprint_game.fragment.AlertDialogFragment_;
 import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment;
 import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment_;
 import cz.hanusova.fingerprint_game.model.Place;
@@ -68,12 +75,16 @@ public class MapActivity extends AppCompatActivity {
     FloatingActionButton buttonProfile;
     @ViewById(R.id.action_menu)
     FloatingActionMenu buttonActionMenu;
-    @OptionsMenuItem(R.id.action_map_options)
+    @OptionsMenuItem(R.id.action_map_logout)
     MenuItem optionsItem;
     private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
     private Drawable[] layers;
     private Bitmap[] mapField = new Bitmap[4];
     private List<Place> places;
+
+    @Pref
+    Preferences_ preferences;
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
@@ -105,10 +116,21 @@ public class MapActivity extends AppCompatActivity {
     }
 
     @OptionsItem
-    void action_map_options() {
+    void action_map_logout() {
+        preferences.clear();
+        LoginActivity_.intent(getApplicationContext()).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
+        finish();
 
-        //TODO: app options menu
     }
+
+    @OptionsItem
+    void action_map_end() {
+        AlertDialogFragment alertDialogFragment = new AlertDialogFragment_();
+        alertDialogFragment.show(getSupportFragmentManager(), "ddd");
+
+
+    }
+
 
     public String getFloorName(int currentFloor) {
         return currentFloor + "NP.jpg";
@@ -198,4 +220,11 @@ public class MapActivity extends AppCompatActivity {
         int f = 555;
     }
 
+    public void doPositiveClick() {
+        finish();
+    }
+
+    public void doNegativeClick(){
+        return;
+    }
 }

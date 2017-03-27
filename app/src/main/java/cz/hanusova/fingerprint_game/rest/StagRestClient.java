@@ -1,6 +1,7 @@
 package cz.hanusova.fingerprint_game.rest;
 
 import org.androidannotations.rest.spring.annotations.Get;
+import org.androidannotations.rest.spring.annotations.Header;
 import org.androidannotations.rest.spring.annotations.Path;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -16,13 +17,14 @@ import cz.hanusova.fingerprint_game.utils.Constants;
  */
 
 
-@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.STAG_API_BASE_URL, interceptors = {AuthInterceptor.class})
+@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.STAG_API_BASE_URL)
 public interface StagRestClient {
 
     @Get("users/getOsobniCislaByExternalLogin?login={login}&outputFormat=JSON")
     List<StagUser> getUserNumberForLogin(@Path String login);
 
     @Get("rozvrhy/getRozvrhByStudent?osCislo={osCislo}&outputFormat=JSON")
+    @Header(name = "Authorization", value = "Basic a2FtZW5rcjE6U2VyZW5hc3RvMTIz")
     List<StagTimetable> getTimetableToAuthorize(@Path String osCislo);
 
 
