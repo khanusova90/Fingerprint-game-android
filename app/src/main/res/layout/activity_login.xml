@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
                     android:inputType="text"
+                    android:labelFor="@string/username"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -51,6 +52,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@string/password"
                     android:hint="@string/password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/sign_in"
@@ -61,13 +63,19 @@
 
             </android.support.design.widget.TextInputLayout>
 
+                <CheckBox
+                    android:text="@string/stayin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBoxIn"
+                    android:layout_marginTop="5pt" />
+
             <TextView
                 android:id="@+id/login_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textColor="#FF0000"/>
-
             <Button
                 android:id="@+id/btn_sign_in"
                 style="?android:textAppearanceSmall"
@@ -76,12 +84,6 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_in"
                 android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/login_test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TEST"/>
 
         </LinearLayout>
     </ScrollView>

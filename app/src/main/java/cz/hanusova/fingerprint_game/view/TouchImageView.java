@@ -147,16 +147,17 @@ public class TouchImageView extends ImageView {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
 
-            if (values[Matrix.MSCALE_Y] - 0.1 >= 0.7 && values[Matrix.MSCALE_Y] + 0.1  < 1.5) {
+          //  if (values[Matrix.MSCALE_Y] - 0.1 >= 0.7 && values[Matrix.MSCALE_Y] + 0.1  < 1.5) {
                 return setScale(detector);
-            }
-            return false;
+           // }
+          //  return false;
         }
 
         public boolean setScale(ScaleGestureDetector detector) {
             scaleFactor = detector.getScaleFactor();
 
-            matrix.postScale(scaleFactor, scaleFactor, getX(detector), getY(detector));
+            //matrix.postScale(scaleFactor, scaleFactor, getX(detector), getY(detector));
+            matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
             return true;
         }
 

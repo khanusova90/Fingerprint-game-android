@@ -18,7 +18,7 @@
     <string name="stagname">Jméno ve stagu</string>
     <string name="username">Uživatelské jméno</string>
 
-    <string name="login_error">Chyba při přihlašování!</string>
+    <string name="login_error">Přihlašovací jméno nebo heslo je nesprávné!</string>
 
     <string name="place_id">Místo ID %1$d</string>
     <string name="place_info">Informace o místě:</string>
@@ -65,6 +65,11 @@
     <string name="lvl">Level</string>
     <string name="place_type">Druh místa</string>
     <string name="place_time">Čas počátku</string>
+    <string name="logout">Odhlásit se</string>
+    <string name="end">Konec hry</string>
+    <string name="stayin">Zapamatovat</string>
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
 
 
 
