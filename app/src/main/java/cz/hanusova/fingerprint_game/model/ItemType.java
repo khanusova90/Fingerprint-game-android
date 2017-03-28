@@ -20,6 +20,9 @@ public class ItemType implements Serializable {
 
     private Material material;
 
+    private String price;
+
+
     /**
      * @return the idItemType
      */
@@ -76,4 +79,17 @@ public class ItemType implements Serializable {
         this.material = material;
     }
 
+    /**
+     * @return the price
+     */
+    public String getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(String price) {
+        this.price = price;
+    }
 }
