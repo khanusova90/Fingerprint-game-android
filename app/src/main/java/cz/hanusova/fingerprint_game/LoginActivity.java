@@ -111,6 +111,7 @@ public class LoginActivity extends AbstractAsyncActivity {
         } catch (Exception e) {
             Log.w(TAG, "Exception while getting timetable", e);
             setLoginError(R.string.login_error);
+            preferences.clear();
         } finally {
         }
         dismissProgressDialog();
