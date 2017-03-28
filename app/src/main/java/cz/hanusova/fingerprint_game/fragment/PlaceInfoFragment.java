@@ -63,7 +63,8 @@ public class PlaceInfoFragment extends DialogFragment {
 
         Bitmap bitmap = null;
         try {
-            bitmap = new BitmapWorkerTask(place.getMaterial().getIconName(), this.getContext(), 4).execute().get();
+            String iconName = place.getMaterial() != null ? place.getMaterial().getIconName() : place.getPlaceType().getImgUrl();
+            bitmap = new BitmapWorkerTask(iconName, this.getContext(), 4).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
