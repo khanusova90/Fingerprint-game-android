@@ -2,6 +2,7 @@ package cz.hanusova.fingerprint_game.model.fingerprint;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by khanusova on 10.1.2017.
  */
-public class Fingerprint {
+public class Fingerprint implements Serializable {
 
     private String level;
 
