@@ -1,9 +1,11 @@
 package cz.hanusova.fingerprint_game.model.fingerprint;
 
+import java.io.Serializable;
+
 /**
  * Created by khanusova on 10.1.2017.
  */
-public class WifiScan {
+public class WifiScan implements Serializable{
 
     //FIXME: refactor
 
@@ -344,5 +346,33 @@ public class WifiScan {
                 this.technology = "";
                 break;
         }
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public String getSSID() {
+        return SSID;
+    }
+
+    public String getMAC() {
+        return MAC;
+    }
+
+    public String getTechnology() {
+        return technology;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public int getStrength() {
+        return strength;
     }
 }
