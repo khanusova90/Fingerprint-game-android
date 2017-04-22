@@ -347,4 +347,32 @@ public class WifiScan implements Serializable{
                 break;
         }
     }
+
+    public long getTime() {
+        return time;
+    }
+
+    public String getSSID() {
+        return SSID;
+    }
+
+    public String getMAC() {
+        return MAC;
+    }
+
+    public String getTechnology() {
+        return technology;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
 }

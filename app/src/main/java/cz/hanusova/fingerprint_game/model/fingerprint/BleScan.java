@@ -1,9 +1,11 @@
 package cz.hanusova.fingerprint_game.model.fingerprint;
 
+import java.io.Serializable;
+
 /**
  * Created by khanusova on 10.1.2017.
  */
-public class BleScan {
+public class BleScan implements Serializable{
 
     //FIXME: REFACTOR NEEDED!
     int rssi;
@@ -49,5 +51,29 @@ public class BleScan {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public int getRssi() {
+        return rssi;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public int getMajor() {
+        return major;
+    }
+
+    public int getMinor() {
+        return minor;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public long getTime() {
+        return time;
     }
 }

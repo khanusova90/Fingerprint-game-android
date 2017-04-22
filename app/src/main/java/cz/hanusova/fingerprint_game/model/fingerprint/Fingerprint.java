@@ -213,4 +213,152 @@ public class Fingerprint implements Serializable {
     public void setCellScans(List<CellScan> cellScans) {
         this.cellScans = cellScans;
     }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<WifiScan> getWifiScans() {
+        return wifiScans;
+    }
+
+    public List<BleScan> getBleScans() {
+        return bleScans;
+    }
+
+    public List<CellScan> getCellScans() {
+        return cellScans;
+    }
+
+    public float getAccX() {
+        return accX;
+    }
+
+    public float getAccY() {
+        return accY;
+    }
+
+    public float getAccZ() {
+        return accZ;
+    }
+
+    public float getGyroX() {
+        return gyroX;
+    }
+
+    public float getGyroY() {
+        return gyroY;
+    }
+
+    public float getGyroZ() {
+        return gyroZ;
+    }
+
+    public float getMagX() {
+        return magX;
+    }
+
+    public float getMagY() {
+        return magY;
+    }
+
+    public float getMagZ() {
+        return magZ;
+    }
+
+    public String getBoard() {
+        return board;
+    }
+
+    public String getBootloader() {
+        return bootloader;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
+    public String getHardware() {
+        return hardware;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public String getOsId() {
+        return osId;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public boolean isSupportsBLE() {
+        return supportsBLE;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public Float getLat() {
+        return lat;
+    }
+
+    public Float getLon() {
+        return lon;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 }

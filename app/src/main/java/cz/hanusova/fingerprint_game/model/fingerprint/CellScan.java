@@ -1,10 +1,12 @@
 package cz.hanusova.fingerprint_game.model.fingerprint;
 
+import java.io.Serializable;
+
 /**
  * Trida reprezentujici zjistenou GSM BTS.
  * Created by Matej Danicek on 8.11.2015.
  */
-public class CellScan {
+public class CellScan implements Serializable{
     /**
      * CellID - identifikuje jednoznacne BTS (vysilac) popr jeho antenu uvnitr "Location Area" pro GPRS a EDGE
      */
@@ -66,4 +68,27 @@ public class CellScan {
         this.time = time;
     }
 
+    public int getCid() {
+        return cid;
+    }
+
+    public int getLac() {
+        return lac;
+    }
+
+    public int getPsc() {
+        return psc;
+    }
+
+    public int getRssi() {
+        return rssi;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public long getTime() {
+        return time;
+    }
 }
