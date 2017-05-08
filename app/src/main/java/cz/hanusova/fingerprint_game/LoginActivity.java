@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,8 +22,11 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.rest.LoginClient;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.utils.Constants;
 import cz.hanusova.fingerprint_game.utils.ValidationUtils;
@@ -36,6 +40,7 @@ import cz.hanusova.fingerprint_game.utils.ValidationUtils;
 public class LoginActivity extends AbstractAsyncActivity {
     private static final String TAG = "LoginActivity";
     private Boolean stayIn = false;
+    private String error;
 
     protected Context context;
 
@@ -46,11 +51,13 @@ public class LoginActivity extends AbstractAsyncActivity {
     ValidationUtils validationUtils;
 
     @RestService
-    RestClient restClient;
+    LoginClient restClient;
 
 
+    //    @Extra(value = Constants.EXTRA_ERROR)
+//    boolean showError;
     @Extra(value = Constants.EXTRA_ERROR)
-    boolean showError;
+    Integer errorCode;
 
     @ViewById(R.id.username)
     EditText etUsername;
@@ -66,7 +73,7 @@ public class LoginActivity extends AbstractAsyncActivity {
         super.onCreate(savedInstanceState);
         context = this;
         String username = preferences.username().get();
-        if (preferences.stayIn().get() && !TextUtils.isEmpty(username) && !showError) {
+        if (preferences.stayIn().get() && !TextUtils.isEmpty(username) && TextUtils.isEmpty(error)) {
             signIn(username);
         }
     }
@@ -74,8 +81,21 @@ public class LoginActivity extends AbstractAsyncActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (showError) {
-            tvError.setText(R.string.login_error);
+//        if (showError) {
+//            tvError.setText(R.string.login_error);
+//        }
+
+//        if (TextUtils.isEmpty(error)){
+//            tvError.setVisibility(View.GONE);
+//        } else {
+//            setLoginError(error);
+//        }
+
+        if (errorCode == null) {
+            error = "";
+            tvError.setVisibility(View.GONE);
+        } else {
+            setLoginError(getString(errorCode));
         }
     }
 
@@ -102,26 +122,46 @@ public class LoginActivity extends AbstractAsyncActivity {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 preferences.user().put(mapper.writeValueAsString(user));
+                MapActivity_.intent(context).start();
+                dismissProgressDialog();
+                finish();
             } catch (JsonProcessingException e) {
-                Log.e(TAG, "Error occurred while trying to save user", e);
+                Log.e(TAG, "Could not save user JSON", e);
+                setLoginError(getString(R.string.login_error_json));
             }
-            MapActivity_.intent(context).start();
-            finish();
-
-        } catch (Exception e) {
-            Log.w(TAG, "Exception while getting timetable", e);
-            setLoginError(R.string.login_error);
-            preferences.clear();
+        } catch (ResourceAccessException e) {
+            Log.e(TAG, "Could not connect to server", e);
+            setLoginError(getString(R.string.login_error_server));
         } finally {
+            dismissProgressDialog();
         }
-        dismissProgressDialog();
+//        try {
+//            AppUser user = restClient.login(username);
+//            ObjectMapper mapper = new ObjectMapper();
+//            try {
+//                preferences.user().put(mapper.writeValueAsString(user));
+//            } catch (JsonProcessingException e) {
+//                Log.e(TAG, "Error occurred while trying to save user", e);
+//            }
+//            MapActivity_.intent(context).start();
+//            finish();
+//
+//        } catch (Exception e) {
+//            Log.w(TAG, "Exception while getting timetable", e);
+//            setLoginError(R.string.login_error);
+//            preferences.clear();
+//        } finally {
+//            dismissProgressDialog();
+//        }
 
     }
 
     @UiThread
-    protected void setLoginError(Integer text) {
+    protected void setLoginError(String text) {
+        tvError.setVisibility(View.VISIBLE);
         tvError.setText(text);
         etPassword.setText("");
+        preferences.clear();
     }
 
 }
