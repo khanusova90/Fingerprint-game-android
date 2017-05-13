@@ -395,6 +395,7 @@ public class QrActivity extends AppCompatActivity {
         p.setLevel(String.valueOf(place.getFloor()));
         p.setX(place.getxCoord());
         p.setY(place.getyCoord());
+        p.setClientVersion(AppUtils.getVersionName(this));
         Log.d(TAG, "New fingerprint: " + p.toString());
         return p;
     }

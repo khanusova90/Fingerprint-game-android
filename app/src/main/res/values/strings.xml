@@ -18,7 +18,10 @@
     <string name="stagname">Jméno ve stagu</string>
     <string name="username">Uživatelské jméno</string>
 
-    <string name="login_error">Přihlašovací jméno nebo heslo je nesprávné!</string>
+    <string name="login_error_credentials">Přihlašovací jméno nebo heslo je nesprávné!</string>
+    <string name="login_error_unauthorized">Nemáte přístup ke zvolené akci</string>
+    <string name="login_error_json">Chyba při načítání uživatele</string>
+    <string name="login_error_server">Chyba v komunikaci se serverem, opakujte prosím později</string>
 
     <string name="place_id">Místo ID %1$d</string>
     <string name="place_info">Informace o místě:</string>

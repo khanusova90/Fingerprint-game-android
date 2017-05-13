@@ -14,9 +14,9 @@ import java.io.IOException;
  * Created by khanusova on 3.11.2016.
  */
 @EBean(scope = EBean.Scope.Singleton)
-public class LoggingInterceptor implements ClientHttpRequestInterceptor {
+public class LogInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final String TAG = "LoggingInterceptor";
+    private static final String TAG = "LogInterceptor";
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

@@ -8,14 +8,11 @@ import org.androidannotations.rest.spring.annotations.Put;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Item;
-import cz.hanusova.fingerprint_game.model.ItemType;
 import cz.hanusova.fingerprint_game.model.Place;
-import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
@@ -24,11 +21,8 @@ import cz.hanusova.fingerprint_game.utils.Constants;
  * <p>
  * Rest client for communication with server
  */
-@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = {AuthInterceptor.class, LoggingInterceptor.class})
+@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = {AuthInterceptor.class, LogInterceptor.class})
 public interface RestClient {
-
-    @Post("/login?username={username}")
-    AppUser login(@Path String username);
 
     @Get("/qr/{code}")
     Place getPlaceByCode(@Path String code);

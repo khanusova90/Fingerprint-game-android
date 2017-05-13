@@ -21,6 +21,7 @@ import cz.hanusova.fingerprint_game.LoginActivity;
 import cz.hanusova.fingerprint_game.LoginActivity_;
 import cz.hanusova.fingerprint_game.MapActivity_;
 import cz.hanusova.fingerprint_game.Preferences_;
+import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
@@ -47,17 +48,17 @@ public class AuthInterceptor implements ClientHttpRequestInterceptor {
         if (response == null || response.getStatusCode() == null){
             return response;
         }
-        switch (response.getStatusCode().value()){
-            case 401:
-                Log.d(TAG, "401 from server");
-                LoginActivity_.intent(FingerprintApplication.getContext())
-                        .showError(true)
-                        .flags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        .start();
-                break;
-            default:
-                break;
-        }
+//        switch (response.getStatusCode().value()){
+//            case 401:
+//                Log.d(TAG, "401 from server");
+//                LoginActivity_.intent(FingerprintApplication.getContext())
+//                        .errorCode(R.string.login_error_unauthorized)
+//                        .flags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//                        .start();
+//                break;
+//            default:
+//                break;
+//        }
         return response;
     }
 }

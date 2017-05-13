@@ -32,6 +32,8 @@ public class Fingerprint implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
 
+    private String clientVersion;
+
     public Fingerprint() {
     }
 
@@ -360,5 +362,13 @@ public class Fingerprint implements Serializable {
 
     public Date getCreatedDate() {
         return createdDate;
+    }
+
+    public String getClientVersion(){
+        return clientVersion;
+    }
+
+    public void setClientVersion(String clientVersion) {
+        this.clientVersion = clientVersion;
     }
 }
