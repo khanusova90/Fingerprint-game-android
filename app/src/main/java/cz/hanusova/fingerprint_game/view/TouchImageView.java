@@ -37,7 +37,7 @@ public class TouchImageView extends ImageView {
     private ScaleGestureDetector scaleDetector;
     private float origW, origH, mapWidth, mapHeight;
     private float actW = 0, actH = 0;
-    private float scaleFactor = 1;
+    private float scaleFactor = 0.5f;
     private long startClickTime;
     private float relativeX, relativeY;
     private List<Place> places;
@@ -61,6 +61,7 @@ public class TouchImageView extends ImageView {
         matrix = new Matrix();
         values = new float[9];
         matrix.getValues(values);
+        matrix.postScale(scaleFactor, scaleFactor);
         setImageMatrix(matrix);
         setScaleType(ScaleType.MATRIX);
         initOnTouchListener();
@@ -206,7 +207,7 @@ public class TouchImageView extends ImageView {
         if (place != null) {
             PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment_();
             placeInfoFragment.setPlace(places.get(i - 1));
-            placeInfoFragment.show(fragmentManager, "hovno");
+            placeInfoFragment.show(fragmentManager, "placeInfoFragment");
         }
     }
 }
