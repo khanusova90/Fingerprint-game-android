@@ -11,7 +11,7 @@ import cz.hanusova.fingerprint_game.utils.Constants;
 /**
  * Created by khanusova on 23.4.2017.
  */
-@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = {AuthInterceptor.class, LogInterceptor.class, LogInterceptor.class})
+@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = {AuthInterceptor.class, LogInterceptor.class, LoginInterceptor.class})
 public interface LoginClient {
 
     @Post(value = "/login?username={username}")
