@@ -123,7 +123,6 @@ public class QrActivity extends AppCompatActivity {
         wasBTEnabled = bluetoothAdapter.isEnabled();
         wasWifiEnabled = wm.isWifiEnabled();
         changeBTWifiState(true);
-        //TODO: Check permission
         createCameraSource(true, false);
         createTimer();
         startTracking();
@@ -267,7 +266,7 @@ public class QrActivity extends AppCompatActivity {
             public void onFinish() {
                 Log.i(TAG, "Timer finished, starting activity");
                 if (place != null) {
-                    switch(place.getPlaceType().getActivity()){
+                    switch (place.getPlaceType().getActivity()) {
                         case BUILD:
                         case MINE:
                             startActivity();
@@ -282,7 +281,7 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @Background
-    public void startActivity(){
+    public void startActivity() {
         AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place);
         ArrayList<UserActivity> activities = (ArrayList<UserActivity>) user.getActivities();
         Intent i = new Intent();
@@ -292,14 +291,14 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @OnActivityResult(REQ_CODE_MARKET)
-    public void returnToMap(@OnActivityResult.Extra(value = Constants.EXTRA_ITEMS) ArrayList<Item> items){
+    public void returnToMap(@OnActivityResult.Extra(value = Constants.EXTRA_ITEMS) ArrayList<Item> items) {
         buyItems(items);
         setResult(Activity.RESULT_OK);
 //        finish();
     }
 
     @Background
-    void buyItems(List<Item> items){
+    void buyItems(List<Item> items) {
         AppUser user = restClient.buyItem(items); //Prida item do DB a vrati aktualizovaneho uzivatele
         setResult(Activity.RESULT_OK);
         finish();
@@ -321,7 +320,7 @@ public class QrActivity extends AppCompatActivity {
                 break;
             case BUY:
                 possibleItems = (ArrayList<Item>) restClient.getPossibleItems();
-                for (Item item : possibleItems){
+                for (Item item : possibleItems) {
                     String itemUrl = item.getImgUrl();
                     try {
                         new BitmapWorkerTask(itemUrl, this.getApplicationContext(), AppUtils.getVersionCode(context)).execute().get();

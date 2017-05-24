@@ -53,9 +53,6 @@ public class LoginActivity extends AbstractAsyncActivity {
     @RestService
     LoginClient restClient;
 
-
-    //    @Extra(value = Constants.EXTRA_ERROR)
-//    boolean showError;
     @Extra(value = Constants.EXTRA_ERROR)
     Integer errorCode;
 
@@ -81,16 +78,6 @@ public class LoginActivity extends AbstractAsyncActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        if (showError) {
-//            tvError.setText(R.string.login_error);
-//        }
-
-//        if (TextUtils.isEmpty(error)){
-//            tvError.setVisibility(View.GONE);
-//        } else {
-//            setLoginError(error);
-//        }
-
         if (errorCode == null) {
             error = "";
             tvError.setVisibility(View.GONE);
@@ -139,25 +126,6 @@ public class LoginActivity extends AbstractAsyncActivity {
         } finally {
             dismissProgressDialog();
         }
-//        try {
-//            AppUser user = restClient.login(username);
-//            ObjectMapper mapper = new ObjectMapper();
-//            try {
-//                preferences.user().put(mapper.writeValueAsString(user));
-//            } catch (JsonProcessingException e) {
-//                Log.e(TAG, "Error occurred while trying to save user", e);
-//            }
-//            MapActivity_.intent(context).start();
-//            finish();
-//
-//        } catch (Exception e) {
-//            Log.w(TAG, "Exception while getting timetable", e);
-//            setLoginError(R.string.login_error);
-//            preferences.clear();
-//        } finally {
-//            dismissProgressDialog();
-//        }
-
     }
 
     @UiThread

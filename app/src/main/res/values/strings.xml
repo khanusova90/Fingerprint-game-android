@@ -18,6 +18,8 @@
     <string name="stagname">Jméno ve stagu</string>
     <string name="username">Uživatelské jméno</string>
 
+    <string name="login_fill_stag_credentials">Zadejte přihlašovací údaje do IS STAG*</string>
+    <string name="login_credentials_policy">*Vaše přihlašovací údaje budou použity pouze k přihlášení pomocí IS STAG a nebudou nijak jinak dále zpracovávány</string>
     <string name="login_error_credentials">Přihlašovací jméno nebo heslo je nesprávné!</string>
     <string name="login_error_unauthorized">Nemáte přístup ke zvolené akci</string>
     <string name="login_error_json">Chyba při načítání uživatele</string>

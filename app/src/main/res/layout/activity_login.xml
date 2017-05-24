@@ -28,6 +28,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/login_stag_credentials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login_fill_stag_credentials"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorAccent"/>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -84,6 +94,13 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_in"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/login_privacy_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login_credentials_policy"
+                android:layout_marginTop="20dp"/>
 
         </LinearLayout>
     </ScrollView>
