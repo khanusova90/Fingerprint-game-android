@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,8 +9,7 @@
         android:id="@+id/market_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
 
     </LinearLayout>
 
@@ -19,9 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/money_lay"
-        android:layout_marginTop="100pt"
-        android:layout_alignTop="@+id/market_item_layout"
-        android:layout_marginLeft="5pt"
+        android:layout_marginStart="5pt"
 
         >
 
@@ -37,7 +34,7 @@
             android:text="0"
             android:textStyle="normal|bold"
             android:textSize="15pt"
-            android:paddingLeft="5pt"
+            android:paddingStart="5pt"
 
             />
 
@@ -49,9 +46,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/market_price_layout"
-        android:layout_below="@+id/money_lay"
-        android:layout_marginLeft="5pt"
-        android:layout_alignParentStart="true">
+        android:layout_marginStart="5pt">
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +60,7 @@
             android:textStyle="normal|bold"
             android:text="0"
             android:textSize="15pt"
-            android:paddingLeft="5pt"
+            android:paddingStart="5pt"
 
             />
     </LinearLayout>
@@ -74,10 +69,9 @@
         android:id="@+id/market_buy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5pt"
+        android:layout_marginStart="5pt"
         android:text="@string/market_buy"
-        android:layout_below="@+id/market_price_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="70dp" />
 
-</RelativeLayout>
+</LinearLayout>
