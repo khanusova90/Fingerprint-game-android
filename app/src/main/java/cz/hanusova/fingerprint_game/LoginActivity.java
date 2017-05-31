@@ -23,11 +23,10 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
+import cz.hanusova.fingerprint_game.base.AbstractAsyncActivity;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.rest.LoginClient;
-import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.utils.Constants;
 import cz.hanusova.fingerprint_game.utils.ValidationUtils;
 

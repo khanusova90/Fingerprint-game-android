@@ -1,26 +1,18 @@
-package cz.hanusova.fingerprint_game;
+package cz.hanusova.fingerprint_game.map;
 
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -37,10 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import cz.hanusova.fingerprint_game.LoginActivity_;
+import cz.hanusova.fingerprint_game.Preferences_;
+import cz.hanusova.fingerprint_game.QrActivity_;
+import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.fragment.AlertDialogFragment;
 import cz.hanusova.fingerprint_game.fragment.AlertDialogFragment_;
-import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment;
-import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment_;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.service.UserService;
@@ -62,7 +57,7 @@ public class MapActivity extends AppCompatActivity {
     private static final int ICON_SIZE = 8;
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
-//    private static final int APP_VERSION = 6;
+
     @Bean(UserServiceImpl.class)
     UserService userService;
     @ViewById(R.id.img_map)
@@ -93,28 +88,45 @@ public class MapActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @AfterViews
     void init() {
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-                Log.e("Thread exception", paramThrowable.getMessage());
-            }
-        });
-        this.setTitle(currentFloor + ". patro");
-        if (mapField[currentFloor - 1] == null) {
+        //TODO: proc tady?
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//            @Override
+//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+//                Log.e("Thread exception", paramThrowable.getMessage());
+//            }
+//        });
+        System.out.println("INITIALIZING");
+        setTitle(currentFloor + ". patro");
+        int index = currentFloor - 1;
+        if (mapField[index] == null) {
+            System.out.println("MAP WAS NULL");
+            String drawableName = "j" + currentFloor + "np";
+//            Drawable defaultMap = getResources().getDrawable(getResources().getIdentifier(drawableName, "drawable", getPackageName()));
+            mapField[index] = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(drawableName, "drawable", getPackageName()));
+            System.out.println("MAP FIELD FILLED");
             try {
-                mapField[currentFloor - 1] = new BitmapWorkerTask(getFloorName(currentFloor), this.getApplicationContext(), AppUtils.getVersionCode(this))
+                System.out.println("DOWNLOADING MAP");
+                mapField[index] = new BitmapWorkerTask(getFloorName(currentFloor), this.getApplicationContext(), AppUtils.getVersionCode(this))
                         .execute().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
+            System.out.println("MAP DOWNLOADED");
         }
-        Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
-        places = userService.getActualUser().getPlacesByFloor(currentFloor);
-        List<Drawable> icons = getIcons(places);
-        changeIconPosition(mapDrawable, places, createLayers(mapDrawable, icons));
+        System.out.println("CREATING DRAWABLE");
+        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("GETTING PLACES");
+                places = userService.getActualUser().getPlacesByFloor(currentFloor);
+                List<Drawable> icons = getIcons(places);
+                changeIconPosition(mapDrawable, places, createLayers(mapDrawable, icons));
+            }
+        }).start();
+
+
         buttonFloorDown.setEnabled(!(currentFloor == 1));
         buttonFloorUp.setEnabled(!(currentFloor == 4));
     }
@@ -136,9 +148,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    public String getFloorName(int currentFloor) {
-        return currentFloor + "NP.jpg";
-    }
+
 
 
     private List<Drawable> getIcons(List<Place> places) {
@@ -155,10 +165,7 @@ public class MapActivity extends AppCompatActivity {
                 Bitmap bitmap = new BitmapWorkerTask(iconName, this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
                 Drawable icon = new BitmapDrawable(getResources(), bitmap);
                 icons.add(icon);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -221,14 +228,14 @@ public class MapActivity extends AppCompatActivity {
 
     @OnActivityResult(REQ_CODE_QR)
     void showActivitiesUpdate(int resultCode, @OnActivityResult.Extra(value = Constants.EXTRA_ACTIVITIES) ArrayList<UserActivity> activities) {
-        int f = 555;
+        int f = 555; //TODO: ???
     }
 
+    //TODO: co to je za metody?
     public void doPositiveClick() {
         finish();
     }
 
     public void doNegativeClick(){
-        return;
     }
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.hanusova.fingerprint_game.adapter.ActivitySpinAdapter;
+import cz.hanusova.fingerprint_game.base.AbstractAsyncActivity;
 import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
