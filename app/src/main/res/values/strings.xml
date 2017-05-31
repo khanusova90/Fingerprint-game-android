@@ -25,6 +25,8 @@
     <string name="login_error_json">Chyba při načítání uživatele</string>
     <string name="login_error_server">Chyba v komunikaci se serverem, opakujte prosím později</string>
 
+    <string name="menu_instructions">Návod</string>
+
     <string name="place_id">Místo ID %1$d</string>
     <string name="place_info">Informace o místě:</string>
     <string name="place_name">Název místa:</string>

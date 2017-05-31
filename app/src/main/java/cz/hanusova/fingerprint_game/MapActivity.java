@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -128,11 +129,14 @@ public class MapActivity extends AppCompatActivity {
     }
 
     @OptionsItem
-    void action_map_end() {
+    void action_map_end() { //TODO: smazat nebo upravit
         AlertDialogFragment alertDialogFragment = new AlertDialogFragment_();
         alertDialogFragment.show(getSupportFragmentManager(), "ddd");
+    }
 
-
+    @OptionsItem(R.id.action_show_instructions)
+    void showInstructions(){
+        Toast.makeText(this, "not implemented yet", Toast.LENGTH_LONG).show();
     }
 
 
