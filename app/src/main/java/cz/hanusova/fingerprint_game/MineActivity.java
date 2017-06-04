@@ -16,6 +16,7 @@ import cz.hanusova.fingerprint_game.model.Place;
  * Created by khanusova on 4.10.2016.
  */
 @EActivity(R.layout.activity_mine)
+@Deprecated
 public class MineActivity extends AppCompatActivity {
 
     @ViewById(R.id.mine_free_workers)

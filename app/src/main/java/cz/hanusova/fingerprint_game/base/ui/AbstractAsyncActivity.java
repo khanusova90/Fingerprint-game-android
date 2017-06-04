@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.hanusova.fingerprint_game.base;
+package cz.hanusova.fingerprint_game.base.ui;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +31,7 @@ import org.androidannotations.annotations.UiThread;
  * @author Pierre-Yves Ricau
  */
 @EActivity
+@Deprecated
 public abstract class AbstractAsyncActivity extends AppCompatActivity{
 
     private ProgressDialog progressDialog;

@@ -1,13 +1,9 @@
 package cz.hanusova.fingerprint_game.rest;
 
-import android.content.Intent;
 import android.util.Base64;
-import android.util.Log;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.springframework.http.HttpAuthentication;
-import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -16,13 +12,7 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 
-import cz.hanusova.fingerprint_game.FingerprintApplication;
-import cz.hanusova.fingerprint_game.LoginActivity;
-import cz.hanusova.fingerprint_game.LoginActivity_;
-import cz.hanusova.fingerprint_game.MapActivity_;
 import cz.hanusova.fingerprint_game.Preferences_;
-import cz.hanusova.fingerprint_game.R;
-import cz.hanusova.fingerprint_game.utils.Constants;
 
 /**
  * Created by khanusova on 10.10.2016.

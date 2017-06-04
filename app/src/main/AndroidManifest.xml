@@ -38,7 +38,7 @@
         <activity
             android:name=".PlaceActivity"
             android:label="@string/place_info" />
-        <activity android:name=".MapActivity_" />
+        <activity android:name=".map.MapActivity_" />
         <activity
             android:name=".MineActivity_"
             android:label="@string/mining" />
@@ -51,10 +51,10 @@
         <activity
             android:name=".UserDetailActivity_"
             android:label="@string/title_activity_user_detail"
-            android:parentActivityName=".MapActivity_">
+            android:parentActivityName=".map.MapActivity_">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="cz.hanusova.fingerprint_game.MapActivity_" />
+                android:value="cz.hanusova.fingerprint_game.map.MapActivity_" />
         </activity>
 
         <service android:name=".firebase.FirebaseMsgService">

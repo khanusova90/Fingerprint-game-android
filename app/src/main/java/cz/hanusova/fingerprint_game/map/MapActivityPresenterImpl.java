@@ -11,8 +11,10 @@ import cz.hanusova.fingerprint_game.utils.AppUtils;
  * Created by khanusova on 31.5.2017.
  */
 
-public class MapActivityProvider {
-    private static final String TAG = "MapActivityProvider";
+public class MapActivityPresenterImpl implements MapActivityPresenter {
+    private static final String TAG = "MapActivityPresenterImpl";
+
+    private MapActivityView view;
 
     void downloadMapFromServer(int currentFloor, Context context) {
         //TODO: download map from server
@@ -27,5 +29,16 @@ public class MapActivityProvider {
 
     private String getFloorName(int currentFloor) {
         return currentFloor + "NP.jpg";
+    }
+
+    @Override
+    public void onAttach(MapActivityView view) {
+        this.view = view;
+        System.out.println("HELLO FROM PRESENTER");
+    }
+
+    @Override
+    public void onDetach() {
+        this.view = null;
     }
 }
