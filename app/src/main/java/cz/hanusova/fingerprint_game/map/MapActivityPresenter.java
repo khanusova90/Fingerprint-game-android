@@ -1,5 +1,7 @@
 package cz.hanusova.fingerprint_game.map;
 
+import android.content.Context;
+
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 
 /**
@@ -7,4 +9,5 @@ import cz.hanusova.fingerprint_game.base.BasePresenter;
  */
 
 public interface MapActivityPresenter extends BasePresenter<MapActivityView> {
+    void createMap(int currentFloor, Context context);
 }

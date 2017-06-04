@@ -1,14 +1,29 @@
 package cz.hanusova.fingerprint_game.map;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import cz.hanusova.fingerprint_game.FingerprintApplication;
+import cz.hanusova.fingerprint_game.QrActivity_;
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
+import cz.hanusova.fingerprint_game.view.TouchImageView;
 
 /**
  * Created by khanusova on 6.6.2016.
@@ -23,8 +38,34 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     private static final int MAP_HEIGHT = 2800;
     private static final int MAP_WIDTH = 2600;
 
+    @ViewById(R.id.img_map)
+    TouchImageView mapView;
+
     @Inject
     MapActivityPresenter presenter;
+
+    private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
+
+    @AfterViews
+    void init() {
+        setTitle(currentFloor + ". patro");
+        presenter.createMap(currentFloor, this);
+    }
+
+    @Override
+    public void updateView(Bitmap[] mapField) {
+        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
+        mapView.setImageDrawable(createLayers(mapDrawable, new ArrayList<Drawable>()));
+    }
+
+    private LayerDrawable createLayers(Drawable mapDrawable, List<Drawable> icons) {
+        Drawable[] layers = new Drawable[icons != null ? icons.size() + 1 : 1];
+        layers[0] = mapDrawable;
+        for (int i = 1; i < layers.length; i++) {
+            layers[i] = icons.get(i - 1);
+        }
+        return new LayerDrawable(layers);
+    }
 
     @Override
     public void inject() {
@@ -40,8 +81,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //
 //    @Bean(UserServiceImpl.class)
 //    UserService userService;
-//    @ViewById(R.id.img_map)
-//    TouchImageView mapView;
+//
 //    @ViewById(R.id.action_menu)
 //    FloatingActionMenu floatingActionMenu;
 //    @ViewById(R.id.action_floor_up)
@@ -56,8 +96,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //    FloatingActionMenu buttonActionMenu;
 //    @OptionsMenuItem(R.id.action_map_logout)
 //    MenuItem optionsItem;
-//    private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
-//    private Drawable[] layers;
+//    private;
 //    private Bitmap[] mapField = new Bitmap[4];
 //    private List<Place> places;
 //
@@ -152,15 +191,8 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //        return icons;
 //    }
 //
-//    private LayerDrawable createLayers(Drawable mapDrawable, List<Drawable> icons) {
-//        layers = new Drawable[icons != null ? icons.size() + 1 : 1];
-//        layers[0] = mapDrawable;
-//        for (int i = 1; i < layers.length; i++) {
-//            layers[i] = icons.get(i - 1);
-//        }
-//        return new LayerDrawable(layers);
-//    }
-//
+
+    //
 //
 //
 //    private void changeIconPosition(Drawable mapDrawable, List<Place> places, LayerDrawable ld) {
@@ -182,28 +214,28 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //    }
 //
 //
-//    @Click(R.id.action_camera)
-//    void startCamera() {
-//        QrActivity_.intent(this).startForResult(REQ_CODE_QR);
-//    }
-//
-//    @Click(R.id.action_floor_down)
-//    void goDown() {
-//        currentFloor = currentFloor > 1 ? --currentFloor : currentFloor;
-//        init();
-//
-//    }
-//
-//    @Click(R.id.action_floor_up)
-//    void goUp() {
-//        currentFloor = currentFloor < 4 ? ++currentFloor : currentFloor;
-//        init();
-//    }
-//
-//    @Click(R.id.action_profile)
-//    void goToProfile() {
-//        UserDetailActivity_.intent(this).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
-//    }
+    @Click(R.id.action_camera)
+    void startCamera() {
+        QrActivity_.intent(this).startForResult(REQ_CODE_QR);
+    }
+
+    @Click(R.id.action_floor_down)
+    void goDown() {
+        currentFloor = currentFloor > 1 ? --currentFloor : currentFloor;
+        init();
+    }
+
+    @Click(R.id.action_floor_up)
+    void goUp() {
+        currentFloor = currentFloor < 4 ? ++currentFloor : currentFloor;
+        init();
+    }
+
+    @Click(R.id.action_profile)
+    void goToProfile() {
+        //TODO: proč new task?
+        UserDetailActivity_.intent(this).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
+    }
 //
 //
 //    @OnActivityResult(REQ_CODE_QR)

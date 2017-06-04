@@ -1,5 +1,7 @@
 package cz.hanusova.fingerprint_game.map;
 
+import android.graphics.Bitmap;
+
 import cz.hanusova.fingerprint_game.base.BaseView;
 
 /**
@@ -7,4 +9,6 @@ import cz.hanusova.fingerprint_game.base.BaseView;
  */
 
 public interface MapActivityView extends BaseView {
+
+    void updateView(Bitmap[] mapField);
 }
