@@ -9,8 +9,10 @@ import android.graphics.drawable.LayerDrawable;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import cz.hanusova.fingerprint_game.FingerprintApplication;
+import cz.hanusova.fingerprint_game.LoginActivity_;
+import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.QrActivity_;
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.UserDetailActivity_;
@@ -40,6 +44,9 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     @ViewById(R.id.img_map)
     TouchImageView mapView;
+
+    @Pref
+    Preferences_ preferences;
 
     @Inject
     MapActivityPresenter presenter;
@@ -100,8 +107,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //    private Bitmap[] mapField = new Bitmap[4];
 //    private List<Place> places;
 //
-//    @Pref
-//    Preferences_ preferences;
+//
 //
 //
 //    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -150,13 +156,12 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //        buttonFloorUp.setEnabled(!(currentFloor == 4));
 //    }
 //
-//    @OptionsItem
-//    void action_map_logout() {
-//        preferences.clear();
-//        LoginActivity_.intent(getApplicationContext()).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
-//        finish();
-//
-//    }
+    @OptionsItem
+    void action_map_logout() {
+        preferences.clear();
+        LoginActivity_.intent(getApplicationContext()).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
+        finish();
+    }
 //
 //    @OptionsItem
 //    void action_map_end() {
