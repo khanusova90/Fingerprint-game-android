@@ -10,7 +10,6 @@ import android.widget.TextView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import cz.hanusova.fingerprint_game.adapter.ActivityAdapter;
@@ -21,7 +20,6 @@ import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 
 
 @EActivity(R.layout.content_user_detail)
-@OptionsMenu(R.menu.menu_user_detail)
 public class UserDetailActivity extends AppCompatActivity {
 
     @Bean(UserServiceImpl.class)
@@ -48,14 +46,12 @@ public class UserDetailActivity extends AppCompatActivity {
     @ViewById(R.id.text_experience)
     TextView experience;
 
-    @ViewById(R.id.text_name_stag)
-    TextView nameStag;
-
     @ViewById(R.id.text_username)
     TextView username;
 
     @ViewById(R.id.list_of_activities)
     ListView listOfActivities;
+
     private AppUser user;
 
     @AfterViews
@@ -89,9 +85,6 @@ public class UserDetailActivity extends AppCompatActivity {
         experience.setText(this.getResources().getText(R.string.experience) + " " + String.valueOf(activitiesVal + "%"));
         progressBarExperience.setProgress(activitiesVal);
         progressBarPlaces.setProgress(placesVal);
-        nameStag.setText(user.getStagname());
         username.setText(user.getUsername());
-
-
     }
 }

@@ -8,43 +8,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-
-            android:text="@string/stag_name" />
-
-        <TextView
-            android:id="@+id/text_name_stag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:text="@string/activities"
-            android:textSize="18sp"
-            android:textStyle="normal|bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:text="@string/user_name" />
-
 
         <TextView
             android:id="@+id/text_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:text="@string/activities"
-            android:textSize="18sp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/username"
+            android:textSize="24sp"
             android:textStyle="normal|bold" />
 
         <View
@@ -57,7 +31,8 @@
             android:id="@+id/text_activities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
             android:text="@string/activities"
             android:textStyle="normal|bold" />
 

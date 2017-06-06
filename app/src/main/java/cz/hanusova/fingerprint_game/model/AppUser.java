@@ -17,6 +17,7 @@ public class AppUser implements Serializable {
 
     private String password;
 
+    @Deprecated
     private String stagname;
 
     private Character character;
@@ -69,10 +70,12 @@ public class AppUser implements Serializable {
         this.password = password;
     }
 
+    @Deprecated
     public String getStagname() {
         return stagname;
     }
 
+    @Deprecated
     public void setStagname(String stagname) {
         this.stagname = stagname;
     }
