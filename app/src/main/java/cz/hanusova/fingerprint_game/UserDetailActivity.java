@@ -1,7 +1,6 @@
 package cz.hanusova.fingerprint_game;
 
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -67,17 +66,11 @@ public class UserDetailActivity extends AppCompatActivity {
 
     @AfterViews
     void init() {
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-                Log.e("Thread exception", paramThrowable.getMessage());
-            }
-        });
         user = userService.getActualUser();
 
-        this.setTitle("Profil");
+        this.setTitle(getString(R.string.title_activity_user_detail));
 
+        //TODO: nastavit hodnoty
         int placesVal = 55;
         int activitiesVal = 44;
         places.setText(this.getResources().getText(R.string.places) + " " + String.valueOf(placesVal) + "%");

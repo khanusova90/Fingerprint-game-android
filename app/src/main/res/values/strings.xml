@@ -15,7 +15,6 @@
     <string name="map">Mapa</string>
     <string name="password">Heslo</string>
     <string name="sign_in">Přihlásit</string>
-    <string name="stagname">Jméno ve stagu</string>
     <string name="username">Uživatelské jméno</string>
 
     <string name="login_fill_stag_credentials">Zadejte přihlašovací údaje do IS STAG*</string>
@@ -51,10 +50,6 @@
     <string name="qr_countdown">Start za %1$d s</string>
 
     <!-- floor array -->
-
-    <string name="spinner_title_material">Start za %1$d s</string>
-    <string name="spinner_title_floor">Start za %1$d s</string>
-
     <string name="floor_up">Nahoru</string>
     <string name="floor_down">Dolu</string>
     <string name="title_activity_user_info">UserInfo</string>
@@ -78,13 +73,6 @@
     <string name="axeTooltip">Urychluje těžbu dřeva.</string>
     <string name="ladderTooltip">Urychluje sklizeň.</string>
 
-
-
-
-
-
-
-
-
+    <string name="activity_start">Začátek</string>
 
 </resources>

@@ -7,6 +7,8 @@ import android.widget.TextView;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
+import java.text.SimpleDateFormat;
+
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 
@@ -17,6 +19,8 @@ import cz.hanusova.fingerprint_game.model.UserActivity;
 
 @EViewGroup(R.layout.double_test_list_item)
 public class ActivityItemView extends LinearLayout {
+
+    private static final SimpleDateFormat SDF = new SimpleDateFormat("d.M.yyyy HH:mm");
 
     @ViewById(R.id.activity_name)
     TextView activityName;
@@ -36,8 +40,9 @@ public class ActivityItemView extends LinearLayout {
 
     public void bind(UserActivity userActivity) {
         activityName.setText(userActivity.getPlace().getPlaceType().getPlaceType());
-        activityMaterial.setText(userActivity.getPlace().getMaterial().getName());
+        int materialStrId = getResources().getIdentifier(userActivity.getPlace().getMaterial().getName(), "string", getContext().getPackageName());
+        activityMaterial.setText(getResources().getString(materialStrId));
         activityPlace.setText(userActivity.getPlace().getName());
-        activityDate.setText(userActivity.getStartTime().toString());
+        activityDate.setText(getResources().getString(R.string.activity_start) + ": " + SDF.format(userActivity.getStartTime()));
     }
 }
