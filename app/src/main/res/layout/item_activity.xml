@@ -3,39 +3,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="1dip"
-    android:paddingBottom="1dip"
-    android:paddingStart="8dip"
-    android:paddingEnd="8dip"
     android:orientation="vertical"
+    android:paddingBottom="1dip"
+    android:paddingEnd="8dip"
+    android:paddingStart="8dip"
+    android:paddingTop="1dip"
     android:weightSum="1">
 
-    <TextView android:id="@+id/activity_name"
+    <TextView
+        android:id="@+id/activity_name"
         android:layout_width="match_parent"
         android:layout_height="20pt"
-        android:text="@string/places"
         android:paddingLeft="5pt"
         android:paddingTop="5pt"
+        android:text="@string/places"
 
-        android:textStyle="normal|bold"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="normal|bold" />
 
-    <TextView android:id="@+id/activity_place"
+    <TextView
+        android:id="@+id/activity_place"
         android:layout_width="match_parent"
-        android:text="@string/places"
         android:layout_height="15pt"
         android:paddingLeft="5pt"
-        />
-    <TextView android:id="@+id/activity_material"
+        android:text="@string/places" />
+
+    <TextView
+        android:id="@+id/activity_material"
         android:layout_width="match_parent"
-        android:text="@string/places"
         android:layout_height="15pt"
         android:paddingLeft="5pt"
-        />
-    <TextView android:id="@+id/activity_since"
+        android:text="@string/places" />
+
+    <TextView
+        android:id="@+id/activity_since"
         android:layout_width="match_parent"
-        android:text="@string/places"
         android:layout_height="15pt"
         android:paddingLeft="5pt"
-        />
+        android:text="@string/places" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorAccent" />
+
 </LinearLayout>

@@ -17,7 +17,7 @@ import cz.hanusova.fingerprint_game.model.UserActivity;
  */
 
 
-@EViewGroup(R.layout.double_test_list_item)
+@EViewGroup(R.layout.item_activity)
 public class ActivityItemView extends LinearLayout {
 
     private static final SimpleDateFormat SDF = new SimpleDateFormat("d.M.yyyy HH:mm");

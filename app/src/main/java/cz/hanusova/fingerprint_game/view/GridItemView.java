@@ -20,7 +20,7 @@ import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
  * Created by Kristyna on 16/02/2017.
  */
 
-@EViewGroup(R.layout.grid_item)
+@EViewGroup(R.layout.item_inventory)
 public class GridItemView extends LinearLayout {
 
 
