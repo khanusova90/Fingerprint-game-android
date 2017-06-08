@@ -71,7 +71,7 @@ public class UserDetailActivity extends AppCompatActivity {
         this.setTitle(getString(R.string.title_activity_user_detail));
 
         //TODO: nastavit hodnoty
-        int placesVal = 55;
+        int placesVal = user.getPlaceProgress();
         int activitiesVal = 44;
         places.setText(this.getResources().getText(R.string.places) + " " + String.valueOf(placesVal) + "%");
         places.setTextSize(15);
