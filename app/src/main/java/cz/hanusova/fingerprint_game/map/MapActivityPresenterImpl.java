@@ -38,7 +38,6 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
     @Override
     public void createMap(int currentFloor, Context context) {
         Log.d(TAG, "creating map");
-        createIcons(context, currentFloor);
         int index = currentFloor - 1;
         if (mapField[index] == null) {
             Log.d(TAG, "Map was null");
@@ -47,7 +46,8 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
             mapField[index] = BitmapFactory.decodeResource(context.getResources(), drawableId);
             downloadMap(currentFloor, context);
         }
-        view.updateView(mapField);
+        view.setMapField(mapField);
+        view.updateView();
     }
 
     @Background
@@ -59,7 +59,8 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        view.updateView(mapField);
+        view.setMapField(mapField);
+        view.updateView();
     }
 
     @Override
@@ -67,26 +68,27 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
         return userService.getActualUser().getPlacesByFloor(currentFloor);
     }
 
-    void createIcons(Context context, int currentFloor) {
+    @Override
+    public void createIcons(Context context, int currentFloor) {
         places = userService.getActualUser().getPlacesByFloor(currentFloor);
-        if (places == null) {
-            return;
-        }
         List<Drawable> icons = new ArrayList<>();
-        for (Place p : places) {
-            try {
-                String iconName = p.getPlaceType().getImgUrl();
-                if (iconName == null) {
-                    iconName = p.getMaterial().getIconName();
+        if (places != null) {
+            for (Place p : places) {
+                try {
+                    String iconName = p.getPlaceType().getImgUrl();
+                    if (iconName == null) {
+                        iconName = p.getMaterial().getIconName();
+                    }
+                    Bitmap bitmap = new BitmapWorkerTask(iconName, context, AppUtils.getVersionCode(context)).execute().get();
+                    Drawable icon = new BitmapDrawable(context.getResources(), bitmap);
+                    icons.add(icon);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-                Bitmap bitmap = new BitmapWorkerTask(iconName, context, AppUtils.getVersionCode(context)).execute().get();
-                Drawable icon = new BitmapDrawable(context.getResources(), bitmap);
-                icons.add(icon);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
             }
         }
         view.updateIcons(icons);
+        view.updateView();
     }
 
     private String getFloorName(int currentFloor) {

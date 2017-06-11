@@ -16,4 +16,5 @@ public interface MapActivityPresenter extends BasePresenter<MapActivityView> {
 
     List<Place> getPlaces(int currentFloor);
 
+    void createIcons(Context context, int currentFloor);
 }

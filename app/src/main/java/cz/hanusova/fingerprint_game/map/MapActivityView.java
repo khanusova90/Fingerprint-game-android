@@ -13,6 +13,9 @@ import cz.hanusova.fingerprint_game.base.BaseView;
 
 public interface MapActivityView extends BaseView {
 
-    void updateView(Bitmap[] mapField);
+    void updateView();
+
+    void setMapField(Bitmap[] mapField);
+
     void updateIcons(List<Drawable> icons);
 }
