@@ -1,7 +1,6 @@
 package cz.hanusova.fingerprint_game;
 
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import cz.hanusova.fingerprint_game.adapter.ActivityAdapter;
@@ -21,7 +19,6 @@ import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 
 
 @EActivity(R.layout.content_user_detail)
-@OptionsMenu(R.menu.menu_user_detail)
 public class UserDetailActivity extends AppCompatActivity {
 
     @Bean(UserServiceImpl.class)
@@ -42,20 +39,19 @@ public class UserDetailActivity extends AppCompatActivity {
     @ViewById(R.id.progressBar_places)
     ProgressBar progressBarPlaces;
 
-    @ViewById(R.id.text_places)
+    @ViewById(R.id.detail_place_progress)
     TextView places;
-
-    @ViewById(R.id.text_experience)
+    @ViewById(R.id.detail_level)
+    TextView level;
+    @ViewById(R.id.detail_level_progress)
     TextView experience;
-
-    @ViewById(R.id.text_name_stag)
-    TextView nameStag;
 
     @ViewById(R.id.text_username)
     TextView username;
 
     @ViewById(R.id.list_of_activities)
     ListView listOfActivities;
+
     private AppUser user;
 
     @AfterViews
@@ -66,32 +62,22 @@ public class UserDetailActivity extends AppCompatActivity {
     @AfterViews
     void bindAdapter2() {
         listOfActivities.setAdapter(activityAdapter);
-
     }
 
     @AfterViews
     void init() {
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-                Log.e("Thread exception", paramThrowable.getMessage());
-            }
-        });
         user = userService.getActualUser();
 
-        this.setTitle("Profil");
+        this.setTitle(getString(R.string.title_activity_user_detail));
 
-        int placesVal = 55;
-        int activitiesVal = 44;
-        places.setText(this.getResources().getText(R.string.places) + " " + String.valueOf(placesVal) + "%");
+        int placesVal = user.getPlaceProgress();
+        int activitiesVal = user.getLevelProgress();
+        places.setText(String.valueOf(placesVal) + "%");
         places.setTextSize(15);
-        experience.setText(this.getResources().getText(R.string.experience) + " " + String.valueOf(activitiesVal + "%"));
+        level.setText(getString(R.string.lvl) + " " + user.getLevel());
+        experience.setText(String.valueOf(activitiesVal + "%"));
         progressBarExperience.setProgress(activitiesVal);
         progressBarPlaces.setProgress(placesVal);
-        nameStag.setText(user.getStagname());
         username.setText(user.getUsername());
-
-
     }
 }

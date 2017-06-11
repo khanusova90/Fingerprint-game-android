@@ -17,6 +17,7 @@ public class AppUser implements Serializable {
 
     private String password;
 
+    @Deprecated
     private String stagname;
 
     private Character character;
@@ -31,6 +32,12 @@ public class AppUser implements Serializable {
 
     private List<Item> items = new ArrayList<>();
 
+    private int placeProgress;
+    private int level;
+    private int levelProgress;
+
+
+    //FIXME: to neni metoda uzivatele!
     public List<Place> getPlacesByFloor(int currentFloor) {
         // TODO: maybe fix this shit with a filter
         List<Place> places = new ArrayList<>();
@@ -69,10 +76,12 @@ public class AppUser implements Serializable {
         this.password = password;
     }
 
+    @Deprecated
     public String getStagname() {
         return stagname;
     }
 
+    @Deprecated
     public void setStagname(String stagname) {
         this.stagname = stagname;
     }
@@ -123,5 +132,29 @@ public class AppUser implements Serializable {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public int getPlaceProgress() {
+        return placeProgress;
+    }
+
+    public void setPlaceProgress(int placeProgress) {
+        this.placeProgress = placeProgress;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getLevelProgress() {
+        return levelProgress;
+    }
+
+    public void setLevelProgress(int levelProgress) {
+        this.levelProgress = levelProgress;
     }
 }

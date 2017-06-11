@@ -126,4 +126,23 @@ public class Place implements Serializable {
     public void setyCoord(Integer yCoord) {
         this.yCoord = yCoord;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Place place = (Place) o;
+
+        if (idPlace != null ? !idPlace.equals(place.idPlace) : place.idPlace != null) return false;
+        return code != null ? code.equals(place.code) : place.code == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idPlace != null ? idPlace.hashCode() : 0;
+        result = 31 * result + (code != null ? code.hashCode() : 0);
+        return result;
+    }
 }
