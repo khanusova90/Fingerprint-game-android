@@ -3,7 +3,9 @@ package cz.hanusova.fingerprint_game;
 import android.app.Application;
 
 import cz.hanusova.fingerprint_game.map.MapActivityPresenter;
-import cz.hanusova.fingerprint_game.map.MapActivityPresenterImpl;
+import cz.hanusova.fingerprint_game.map.MapActivityPresenterImpl_;
+import cz.hanusova.fingerprint_game.service.UserService;
+import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl_;
 import dagger.Module;
 import dagger.Provides;
 
@@ -21,6 +23,11 @@ public class AppModule {
 
     @Provides
     public MapActivityPresenter providesMapActivityPresenter(){
-        return new MapActivityPresenterImpl();
+        return MapActivityPresenterImpl_.getInstance_(application.getApplicationContext());
+    }
+
+    @Provides
+    public UserService providesUserService(){
+        return UserServiceImpl_.getInstance_(application.getApplicationContext());
     }
 }

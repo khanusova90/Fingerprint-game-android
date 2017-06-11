@@ -5,12 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.util.Log;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
@@ -27,6 +31,7 @@ import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
+import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
 /**
@@ -37,6 +42,8 @@ import cz.hanusova.fingerprint_game.view.TouchImageView;
 @EActivity(R.layout.map)
 @OptionsMenu(R.menu.map_toolbar_menu)
 public class MapActivity extends BaseActivity implements MapActivityView {
+    private static final String TAG = "MapActivity";
+
     private static final int REQ_CODE_QR = 1;
     private static final int ICON_SIZE = 8;
     private static final int MAP_HEIGHT = 2800;
@@ -44,6 +51,10 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     @ViewById(R.id.img_map)
     TouchImageView mapView;
+    @ViewById(R.id.action_floor_up)
+    FloatingActionButton buttonFloorUp;
+    @ViewById(R.id.action_floor_down)
+    FloatingActionButton buttonFloorDown;
 
     @Pref
     Preferences_ preferences;
@@ -52,6 +63,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     MapActivityPresenter presenter;
 
     private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
+    private List<Drawable> icons = new ArrayList<>();
 
     @AfterViews
     void init() {
@@ -60,18 +72,47 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     }
 
     @Override
+    @UiThread
     public void updateView(Bitmap[] mapField) {
+        Log.d(TAG, "Updating map view");
         final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
-        mapView.setImageDrawable(createLayers(mapDrawable, new ArrayList<Drawable>()));
+        System.out.println("MAP DRAWABLE " + mapDrawable.toString());
+        changeIconPosition(mapDrawable, createLayers(mapDrawable));
+        buttonFloorDown.setEnabled(!(currentFloor == 1));
+        buttonFloorUp.setEnabled(!(currentFloor == 4));
     }
 
-    private LayerDrawable createLayers(Drawable mapDrawable, List<Drawable> icons) {
+    @Override
+    public void updateIcons(List<Drawable> icons) {
+        this.icons = icons;
+    }
+
+    private LayerDrawable createLayers(Drawable mapDrawable) {
         Drawable[] layers = new Drawable[icons != null ? icons.size() + 1 : 1];
+        System.out.println("ICON SIZE " + icons.size());
         layers[0] = mapDrawable;
         for (int i = 1; i < layers.length; i++) {
             layers[i] = icons.get(i - 1);
         }
         return new LayerDrawable(layers);
+    }
+
+    private void changeIconPosition(Drawable mapDrawable, LayerDrawable ld) {
+        List<Place> places = presenter.getPlaces(currentFloor);
+        if (places == null || icons.isEmpty()) {
+            mapView.setImageDrawable(ld);
+            return;
+        }
+        System.out.println("PLACES SIZE " + places.size());
+        for (int i = 0; i < places.size(); i++) {
+            Place p = places.get(i);
+            int x = p.getxCoord();
+            int y = p.getyCoord();
+            ld.setLayerInset(i + 1, x, y, mapDrawable.getIntrinsicWidth() - x + ICON_SIZE, mapDrawable.getIntrinsicHeight() - y + ICON_SIZE);
+        }
+        mapView.setImageDrawable(ld);
+        mapView.setPlaces(places);
+        mapView.setFragmentManager(getSupportFragmentManager());
     }
 
     @Override
@@ -91,10 +132,8 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //
 //    @ViewById(R.id.action_menu)
 //    FloatingActionMenu floatingActionMenu;
-//    @ViewById(R.id.action_floor_up)
-//    FloatingActionButton buttonFloorUp;
-//    @ViewById(R.id.action_floor_down)
-//    FloatingActionButton buttonFloorDown;
+
+    //    FloatingActionButton buttonFloorDown;
 //    @ViewById(R.id.action_camera)
 //    FloatingActionButton buttonCamera;
 //    @ViewById(R.id.action_profile)
@@ -106,51 +145,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //    private;
 //    private Bitmap[] mapField = new Bitmap[4];
 //    private List<Place> places;
-//
-//
-//
-//
-//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-//    @AfterViews
-//    void init() {
-//        //TODO: proc tady?
-////        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-////            @Override
-////            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-////                Log.e("Thread exception", paramThrowable.getMessage());
-////            }
-////        });
-//        System.out.println("INITIALIZING");
-//        setTitle(currentFloor + ". patro");
-//        int index = currentFloor - 1;
-//        if (mapField[index] == null) {
-//            System.out.println("MAP WAS NULL");
-//            String drawableName = "j" + currentFloor + "np";
-////            Drawable defaultMap = getResources().getDrawable(getResources().getIdentifier(drawableName, "drawable", getPackageName()));
-//            mapField[index] = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(drawableName, "drawable", getPackageName()));
-//            System.out.println("MAP FIELD FILLED");
-//            try {
-//                System.out.println("DOWNLOADING MAP");
-//                mapField[index] = new BitmapWorkerTask(getFloorName(currentFloor), this.getApplicationContext(), AppUtils.getVersionCode(this))
-//                        .execute().get();
-//            } catch (InterruptedException | ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("MAP DOWNLOADED");
-//        }
-//        System.out.println("CREATING DRAWABLE");
-//        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                System.out.println("GETTING PLACES");
-//                places = userService.getActualUser().getPlacesByFloor(currentFloor);
-//                List<Drawable> icons = getIcons(places);
-//                changeIconPosition(mapDrawable, places, createLayers(mapDrawable, icons));
-//            }
-//        }).start();
-//
 //
 //        buttonFloorDown.setEnabled(!(currentFloor == 1));
 //        buttonFloorUp.setEnabled(!(currentFloor == 4));
@@ -175,26 +169,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 //
 //
 //
-//    private List<Drawable> getIcons(List<Place> places) {
-//        if (places == null) {
-//            return null;
-//        }
-//        List<Drawable> icons = new ArrayList<>();
-//        for (Place p : places) {
-//            try {
-//                String iconName = p.getPlaceType().getImgUrl();
-//                if (iconName == null) {
-//                    iconName = p.getMaterial().getIconName();
-//                }
-//                Bitmap bitmap = new BitmapWorkerTask(iconName, this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
-//                Drawable icon = new BitmapDrawable(getResources(), bitmap);
-//                icons.add(icon);
-//            } catch (InterruptedException | ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return icons;
-//    }
 //
 
     //

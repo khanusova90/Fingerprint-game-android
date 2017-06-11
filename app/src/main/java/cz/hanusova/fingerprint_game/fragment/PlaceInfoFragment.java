@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
@@ -42,33 +42,36 @@ public class PlaceInfoFragment extends DialogFragment {
     TextView placeStart;
     @ViewById(R.id.place_type)
     TextView placeType;
+    @ViewById(R.id.fragment_place_image)
+    ImageView imageView;
 
     @Bean(UserServiceImpl.class)
     UserService userService;
 
-    ImageView imageView;
 
     @FragmentArg
     Place place;
     AppUser user;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    //    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+    @AfterViews
+    public void initViews() {
         LayoutInflater lf = getActivity().getLayoutInflater();
         user = userService.getActualUser();
 
         List<UserActivity> activities = user.getActivities();
         UserActivity activity = null;
 
-        for (UserActivity a : activities){
-            if (a.getPlace().equals(place)){
+        for (UserActivity a : activities) {
+            if (a.getPlace().equals(place)) {
                 activity = a;
                 break;
             }
         }
 
-        View view = lf.inflate(R.layout.fragment_place_info, container, false);
+//        View view = lf.inflate(R.layout.fragment_place_info, container, false);
         placeType.setText(place.getPlaceType().getPlaceType());
         placeName.setText(place.getDescription());
         if (activity != null) {
@@ -86,7 +89,7 @@ public class PlaceInfoFragment extends DialogFragment {
             e.printStackTrace();
         }
         imageView.setImageDrawable(new BitmapDrawable(this.getContext().getResources(), bitmap));
-        return view;
+//        return view;
     }
 
     @Override

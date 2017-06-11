@@ -3,19 +3,28 @@ package cz.hanusova.fingerprint_game.map;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.EBean;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.model.Place;
+import cz.hanusova.fingerprint_game.service.UserService;
+import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 import cz.hanusova.fingerprint_game.utils.AppUtils;
 
 /**
  * Created by khanusova on 31.5.2017.
  */
-
+@EBean
 public class MapActivityPresenterImpl implements MapActivityPresenter {
     private static final String TAG = "MapActivityPresenter";
 
@@ -23,57 +32,61 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
     private Bitmap[] mapField = new Bitmap[4];
     private List<Place> places;
 
+    @Bean(UserServiceImpl.class)
+    UserService userService;
+
     @Override
-    public void createMap(int currentFloor, Context context){
-        int index= currentFloor - 1;
+    public void createMap(int currentFloor, Context context) {
+        Log.d(TAG, "creating map");
+        createIcons(context, currentFloor);
+        int index = currentFloor - 1;
         if (mapField[index] == null) {
             Log.d(TAG, "Map was null");
             String drawableName = "j" + currentFloor + "np";
             int drawableId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
-//            Drawable defaultMap = context.getResources().getDrawable(drawableId);
             mapField[index] = BitmapFactory.decodeResource(context.getResources(), drawableId);
-            //TODO: download map from server
+            downloadMap(currentFloor, context);
         }
         view.updateView(mapField);
     }
 
-//            System.out.println("MAP WAS NULL");
-//
-////            Drawable defaultMap = getResources().getDrawable(getResources().getIdentifier(drawableName, "drawable", getPackageName()));
-//
-//            System.out.println("MAP FIELD FILLED");
-//            try {
-//                System.out.println("DOWNLOADING MAP");
-//                mapField[index] = new BitmapWorkerTask(getFloorName(currentFloor), this.getApplicationContext(), AppUtils.getVersionCode(this))
-//                        .execute().get();
-//            } catch (InterruptedException | ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("MAP DOWNLOADED");
-//        }
-//        System.out.println("CREATING DRAWABLE");
-//        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                System.out.println("GETTING PLACES");
-//                places = userService.getActualUser().getPlacesByFloor(currentFloor);
-//                List<Drawable> icons = getIcons(places);
-//                changeIconPosition(mapDrawable, places, createLayers(mapDrawable, icons));
-//            }
-//        }).start();
-//    }
-
-    void downloadMapFromServer(int currentFloor, Context context) {
-        //TODO: download map from server
+    @Background
+    void downloadMap(int currentFloor, Context context) {
+        Log.i(TAG, "Downloading map from server - " + currentFloor + " floor");
         try {
-            new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
+            mapField[currentFloor - 1] = new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
                     .execute().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        //TODO: refresh view
+        view.updateView(mapField);
+    }
+
+    @Override
+    public List<Place> getPlaces(int currentFloor) {
+        return userService.getActualUser().getPlacesByFloor(currentFloor);
+    }
+
+    void createIcons(Context context, int currentFloor) {
+        places = userService.getActualUser().getPlacesByFloor(currentFloor);
+        if (places == null) {
+            return;
+        }
+        List<Drawable> icons = new ArrayList<>();
+        for (Place p : places) {
+            try {
+                String iconName = p.getPlaceType().getImgUrl();
+                if (iconName == null) {
+                    iconName = p.getMaterial().getIconName();
+                }
+                Bitmap bitmap = new BitmapWorkerTask(iconName, context, AppUtils.getVersionCode(context)).execute().get();
+                Drawable icon = new BitmapDrawable(context.getResources(), bitmap);
+                icons.add(icon);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        view.updateIcons(icons);
     }
 
     private String getFloorName(int currentFloor) {
@@ -83,7 +96,6 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
     @Override
     public void onAttach(MapActivityView view) {
         this.view = view;
-        System.out.println("HELLO FROM PRESENTER");
     }
 
     @Override

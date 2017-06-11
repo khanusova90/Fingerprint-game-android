@@ -120,7 +120,7 @@ public class LoginActivity extends AbstractAsyncActivity {
             Log.e(TAG, "Could not connect to server", e);
             setLoginError(getString(R.string.login_error_server));
         } catch (Exception e) {
-            Log.e(TAG, "Exception ocurred while trying to login");
+            Log.e(TAG, "Exception ocurred while trying to login", e);
             dismissProgressDialog();
             finish();
         } finally {
