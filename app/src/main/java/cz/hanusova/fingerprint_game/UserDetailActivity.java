@@ -39,10 +39,11 @@ public class UserDetailActivity extends AppCompatActivity {
     @ViewById(R.id.progressBar_places)
     ProgressBar progressBarPlaces;
 
-    @ViewById(R.id.text_places)
+    @ViewById(R.id.detail_place_progress)
     TextView places;
-
-    @ViewById(R.id.text_experience)
+    @ViewById(R.id.detail_level)
+    TextView level;
+    @ViewById(R.id.detail_level_progress)
     TextView experience;
 
     @ViewById(R.id.text_username)
@@ -61,7 +62,6 @@ public class UserDetailActivity extends AppCompatActivity {
     @AfterViews
     void bindAdapter2() {
         listOfActivities.setAdapter(activityAdapter);
-
     }
 
     @AfterViews
@@ -70,12 +70,12 @@ public class UserDetailActivity extends AppCompatActivity {
 
         this.setTitle(getString(R.string.title_activity_user_detail));
 
-        //TODO: nastavit hodnoty
         int placesVal = user.getPlaceProgress();
-        int activitiesVal = 44;
-        places.setText(this.getResources().getText(R.string.places) + " " + String.valueOf(placesVal) + "%");
+        int activitiesVal = user.getLevelProgress();
+        places.setText(String.valueOf(placesVal) + "%");
         places.setTextSize(15);
-        experience.setText(this.getResources().getText(R.string.experience) + " " + String.valueOf(activitiesVal + "%"));
+        level.setText(getString(R.string.lvl) + " " + user.getLevel());
+        experience.setText(String.valueOf(activitiesVal + "%"));
         progressBarExperience.setProgress(activitiesVal);
         progressBarPlaces.setProgress(placesVal);
         username.setText(user.getUsername());
