@@ -53,9 +53,6 @@ public class PlaceInfoFragment extends DialogFragment {
     Place place;
     AppUser user;
 
-    //    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
     @AfterViews
     public void initViews() {
         LayoutInflater lf = getActivity().getLayoutInflater();

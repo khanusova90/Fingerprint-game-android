@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.map;
+package cz.hanusova.fingerprint_game.scene.map;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;

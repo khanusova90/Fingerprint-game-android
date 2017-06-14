@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.map;
+package cz.hanusova.fingerprint_game.scene.map;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import android.util.Log;
 import com.github.clans.fab.FloatingActionButton;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
@@ -21,17 +22,14 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import cz.hanusova.fingerprint_game.FingerprintApplication;
-import cz.hanusova.fingerprint_game.LoginActivity_;
 import cz.hanusova.fingerprint_game.Preferences_;
-import cz.hanusova.fingerprint_game.QrActivity_;
 import cz.hanusova.fingerprint_game.R;
-import cz.hanusova.fingerprint_game.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
 import cz.hanusova.fingerprint_game.model.Place;
+import cz.hanusova.fingerprint_game.scene.login.LoginActivity_;
+import cz.hanusova.fingerprint_game.scene.scan.QrActivity_;
+import cz.hanusova.fingerprint_game.scene.user.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
 /**
@@ -59,7 +57,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @Pref
     Preferences_ preferences;
 
-    @Inject
+    @Bean(MapActivityPresenterImpl.class)
     MapActivityPresenter presenter;
 
     private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
@@ -121,14 +119,10 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     }
 
     @Override
-    public void inject() {
-        FingerprintApplication.instance.getComponent().inject(this);
-    }
-
-    @Override
     public BasePresenter getPresenter() {
         return presenter;
     }
+
     @OptionsItem
     void action_map_logout() {
         preferences.clear();
@@ -155,6 +149,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @Click(R.id.action_profile)
     void goToProfile() {
         //TODO: proč new task?
-        UserDetailActivity_.intent(this).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
+        UserDetailActivity_.intent(this).start();
     }
 }

@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import org.androidannotations.annotations.EFragment;
 
 import cz.hanusova.fingerprint_game.R;
-import cz.hanusova.fingerprint_game.map.MapActivity_;
 
 /**
  * Created by Kristyna on 27/03/2017.

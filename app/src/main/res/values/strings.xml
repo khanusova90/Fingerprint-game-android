@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Fingerprint-game</string>
     <string name="ok">OK</string>
+    <string name="wait">Čekejte, prosím</string>
 
     <string name="GOLD">Zlato</string>
     <string name="STONE">Kámen</string>

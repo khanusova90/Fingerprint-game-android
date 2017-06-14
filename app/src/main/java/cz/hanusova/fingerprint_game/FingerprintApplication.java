@@ -13,28 +13,16 @@ public class FingerprintApplication extends Application {
 
     public static FingerprintApplication instance;
 
-    private AppComponent component;
-
     @Override
     public void onCreate() {
         super.onCreate();
         if (instance == null){
             instance = this;
         }
-        initComponents();
     }
 
     public static Context getContext(){
         return instance.getApplicationContext();
-    }
-
-    protected void initComponents(){
-        component = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-        component.inject(this);
-    }
-
-    public AppComponent getComponent(){
-        return component;
     }
 
 }

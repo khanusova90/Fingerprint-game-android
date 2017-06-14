@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game;
+package cz.hanusova.fingerprint_game.scene.login;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,8 +24,11 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
 import org.springframework.web.client.ResourceAccessException;
 
-import cz.hanusova.fingerprint_game.base.ui.AbstractAsyncActivity;
-import cz.hanusova.fingerprint_game.map.MapActivity_;
+import cz.hanusova.fingerprint_game.Preferences_;
+import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.base.BasePresenter;
+import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
+import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.rest.LoginClient;
 import cz.hanusova.fingerprint_game.utils.Constants;
@@ -37,7 +40,7 @@ import cz.hanusova.fingerprint_game.utils.ValidationUtils;
  * Created by khanusova on 21.3.2016.
  */
 @EActivity(R.layout.activity_login)
-public class LoginActivity extends AbstractAsyncActivity {
+public class LoginActivity extends BaseActivity implements LoginActivityView{
     private static final String TAG = "LoginActivity";
     private Boolean stayIn = false;
     private String error;
@@ -47,8 +50,8 @@ public class LoginActivity extends AbstractAsyncActivity {
     @Pref
     Preferences_ preferences;
 
-    @Bean
-    ValidationUtils validationUtils;
+    @Bean (LoginActivityPresenterImpl.class)
+    LoginActivityPresenter presenter;
 
     @RestService
     LoginClient restClient;
@@ -64,6 +67,11 @@ public class LoginActivity extends AbstractAsyncActivity {
     TextView tvError;
     @ViewById(R.id.checkBoxIn)
     CheckBox checkBoxIn;
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return presenter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +99,7 @@ public class LoginActivity extends AbstractAsyncActivity {
         String username = etUsername.getText().toString();
         preferences.username().put(username);
         preferences.password().put(etPassword.getText().toString());
-        if (validationUtils.isNotEmpty(etUsername) && validationUtils.isNotEmpty(etPassword)) {
+        if (ValidationUtils.isNotEmpty(etUsername) && ValidationUtils.isNotEmpty(etPassword)) {
             signIn(username);
         }
     }
@@ -103,7 +111,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 
     @Background
     protected void signIn(String username) {
-        showLoadingProgressDialog();
+        showProgressDialog(null);
         try {
             AppUser user = restClient.login(username);
             ObjectMapper mapper = new ObjectMapper();

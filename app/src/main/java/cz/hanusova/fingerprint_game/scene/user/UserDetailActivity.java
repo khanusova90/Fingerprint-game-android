@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game;
+package cz.hanusova.fingerprint_game.scene.user;
 
 import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
@@ -11,6 +11,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.adapter.ActivityAdapter;
 import cz.hanusova.fingerprint_game.adapter.ImageAdapter;
 import cz.hanusova.fingerprint_game.model.AppUser;

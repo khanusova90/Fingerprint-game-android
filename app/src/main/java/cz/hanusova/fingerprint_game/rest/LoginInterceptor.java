@@ -12,8 +12,8 @@ import org.springframework.http.client.ClientHttpResponse;
 import java.io.IOException;
 
 import cz.hanusova.fingerprint_game.FingerprintApplication;
-import cz.hanusova.fingerprint_game.LoginActivity_;
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.scene.login.LoginActivity_;
 
 /**
  * Created by khanusova on 23.4.2017.
