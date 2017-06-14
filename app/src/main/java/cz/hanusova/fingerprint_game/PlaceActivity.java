@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.hanusova.fingerprint_game.adapter.ActivitySpinAdapter;
+import cz.hanusova.fingerprint_game.base.ui.AbstractAsyncActivity;
 import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
@@ -26,6 +27,7 @@ import cz.hanusova.fingerprint_game.utils.Constants;
 /**
  * Created by khanusova on 27.4.2016.
  */
+@Deprecated
 public class PlaceActivity extends AbstractAsyncActivity {
     private static final String TAG = "PlaceActivity";
 

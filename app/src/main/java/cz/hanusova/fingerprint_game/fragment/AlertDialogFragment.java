@@ -8,13 +8,13 @@ import android.support.v7.app.AlertDialog;
 
 import org.androidannotations.annotations.EFragment;
 
-import cz.hanusova.fingerprint_game.MapActivity_;
 import cz.hanusova.fingerprint_game.R;
 
 /**
  * Created by Kristyna on 27/03/2017.
  */
 @EFragment
+@Deprecated
 public class AlertDialogFragment extends DialogFragment {
 
     public static AlertDialogFragment newInstance(int title) {
@@ -32,14 +32,14 @@ public class AlertDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.yes,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((MapActivity_)getActivity()).doPositiveClick();
+//                                ((MapActivity_)getActivity()).doPositiveClick();
                             }
                         }
                 )
                 .setNegativeButton(R.string.no,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((MapActivity_)getActivity()).doNegativeClick();
+//                                ((MapActivity_)getActivity()).doNegativeClick();
                             }
                         }
                 )

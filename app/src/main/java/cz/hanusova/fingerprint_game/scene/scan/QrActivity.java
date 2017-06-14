@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game;
+package cz.hanusova.fingerprint_game.scene.scan;
 
 
 import android.annotation.SuppressLint;
@@ -43,6 +43,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import cz.hanusova.fingerprint_game.Preferences_;
+import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
 import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
@@ -54,7 +56,6 @@ import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Item;
-import cz.hanusova.fingerprint_game.model.ItemType;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
@@ -65,6 +66,7 @@ import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scan.DeviceInformation;
 import cz.hanusova.fingerprint_game.scan.Scanner;
 import cz.hanusova.fingerprint_game.scan.SensorScanner;
+import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;

@@ -8,9 +8,4 @@
         android:title="@string/logout"
        />
 
-    <item
-        android:id="@+id/action_map_end"
-        android:title="@string/end"
-        />
-
     </menu>

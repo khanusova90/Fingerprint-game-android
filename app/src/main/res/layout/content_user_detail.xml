@@ -8,71 +8,38 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-
-            android:text="@string/stag_name" />
-
-        <TextView
-            android:id="@+id/text_name_stag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:text="@string/activities"
-            android:textSize="18sp"
-            android:textStyle="normal|bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:text="@string/user_name" />
-
 
         <TextView
             android:id="@+id/text_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:text="@string/activities"
-            android:textSize="18sp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/username"
+            android:textSize="24sp"
             android:textStyle="normal|bold" />
 
-        <View
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"/>
-            <!--android:background="@color/common_plus_signin_btn_text_dark_disabled"-->
-        <TextView
-            android:id="@+id/text_activities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/activities"
-            android:textStyle="normal|bold" />
+            android:layout_height="wrap_content">
 
-        <ListView
-            android:id="@+id/list_of_activities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+            <TextView
+                android:id="@+id/detail_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/text_experience"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/experience" />
+            <TextView
+                android:id="@+id/detail_level_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_alignParentEnd="true"/>
 
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/progressBar_experience"
@@ -80,13 +47,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/text_places"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/places" />
+            <TextView
+                android:id="@+id/text_places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textStyle="bold"
+                android:text="@string/places" />
+
+            <TextView
+                android:id="@+id/detail_place_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+
+
+
 
         <ProgressBar
             android:id="@+id/progressBar_places"
@@ -100,6 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
+            android:textStyle="normal|bold"
             android:text="@string/inventory" />
 
         <GridView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -112,6 +96,22 @@
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
             android:verticalSpacing="10dp" />
+
+
+        <TextView
+            android:id="@+id/text_activities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
+            android:text="@string/activities"
+            android:textStyle="normal|bold" />
+
+        <ListView
+            android:id="@+id/list_of_activities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 

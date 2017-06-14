@@ -16,6 +16,7 @@ import android.widget.OverScroller;
  * <p/>
  * http://www.c-sharpcorner.com/UploadFile/88b6e5/multi-touch-panning-pinch-zoom-image-view-in-android-using/
  */
+@Deprecated
 public class TouchImageViewOld extends ImageView {
     private static final String TAG = "TouchImageView";
     //Possible states;

@@ -200,14 +200,18 @@ public class TouchImageView extends ImageView {
     }
 
     public void showFragment(int i) {
+        System.out.println("SHOWING FRAGMENT");
         if (places == null) {
             return;
         }
         Place place = places.get(i - 1);
         if (place != null) {
-            PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment_();
-            placeInfoFragment.setPlace(places.get(i - 1));
-            placeInfoFragment.show(fragmentManager, "placeInfoFragment");
+            System.out.println("OPENING FRAGMENT");
+            PlaceInfoFragment fragment = PlaceInfoFragment_.builder().place(place).build();
+            fragment.show(fragmentManager, "placeInfoFragment");
+//            PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment_();
+//            placeInfoFragment.setPlace(places.get(i - 1));
+//            placeInfoFragment.show(fragmentManager, "placeInfoFragment");
         }
     }
 }

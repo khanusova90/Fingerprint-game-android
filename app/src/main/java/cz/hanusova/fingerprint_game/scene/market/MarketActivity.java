@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game;
+package cz.hanusova.fingerprint_game.scene.market;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import org.androidannotations.rest.spring.annotations.RestService;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.model.ItemEnum;
 import cz.hanusova.fingerprint_game.rest.RestClient;

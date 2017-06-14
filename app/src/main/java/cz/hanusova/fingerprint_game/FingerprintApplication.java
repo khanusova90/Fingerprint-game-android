@@ -5,27 +5,24 @@ import android.content.Context;
 
 import org.androidannotations.annotations.EApplication;
 
-import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
-
 /**
  * Created by khanusova on 26.3.2017.
  */
 @EApplication
 public class FingerprintApplication extends Application {
 
-    private static FingerprintApplication application;
+    public static FingerprintApplication instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (application == null){
-            application = this;
+        if (instance == null){
+            instance = this;
         }
     }
 
     public static Context getContext(){
-        return application.getApplicationContext();
+        return instance.getApplicationContext();
     }
-
 
 }

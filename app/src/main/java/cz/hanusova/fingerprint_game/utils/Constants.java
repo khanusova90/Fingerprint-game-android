@@ -21,7 +21,7 @@ public final class Constants {
     //Name of app for SharedPreferences
     public static final String SP_NAME = "fingerprint_game";
 
-    public static final String EXTRA_PLACE = "place"; //TODO: pouziva se?
+    public static final String EXTRA_PLACE = "place";
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_ACTIVITIES = "activities";
     public static final String EXTRA_ERROR = "error";
