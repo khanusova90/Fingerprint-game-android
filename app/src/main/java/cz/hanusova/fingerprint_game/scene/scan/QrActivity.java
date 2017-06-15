@@ -160,6 +160,7 @@ public class QrActivity extends AppCompatActivity {
         hideSeekers();
         scanner.stopScan();
         changeBTWifiState(false);
+        place = null;
     }
 
     /**
@@ -258,9 +259,9 @@ public class QrActivity extends AppCompatActivity {
                     Log.i(TAG, "Barcode capturing stopped!");
                     //TODO: pridat sipku pro navrat do predchozi activity
                     qrCountdown.setVisibility(View.GONE);
-                    stopTimer();
                     startTracking();
                     scanner.stopScan();
+                    stopTimer();
                 }
             }
 
@@ -361,6 +362,7 @@ public class QrActivity extends AppCompatActivity {
     }
 
     private void stopTimer() {
+        System.out.println("CANCELING TIMER");
         timer.cancel();
     }
 

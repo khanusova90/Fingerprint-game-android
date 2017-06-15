@@ -108,6 +108,7 @@ public class Scanner {
      * @return - zda bylo skenovani uspesne spusteno. False kdyz jsou nektere adaptery vypnute nebo skenovani uz bezi
      */
     public boolean startScan(final int time, boolean wifi, boolean ble, boolean cell, final ScanResultListener scanResultListener) {
+        System.out.println("SCAN START");
         Log.d(TAG, "Start scanning");
         ble = ble && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE); //vyradime ble pokud ho zarizeni nema.
         if (running || !enableHW(wifi, ble)) {
@@ -219,7 +220,11 @@ public class Scanner {
             cdt.cancel();
         }
         //stepDetector.enableStepDetector(false);
-        context.unregisterReceiver(wifiBroadcastReceiver);
+        try { //android does not have method to find out if receiver is registered
+            context.unregisterReceiver(wifiBroadcastReceiver);
+        } catch(IllegalArgumentException e){
+            Log.d(TAG, "Could not unregister receiver");
+        }
         beaconConsumer.unBind();
         running = false;
     }
