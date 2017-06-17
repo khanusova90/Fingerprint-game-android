@@ -124,13 +124,13 @@ public class LoginActivity extends BaseActivity implements LoginActivityView{
                 Log.e(TAG, "Could not save user JSON", e);
                 setLoginError(getString(R.string.login_error_json));
             }
-        } catch (ResourceAccessException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Could not connect to server", e);
             setLoginError(getString(R.string.login_error_server));
-        } catch (Exception e) {
-            Log.e(TAG, "Exception ocurred while trying to login", e);
-            dismissProgressDialog();
-            finish();
+//        } catch (Exception e) {
+//            Log.e(TAG, "Exception ocurred while trying to login", e);
+//            dismissProgressDialog();
+//            finish();
         } finally {
             dismissProgressDialog();
         }
