@@ -4,15 +4,11 @@ package cz.hanusova.fingerprint_game.scene.scan;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Camera;
-import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,33 +35,26 @@ import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.base.BasePresenter;
+import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
 import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
 import cz.hanusova.fingerprint_game.camera.CameraSource;
 import cz.hanusova.fingerprint_game.camera.CameraSourcePreview;
 import cz.hanusova.fingerprint_game.camera.GraphicOverlay;
-import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.ActivityEnum;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
-import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
-import cz.hanusova.fingerprint_game.model.fingerprint.CellScan;
-import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
-import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;
 import cz.hanusova.fingerprint_game.rest.RestClient;
-import cz.hanusova.fingerprint_game.scan.DeviceInformation;
-import cz.hanusova.fingerprint_game.scan.Scanner;
-import cz.hanusova.fingerprint_game.scan.SensorScanner;
 import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
@@ -77,8 +66,8 @@ import cz.hanusova.fingerprint_game.utils.Constants;
  * Created by khanusova on 9.9.2016.
  */
 @EActivity(R.layout.qr_capture)
-public class QrActivity extends AppCompatActivity {
-    private static final String TAG = "QrActivity";
+public class ScanActivity extends BaseActivity implements ScanActivityView{
+    private static final String TAG = "ScanActivity";
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
@@ -89,6 +78,8 @@ public class QrActivity extends AppCompatActivity {
 
     @Bean(UserServiceImpl.class)
     UserService userService;
+    @Bean(ScanActivityPresenterImpl.class)
+    ScanActivityPresenter presenter;
 
     @Pref
     Preferences_ preferences;
@@ -106,29 +97,15 @@ public class QrActivity extends AppCompatActivity {
 
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
-    private CountDownTimer timer;
-    private Scanner scanner;
 
     private Place place;
 
-    private boolean wasBTEnabled, wasWifiEnabled;
-    private WifiManager wm;
-    private BluetoothAdapter bluetoothAdapter;
-    private Context context;
     private ArrayList<Item> possibleItems = new ArrayList<>();
 
     @AfterViews
     public void init() {
-        context = this;
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wasBTEnabled = bluetoothAdapter.isEnabled();
-        wasWifiEnabled = wm.isWifiEnabled();
-        changeBTWifiState(true);
         createCameraSource(true, false);
-        createTimer();
-        startTracking();
-        scanner = new Scanner(this);
+        presenter.init(this);
     }
 
     private void hideSeekers() {
@@ -156,11 +133,14 @@ public class QrActivity extends AppCompatActivity {
             preview.stop();
         }
         qrCountdown.setVisibility(View.GONE);
-        timer.cancel();
+        presenter.destroy();
         hideSeekers();
-        scanner.stopScan();
-        changeBTWifiState(false);
         place = null;
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return presenter;
     }
 
     /**
@@ -173,41 +153,15 @@ public class QrActivity extends AppCompatActivity {
         if (preview != null) {
             preview.release();
         }
-        qrCountdown.setVisibility(View.GONE);
     }
 
-    /**
-     * Zapne BT a Wifi pokud je aktivita aktivni. Pokud bylo BT nebo Wifi zaple, zustane zaple.
-     *
-     * @param enable jestli se ma bt a wifi zapnout/vypnout
-     * @return true
-     */
-    public boolean changeBTWifiState(boolean enable) {
-        if (enable) {
-            if (!wasBTEnabled && !wasWifiEnabled) {
-                wm.setWifiEnabled(true);
-                return bluetoothAdapter.enable();
-            } else if (!wasBTEnabled) {
-                return bluetoothAdapter.enable();
-            } else
-                return wasWifiEnabled || wm.setWifiEnabled(true);
-        } else {
-            if (!wasBTEnabled && !wasWifiEnabled) {
-                wm.setWifiEnabled(false);
-                return bluetoothAdapter.disable();
-            } else if (!wasBTEnabled) {
-                return bluetoothAdapter.disable();
-            } else
-                return wasWifiEnabled || wm.setWifiEnabled(false);
-        }
-    }
-
-    private void startTracking() {
+    @Override
+    public void startTracking() {
+        presenter.createTimer();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 BarcodeGraphicTracker tracker = barcodeFactory.getTracker();
-                //TODO: vyresit tak, aby se opakovalo (znovu zavolani po odjeti z kodu apod.)
                 while (place == null) {
                     while (tracker == null || tracker.getBarcode() == null) {
                         tracker = barcodeFactory.getTracker();
@@ -215,15 +169,7 @@ public class QrActivity extends AppCompatActivity {
                     place = getPlaceInfo();
                 }
                 changeCountdownVisibility();
-                timer.start();
-                scanner.startScan(10000, new ScanResultListener() {
-                    @Override
-                    public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
-                        Log.d(TAG, "Received onScanfinish, wifi = " + wifiScans.size() + ", ble = " + bleScans.size() + ", gsm = " + cellScans.size());
-                        Fingerprint fingerprint = createFingerprint(wifiScans, bleScans, cellScans, place);
-                        restClient.sendFingerprint(fingerprint);
-                    }
-                });
+                presenter.startTimer(place, getApplicationContext());
                 ActivityEnum activity = place.getPlaceType().getActivity();
                 BarcodeGraphic.activity = activity;
                 showActivity(activity);
@@ -238,49 +184,32 @@ public class QrActivity extends AppCompatActivity {
     }
 
     @UiThread
+    @Override
     public void updateCountdown(long millisLeft) {
         qrCountdown.setText(getString(R.string.qr_countdown, millisLeft / 1000));
     }
 
-    private void createTimer() {
-        Log.i(TAG, "Creating timer");
-        timer = new CountDownTimer(10 * 1000, 1000) {
-            private Barcode barcode = null;
+    @Override
+    public void stopCountDown() {
+        qrCountdown.setVisibility(View.GONE);
+        hideSeekers();
+        place = null;
+    }
 
-            @Override
-            public void onTick(long millisLeft) {
-                updateCountdown(millisLeft);
-                if (barcode == null) {
-                    Log.d(TAG, "Getting actual barcode");
-                    barcode = getActualBarcode();
-                }
-                Barcode actualBarcode = getActualBarcode();
-                if (barcode == null || actualBarcode == null || !barcode.displayValue.equals(actualBarcode.displayValue)) {
-                    Log.i(TAG, "Barcode capturing stopped!");
-                    //TODO: pridat sipku pro navrat do predchozi activity
-                    qrCountdown.setVisibility(View.GONE);
-                    startTracking();
-                    scanner.stopScan();
-                    stopTimer();
-                }
+    @Override
+    public void onCountdownFinished() {
+        Log.i(TAG, "Timer finished, starting activity");
+        if (place != null) {
+            switch (place.getPlaceType().getActivity()) {
+                case BUILD:
+                case MINE:
+                    startActivity();
+                    break;
+                case BUY:
+                    MarketActivity_.intent(getApplicationContext()).items(possibleItems).startForResult(REQ_CODE_MARKET);
+                    break;
             }
-
-            @Override
-            public void onFinish() {
-                Log.i(TAG, "Timer finished, starting activity");
-                if (place != null) {
-                    switch (place.getPlaceType().getActivity()) {
-                        case BUILD:
-                        case MINE:
-                            startActivity();
-                            break;
-                        case BUY:
-                            MarketActivity_.intent(context).items(possibleItems).startForResult(REQ_CODE_MARKET);
-                            break;
-                    }
-                }
-            }
-        };
+        }
     }
 
     @Background
@@ -297,7 +226,6 @@ public class QrActivity extends AppCompatActivity {
     public void returnToMap(@OnActivityResult.Extra(value = Constants.EXTRA_ITEMS) ArrayList<Item> items) {
         buyItems(items);
         setResult(Activity.RESULT_OK);
-//        finish();
     }
 
     @Background
@@ -326,7 +254,7 @@ public class QrActivity extends AppCompatActivity {
                 for (Item item : possibleItems) {
                     String itemUrl = item.getImgUrl();
                     try {
-                        new BitmapWorkerTask(itemUrl, this.getApplicationContext(), AppUtils.getVersionCode(context)).execute().get();
+                        new BitmapWorkerTask(itemUrl, this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
                     } catch (InterruptedException | ExecutionException e) {
                         Log.e(TAG, "Could not download image", e);
                     }
@@ -361,48 +289,25 @@ public class QrActivity extends AppCompatActivity {
         workAmountText.setText(String.valueOf(seekWorkers.getProgress()));
     }
 
-    private void stopTimer() {
-        System.out.println("CANCELING TIMER");
-        timer.cancel();
-    }
-
     private Place getPlaceInfo() {
-        Barcode barcode = getActualBarcode();
-        if (barcode != null) {
-            String url = barcode.displayValue;
-            String placeCode = url.substring(url.lastIndexOf("/") + 1);
-            Log.d(TAG, "Getting place with code " + placeCode);
-            Place place = restClient.getPlaceByCode(placeCode);
+        String code = getPlaceCode();
+        if (code != null){
+            Log.d(TAG, "Getting place with code " + code);
+            Place place = restClient.getPlaceByCode(code);
             return place;
         }
         return null;
     }
 
-    /**
-     * Creates new fingerprint
-     *
-     * @param wifiScans
-     * @param bleScans
-     * @param cellScans
-     * @param place
-     * @return {@link Fingerprint} filled with information about scans
-     */
-    private Fingerprint createFingerprint(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans, Place place) {
-        Fingerprint p = new Fingerprint();
-        p.setWifiScans(wifiScans);
-        p.setBleScans(bleScans); // naplnime daty z Bluetooth
-        p.setCellScans(cellScans);
-        new SensorScanner(this).fillPosition(p); // naplnime daty ze senzoru
-        new DeviceInformation(this).fillPosition(p); // naplnime infomacemi o zarizeni
-        p.setCreatedDate(new Date());
-        p.setLevel(String.valueOf(place.getFloor()));
-        p.setX(place.getxCoord());
-        p.setY(place.getyCoord());
-        p.setClientVersion(AppUtils.getVersionName(this));
-        Log.d(TAG, "New fingerprint: " + p.toString());
-        return p;
+    @Override
+    public String getPlaceCode(){
+        Barcode barcode = getActualBarcode();
+        if (barcode != null){
+            String url = barcode.displayValue;
+            return url.substring(url.lastIndexOf("/") + 1);
+        }
+        return null;
     }
-
 
     /**
      * @return {@link Barcode} that is being captured

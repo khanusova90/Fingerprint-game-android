@@ -59,8 +59,10 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        view.setMapField(mapField);
-        view.updateView();
+        if (view != null) {
+            view.setMapField(mapField);
+            view.updateView();
+        }
     }
 
     @Override

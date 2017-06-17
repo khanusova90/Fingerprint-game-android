@@ -28,7 +28,7 @@ import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.scene.login.LoginActivity_;
-import cz.hanusova.fingerprint_game.scene.scan.QrActivity_;
+import cz.hanusova.fingerprint_game.scene.scan.ScanActivity_;
 import cz.hanusova.fingerprint_game.scene.user.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
@@ -131,7 +131,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     }
     @Click(R.id.action_camera)
     void startCamera() {
-        QrActivity_.intent(this).startForResult(REQ_CODE_QR);
+        ScanActivity_.intent(this).startForResult(REQ_CODE_QR);
     }
 
     @Click(R.id.action_floor_down)
