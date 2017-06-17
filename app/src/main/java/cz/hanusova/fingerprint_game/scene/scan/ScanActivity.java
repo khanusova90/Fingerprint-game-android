@@ -193,6 +193,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     public void stopCountDown() {
         qrCountdown.setVisibility(View.GONE);
         hideSeekers();
+        BarcodeGraphic.activity = null;
         place = null;
     }
 
@@ -259,7 +260,6 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
                         Log.e(TAG, "Could not download image", e);
                     }
                 }
-                //TODO: poslat do nove aktivity
                 break;
             default:
                 //TODO: informovat o nezname aktivite
@@ -303,7 +303,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     public String getPlaceCode(){
         Barcode barcode = getActualBarcode();
         if (barcode != null){
-            String url = barcode.displayValue;
+            String url = barcode.rawValue;
             return url.substring(url.lastIndexOf("/") + 1);
         }
         return null;

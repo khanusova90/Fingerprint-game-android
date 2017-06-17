@@ -40,7 +40,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     public static ActivityEnum activity;
     private static int mCurrentColorIndex = 0;
     private int mId;
-    private Byte color = 0;
     private Paint mRectPaint;
     private Paint mTextPaint;
     private volatile Barcode mBarcode;
@@ -100,11 +99,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
             rect.right = translateX(rect.right);
             rect.bottom = translateY(rect.bottom);
             canvas.drawRect(rect, mRectPaint);
-
-//        color++;
-//        Paint textColor = new Paint();
-//        textColor.setColor(Color.rgb(255, 255, color));
-//        textColor.setTextSize(36.0f);
 
             // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
             canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
