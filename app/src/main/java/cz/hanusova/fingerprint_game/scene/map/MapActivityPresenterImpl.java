@@ -19,7 +19,7 @@ import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
-import cz.hanusova.fingerprint_game.utils.AppUtils;
+import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 
 /**
  * Created by khanusova on 31.5.2017.

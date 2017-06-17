@@ -22,7 +22,6 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
-import org.springframework.web.client.ResourceAccessException;
 
 import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
@@ -31,8 +30,8 @@ import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
 import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.rest.LoginClient;
-import cz.hanusova.fingerprint_game.utils.Constants;
-import cz.hanusova.fingerprint_game.utils.ValidationUtils;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
+import cz.hanusova.fingerprint_game.base.utils.ValidationUtils;
 
 /**
  * https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java

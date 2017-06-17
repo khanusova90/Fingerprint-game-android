@@ -14,7 +14,7 @@ import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.service.UserService;
-import cz.hanusova.fingerprint_game.utils.Constants;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 
 /**
  * Created by khanusova on 7.12.2016.

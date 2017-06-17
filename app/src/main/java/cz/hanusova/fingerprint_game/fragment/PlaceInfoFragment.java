@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.base.utils.AppUtils;
+import cz.hanusova.fingerprint_game.base.utils.PlaceUtils;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
@@ -68,7 +70,6 @@ public class PlaceInfoFragment extends DialogFragment {
             }
         }
 
-//        View view = lf.inflate(R.layout.fragment_place_info, container, false);
         placeType.setText(place.getPlaceType().getPlaceType());
         placeName.setText(place.getDescription());
         if (activity != null) {
@@ -78,15 +79,14 @@ public class PlaceInfoFragment extends DialogFragment {
 
         Bitmap bitmap = null;
         try {
-            String iconName = place.getMaterial() != null ? place.getMaterial().getIconName() : place.getPlaceType().getImgUrl();
-            bitmap = new BitmapWorkerTask(iconName, this.getContext(), 4).execute().get();
+            String iconName = PlaceUtils.getIconName(place);
+            bitmap = new BitmapWorkerTask(iconName, getContext(), AppUtils.getVersionCode(getContext())).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
         imageView.setImageDrawable(new BitmapDrawable(this.getContext().getResources(), bitmap));
-//        return view;
     }
 
     @Override

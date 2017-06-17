@@ -22,7 +22,7 @@ import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scan.DeviceInformation;
 import cz.hanusova.fingerprint_game.scan.Scanner;
 import cz.hanusova.fingerprint_game.scan.SensorScanner;
-import cz.hanusova.fingerprint_game.utils.AppUtils;
+import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 
 /**
  * Created by khanusova on 16/06/2017.

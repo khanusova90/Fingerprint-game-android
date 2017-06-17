@@ -15,7 +15,7 @@ public class PlaceType implements Serializable {
     private String placeType;
 
     /**
-     * Image URL (relative, see {@link cz.hanusova.fingerprint_game.utils.Constants#IMG_URL_BASE}
+     * Image URL (relative, see {@link cz.hanusova.fingerprint_game.base.utils.Constants#IMG_URL_BASE}
      */
     private String imgUrl;
 

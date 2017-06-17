@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.utils;
+package cz.hanusova.fingerprint_game.base.utils;
 
 import android.widget.EditText;
 

@@ -22,7 +22,7 @@ import cz.hanusova.fingerprint_game.base.ui.AbstractAsyncActivity;
 import cz.hanusova.fingerprint_game.model.Activity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.PlaceType;
-import cz.hanusova.fingerprint_game.utils.Constants;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 
 /**
  * Created by khanusova on 27.4.2016.
