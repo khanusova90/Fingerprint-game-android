@@ -2,7 +2,7 @@ package cz.hanusova.fingerprint_game.scene.user;
 
 import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -11,12 +11,16 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.List;
+
 import cz.hanusova.fingerprint_game.R;
-import cz.hanusova.fingerprint_game.adapter.ActivityAdapter;
 import cz.hanusova.fingerprint_game.adapter.ImageAdapter;
 import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.view.ActivityItemView;
+import cz.hanusova.fingerprint_game.view.ActivityItemView_;
 
 
 @EActivity(R.layout.content_user_detail)
@@ -25,45 +29,26 @@ public class UserDetailActivity extends AppCompatActivity {
     @Bean(UserServiceImpl.class)
     UserService userService;
 
-    @Bean(ActivityAdapter.class)
-    ActivityAdapter activityAdapter;
-
     @Bean(ImageAdapter.class)
     ImageAdapter imageAdapter;
-
     @ViewById(R.id.gridview_inventory)
     GridView inventoryGrid;
-
     @ViewById(R.id.progressBar_experience)
     ProgressBar progressBarExperience;
-
     @ViewById(R.id.progressBar_places)
     ProgressBar progressBarPlaces;
-
     @ViewById(R.id.detail_place_progress)
     TextView places;
     @ViewById(R.id.detail_level)
     TextView level;
     @ViewById(R.id.detail_level_progress)
     TextView experience;
-
     @ViewById(R.id.text_username)
     TextView username;
-
     @ViewById(R.id.list_of_activities)
-    ListView listOfActivities;
+    LinearLayout listOfActivities;
 
     private AppUser user;
-
-    @AfterViews
-    void bindAdapter() {
-        inventoryGrid.setAdapter(imageAdapter);
-    }
-
-    @AfterViews
-    void bindAdapter2() {
-        listOfActivities.setAdapter(activityAdapter);
-    }
 
     @AfterViews
     void init() {
@@ -80,5 +65,16 @@ public class UserDetailActivity extends AppCompatActivity {
         progressBarExperience.setProgress(activitiesVal);
         progressBarPlaces.setProgress(placesVal);
         username.setText(user.getUsername());
+        inventoryGrid.setAdapter(imageAdapter);
+        showActivities();
+    }
+
+    private void showActivities(){
+        List<UserActivity> activities = userService.getActualUser().getActivities();
+        for (UserActivity activity : activities) {
+            ActivityItemView view = ActivityItemView_.build(this);
+            view.bind(activity);
+            listOfActivities.addView(view);
+        }
     }
 }
