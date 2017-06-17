@@ -42,6 +42,9 @@ import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
+import cz.hanusova.fingerprint_game.base.utils.AppUtils;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
+import cz.hanusova.fingerprint_game.base.utils.PlaceUtils;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphic;
 import cz.hanusova.fingerprint_game.camera.BarcodeGraphicTracker;
 import cz.hanusova.fingerprint_game.camera.BarcodeTrackerFactory;
@@ -59,8 +62,8 @@ import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
-import cz.hanusova.fingerprint_game.utils.AppUtils;
-import cz.hanusova.fingerprint_game.utils.Constants;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by khanusova on 9.9.2016.
@@ -171,7 +174,14 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
                 changeCountdownVisibility();
                 presenter.startTimer(place, getApplicationContext());
                 ActivityEnum activity = place.getPlaceType().getActivity();
-                BarcodeGraphic.activity = activity;
+                try {
+                    BarcodeGraphic.placeIcon = new BitmapWorkerTask(PlaceUtils.getIconName(place), getApplicationContext(), AppUtils.getVersionCode(getApplicationContext())).execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+//                BarcodeGraphic.activity = activity;
                 showActivity(activity);
             }
         }).start();
@@ -198,6 +208,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     }
 
     @Override
+    @UiThread
     public void onCountdownFinished() {
         Log.i(TAG, "Timer finished, starting activity");
         if (place != null) {
@@ -207,7 +218,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
                     startActivity();
                     break;
                 case BUY:
-                    MarketActivity_.intent(getApplicationContext()).items(possibleItems).startForResult(REQ_CODE_MARKET);
+                    MarketActivity_.intent(getApplicationContext()).flags(FLAG_ACTIVITY_NEW_TASK).items(possibleItems).startForResult(REQ_CODE_MARKET);
                     break;
             }
         }

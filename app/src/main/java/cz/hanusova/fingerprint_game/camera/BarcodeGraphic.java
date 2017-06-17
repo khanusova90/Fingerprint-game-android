@@ -15,6 +15,7 @@
  */
 package cz.hanusova.fingerprint_game.camera;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -37,7 +38,9 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
             Color.CYAN,
             Color.GREEN
     };
+    @Deprecated
     public static ActivityEnum activity;
+    public static Bitmap placeIcon;
     private static int mCurrentColorIndex = 0;
     private int mId;
     private Paint mRectPaint;
@@ -92,18 +95,19 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         }
 
         RectF rect = new RectF(barcode.getBoundingBox());
-        if (activity == null) {
             // Draws the bounding box around the barcode.
             rect.left = translateX(rect.left);
             rect.top = translateY(rect.top);
             rect.right = translateX(rect.right);
             rect.bottom = translateY(rect.bottom);
+        if (placeIcon == null) {
             canvas.drawRect(rect, mRectPaint);
 
             // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
             canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
         } else {
-            canvas.drawText(activity.toString(), rect.left, rect.bottom, mTextPaint);
+            canvas.drawBitmap(placeIcon, rect.left, rect.bottom, mTextPaint);
+//            canvas.drawText(activity.toString(), rect.left, rect.bottom, mTextPaint);
         }
 
     }

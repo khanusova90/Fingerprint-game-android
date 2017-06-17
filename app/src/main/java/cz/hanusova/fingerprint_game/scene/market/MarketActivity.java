@@ -24,15 +24,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.base.utils.AppUtils;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.model.ItemEnum;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.service.UserService;
 import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
-import cz.hanusova.fingerprint_game.utils.AppUtils;
-import cz.hanusova.fingerprint_game.utils.Constants;
-import cz.hanusova.fingerprint_game.utils.TypeUtils;
 
 /**
  * Created by khanusova on 7.10.2016.
@@ -64,9 +63,6 @@ public class MarketActivity extends AppCompatActivity {
 
     @Bean(UserServiceImpl.class)
     UserService userService;
-
-    @Bean
-    TypeUtils tu;
 
     //ToolTipManager tooltips;
 
@@ -102,9 +98,9 @@ public class MarketActivity extends AppCompatActivity {
                 Log.e(TAG, "Could not download item image", e);
             }
             priceOfAnItem.setText("Cena: " + item.getItemType().getPrice());
-            levelOfAnItem.setText("Level: " + tu.getString(item.getLevel()));
+            levelOfAnItem.setText("Level: " + item.getLevel());
         }
-        tvUsersMoney.setText(tu.getString(userService.getInventory("GOLD").getAmount()));
+        tvUsersMoney.setText(String.valueOf(userService.getInventory("GOLD").getAmount()));
         LinearLayout.LayoutParams margin = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -135,11 +131,11 @@ public class MarketActivity extends AppCompatActivity {
             if (item.isSelected()) {
                 price += Integer.valueOf(item.getItemType().getPrice());
             }
-            tvPriceForSelected.setText(tu.getString(price));
-            Boolean notEnoughtMoney = tu.getInt(tvPriceForSelected.getText()) > userService.getInventory("GOLD").getAmount().intValue();
-            tvUsersMoney.setTextColor(notEnoughtMoney
+            tvPriceForSelected.setText(String.valueOf(price));
+            Boolean notEnoughMoney = price > userService.getInventory("GOLD").getAmount().intValue();
+            tvUsersMoney.setTextColor(notEnoughMoney
                     ? getResources().getColor(R.color.colorRed) : getResources().getColor(R.color.colorGray));
-            btnBuy.setEnabled(!notEnoughtMoney);
+            btnBuy.setEnabled(!notEnoughMoney);
         }
     }
 

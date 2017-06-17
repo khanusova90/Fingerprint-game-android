@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import cz.hanusova.fingerprint_game.utils.Constants;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 
 /**
  * Async task to save/load Bitmap to/from cache

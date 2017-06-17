@@ -1,11 +1,11 @@
-package cz.hanusova.fingerprint_game.utils;
+package cz.hanusova.fingerprint_game.base.utils;
 
 import android.graphics.drawable.Drawable;
 
 /**
  * Created by Kristyna on 16/02/2017.
  */
-
+@Deprecated
 public class GridItem {
     String amount;
     Drawable imageDrawable;
