@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.service;
+package cz.hanusova.fingerprint_game.base.service;
 
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
@@ -29,4 +29,6 @@ public interface UserService {
      * @return Currently logged in {@link AppUser}
      */
     AppUser getActualUser();
+
+    void updateUser(AppUser user);
 }

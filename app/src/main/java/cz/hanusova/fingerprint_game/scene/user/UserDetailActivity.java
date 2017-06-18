@@ -17,8 +17,8 @@ import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.adapter.ImageAdapter;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.UserActivity;
-import cz.hanusova.fingerprint_game.service.UserService;
-import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.base.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.view.ActivityItemView;
 import cz.hanusova.fingerprint_game.view.ActivityItemView_;
 

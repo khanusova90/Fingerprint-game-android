@@ -113,9 +113,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityView{
         showProgressDialog(null);
         try {
             AppUser user = restClient.login(username);
+
             ObjectMapper mapper = new ObjectMapper();
             try {
-                preferences.user().put(mapper.writeValueAsString(user));
+                preferences.user().put(mapper.writeValueAsString(user)); //TODO: user userService
                 MapActivity_.intent(context).start();
                 dismissProgressDialog();
                 finish();
@@ -126,10 +127,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityView{
         } catch (Exception e) {
             Log.e(TAG, "Could not connect to server", e);
             setLoginError(getString(R.string.login_error_server));
-//        } catch (Exception e) {
-//            Log.e(TAG, "Exception ocurred while trying to login", e);
-//            dismissProgressDialog();
-//            finish();
         } finally {
             dismissProgressDialog();
         }

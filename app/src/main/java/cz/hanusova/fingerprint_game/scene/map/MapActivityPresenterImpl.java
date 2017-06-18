@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.model.Place;
-import cz.hanusova.fingerprint_game.service.UserService;
-import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.base.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 

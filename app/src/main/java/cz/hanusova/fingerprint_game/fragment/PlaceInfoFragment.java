@@ -28,8 +28,8 @@ import cz.hanusova.fingerprint_game.base.utils.PlaceUtils;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
-import cz.hanusova.fingerprint_game.service.UserService;
-import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.base.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 @EFragment(R.layout.fragment_place_info)
