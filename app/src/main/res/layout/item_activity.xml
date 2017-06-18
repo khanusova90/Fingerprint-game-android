@@ -16,7 +16,6 @@
         android:layout_height="20pt"
         android:paddingLeft="5pt"
         android:paddingTop="5pt"
-        android:text="@string/places"
 
         android:textSize="18sp"
         android:textStyle="normal|bold" />
@@ -25,22 +24,19 @@
         android:id="@+id/activity_place"
         android:layout_width="match_parent"
         android:layout_height="15pt"
-        android:paddingLeft="5pt"
-        android:text="@string/places" />
+        android:paddingLeft="5pt"/>
 
     <TextView
         android:id="@+id/activity_material"
         android:layout_width="match_parent"
         android:layout_height="15pt"
-        android:paddingLeft="5pt"
-        android:text="@string/places" />
+        android:paddingLeft="5pt"/>
 
     <TextView
         android:id="@+id/activity_since"
         android:layout_width="match_parent"
         android:layout_height="15pt"
-        android:paddingLeft="5pt"
-        android:text="@string/places" />
+        android:paddingLeft="5pt"/>
 
     <View
         android:layout_width="match_parent"
