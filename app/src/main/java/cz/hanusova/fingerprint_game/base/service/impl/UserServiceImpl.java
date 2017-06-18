@@ -1,7 +1,8 @@
-package cz.hanusova.fingerprint_game.service.impl;
+package cz.hanusova.fingerprint_game.base.service.impl;
 
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.androidannotations.annotations.EBean;
@@ -13,7 +14,7 @@ import java.util.List;
 import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Inventory;
-import cz.hanusova.fingerprint_game.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.UserService;
 import cz.hanusova.fingerprint_game.base.utils.Constants;
 
 /**
@@ -58,6 +59,16 @@ public class UserServiceImpl implements UserService {
         } catch (IOException e) {
             Log.e(TAG, "Error occurred while trying to get actual user", e);
             return null;
+        }
+    }
+
+    @Override
+    public void updateUser(AppUser user){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            preferences.user().put(mapper.writeValueAsString(user));
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "Error occurred while trying to save acutal user", e);
         }
     }
 

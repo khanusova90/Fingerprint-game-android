@@ -106,7 +106,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
             mapView.setImageDrawable(ld);
             return;
         }
-        System.out.println("PLACES SIZE " + places.size());
         for (int i = 0; i < places.size(); i++) {
             Place p = places.get(i);
             int x = p.getxCoord();
@@ -148,7 +147,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     @Click(R.id.action_profile)
     void goToProfile() {
-        //TODO: proč new task?
         UserDetailActivity_.intent(this).start();
     }
 }

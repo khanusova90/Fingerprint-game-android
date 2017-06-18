@@ -59,8 +59,8 @@ import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
-import cz.hanusova.fingerprint_game.service.UserService;
-import cz.hanusova.fingerprint_game.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.base.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -181,7 +181,6 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-//                BarcodeGraphic.activity = activity;
                 showActivity(activity);
             }
         }).start();
@@ -203,7 +202,6 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     public void stopCountDown() {
         qrCountdown.setVisibility(View.GONE);
         hideSeekers();
-        BarcodeGraphic.activity = null;
         place = null;
     }
 
@@ -227,6 +225,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     @Background
     public void startActivity() {
         AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place);
+        userService.updateUser(user);
         ArrayList<UserActivity> activities = (ArrayList<UserActivity>) user.getActivities();
         Intent i = new Intent();
         i.putExtra(Constants.EXTRA_ACTIVITIES, activities);
@@ -243,6 +242,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     @Background
     void buyItems(List<Item> items) {
         AppUser user = restClient.buyItem(items); //Prida item do DB a vrati aktualizovaneho uzivatele
+        userService.updateUser(user);
         setResult(Activity.RESULT_OK);
         finish();
     }
