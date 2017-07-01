@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.base.service.UserService;
 import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
-import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 import cz.hanusova.fingerprint_game.base.utils.AppUtils;
+import cz.hanusova.fingerprint_game.model.Place;
+import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 /**
  * Created by khanusova on 31.5.2017.
@@ -27,13 +27,11 @@ import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 @EBean
 public class MapActivityPresenterImpl implements MapActivityPresenter {
     private static final String TAG = "MapActivityPresenter";
-
+    @Bean(UserServiceImpl.class)
+    UserService userService;
     private MapActivityView view;
     private Bitmap[] mapField = new Bitmap[4];
     private List<Place> places;
-
-    @Bean(UserServiceImpl.class)
-    UserService userService;
 
     @Override
     public void createMap(int currentFloor, Context context) {

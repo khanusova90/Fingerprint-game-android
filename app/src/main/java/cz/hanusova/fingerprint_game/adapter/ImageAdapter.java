@@ -13,9 +13,9 @@ import org.androidannotations.annotations.RootContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.base.service.UserService;
 import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.view.GridItemView;
 import cz.hanusova.fingerprint_game.view.GridItemView_;
 

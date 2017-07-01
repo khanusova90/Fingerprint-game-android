@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Trida reprezentujici zjistenou GSM BTS.
  * Created by Matej Danicek on 8.11.2015.
  */
-public class CellScan implements Serializable{
+public class CellScan implements Serializable {
     /**
      * CellID - identifikuje jednoznacne BTS (vysilac) popr jeho antenu uvnitr "Location Area" pro GPRS a EDGE
      */
@@ -44,51 +44,51 @@ public class CellScan implements Serializable{
                 "}";
     }
 
-    public void setCid(int cid) {
-        this.cid = cid;
-    }
-
-    public void setLac(int lac) {
-        this.lac = lac;
-    }
-
-    public void setPsc(int psc) {
-        this.psc = psc;
-    }
-
-    public void setRssi(int rssi) {
-        this.rssi = rssi;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
-
     public int getCid() {
         return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
     }
 
     public int getLac() {
         return lac;
     }
 
+    public void setLac(int lac) {
+        this.lac = lac;
+    }
+
     public int getPsc() {
         return psc;
+    }
+
+    public void setPsc(int psc) {
+        this.psc = psc;
     }
 
     public int getRssi() {
         return rssi;
     }
 
+    public void setRssi(int rssi) {
+        this.rssi = rssi;
+    }
+
     public int getType() {
         return type;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public long getTime() {
         return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

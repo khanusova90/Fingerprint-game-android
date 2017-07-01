@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Class represents an activity that can be done on some place
- *
+ * <p>
  * Created by khanusova on 11.5.2016.
  */
 @Deprecated

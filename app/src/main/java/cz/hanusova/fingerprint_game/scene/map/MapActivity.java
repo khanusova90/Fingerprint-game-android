@@ -28,6 +28,7 @@ import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.scene.login.LoginActivity_;
+import cz.hanusova.fingerprint_game.scene.ranking.RankingActivity_;
 import cz.hanusova.fingerprint_game.scene.scan.ScanActivity_;
 import cz.hanusova.fingerprint_game.scene.user.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
@@ -82,7 +83,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     }
 
     @Override
-    public void setMapField(Bitmap[] mapField){
+    public void setMapField(Bitmap[] mapField) {
         this.mapField = mapField;
     }
 
@@ -125,9 +126,15 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @OptionsItem
     void action_map_logout() {
         preferences.clear();
-        LoginActivity_.intent(getApplicationContext()).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
+        LoginActivity_.intent(this).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
         finish();
     }
+
+    @OptionsItem(R.id.action_show_rankings)
+    void showRankings() {
+        RankingActivity_.intent(this).start();
+    }
+
     @Click(R.id.action_camera)
     void startCamera() {
         ScanActivity_.intent(this).startForResult(REQ_CODE_QR);

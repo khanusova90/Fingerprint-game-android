@@ -48,6 +48,8 @@
     <string name="market">Obchod</string>
     <string name="market_buy">Koupit</string>
 
+    <string name="ranking">Pořadí ve hře</string>
+
     <string name="qr_countdown">Start za %1$d s</string>
 
     <!-- floor array -->
@@ -56,6 +58,7 @@
     <string name="title_activity_user_info">UserInfo</string>
 
     <string name="action_settings">Nastavení</string>
+    <string name="action_show_rankings">Zobrazit pořadí</string>
     <string name="title_activity_user_detail">Profil uživatele</string>
     <string name="inventory">Inventář</string>
     <string name="stag_name">Jméno ve stagu</string>

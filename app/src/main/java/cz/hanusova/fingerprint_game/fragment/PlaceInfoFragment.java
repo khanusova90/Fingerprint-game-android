@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.base.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 import cz.hanusova.fingerprint_game.base.utils.PlaceUtils;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
-import cz.hanusova.fingerprint_game.base.service.UserService;
-import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 @EFragment(R.layout.fragment_place_info)

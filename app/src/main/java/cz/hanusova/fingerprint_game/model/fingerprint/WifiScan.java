@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by khanusova on 10.1.2017.
  */
-public class WifiScan implements Serializable{
+public class WifiScan implements Serializable {
 
     //FIXME: refactor
 
@@ -19,10 +19,6 @@ public class WifiScan implements Serializable{
         this.strength = strength;
         this.frequency = frequency;
         setChannelAndTechnology();
-    }
-
-    public void setTime(long time) {
-        this.time = time;
     }
 
     @Override
@@ -350,6 +346,10 @@ public class WifiScan implements Serializable{
 
     public long getTime() {
         return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public String getSSID() {

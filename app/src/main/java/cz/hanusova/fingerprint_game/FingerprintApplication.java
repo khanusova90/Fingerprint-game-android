@@ -13,16 +13,16 @@ public class FingerprintApplication extends Application {
 
     public static FingerprintApplication instance;
 
+    public static Context getContext() {
+        return instance.getApplicationContext();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        if (instance == null){
+        if (instance == null) {
             instance = this;
         }
-    }
-
-    public static Context getContext(){
-        return instance.getApplicationContext();
     }
 
 }

@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.List;
 
 import cz.hanusova.fingerprint_game.Preferences_;
-import cz.hanusova.fingerprint_game.model.AppUser;
-import cz.hanusova.fingerprint_game.model.Inventory;
 import cz.hanusova.fingerprint_game.base.service.UserService;
 import cz.hanusova.fingerprint_game.base.utils.Constants;
+import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.Inventory;
 
 /**
  * Created by khanusova on 7.12.2016.
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(AppUser user){
+    public void updateUser(AppUser user) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             preferences.user().put(mapper.writeValueAsString(user));

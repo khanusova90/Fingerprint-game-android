@@ -27,11 +27,11 @@ import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
-import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
-import cz.hanusova.fingerprint_game.model.AppUser;
-import cz.hanusova.fingerprint_game.rest.LoginClient;
 import cz.hanusova.fingerprint_game.base.utils.Constants;
 import cz.hanusova.fingerprint_game.base.utils.ValidationUtils;
+import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.rest.LoginClient;
+import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
 
 /**
  * https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
@@ -39,25 +39,17 @@ import cz.hanusova.fingerprint_game.base.utils.ValidationUtils;
  * Created by khanusova on 21.3.2016.
  */
 @EActivity(R.layout.activity_login)
-public class LoginActivity extends BaseActivity implements LoginActivityView{
+public class LoginActivity extends BaseActivity implements LoginActivityView {
     private static final String TAG = "LoginActivity";
-    private Boolean stayIn = false;
-    private String error;
-
     protected Context context;
-
     @Pref
     Preferences_ preferences;
-
-    @Bean (LoginActivityPresenterImpl.class)
+    @Bean(LoginActivityPresenterImpl.class)
     LoginActivityPresenter presenter;
-
     @RestService
     LoginClient restClient;
-
     @Extra(value = Constants.EXTRA_ERROR)
     Integer errorCode;
-
     @ViewById(R.id.username)
     EditText etUsername;
     @ViewById(R.id.password)
@@ -66,6 +58,8 @@ public class LoginActivity extends BaseActivity implements LoginActivityView{
     TextView tvError;
     @ViewById(R.id.checkBoxIn)
     CheckBox checkBoxIn;
+    private Boolean stayIn = false;
+    private String error;
 
     @Override
     protected BasePresenter getPresenter() {

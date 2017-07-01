@@ -17,11 +17,12 @@ import cz.hanusova.fingerprint_game.base.BaseView;
  * Created by khanusova on 31.5.2017.
  */
 @EActivity
-public abstract class BaseActivity extends AppCompatActivity implements BaseView{
+public abstract class BaseActivity extends AppCompatActivity implements BaseView {
 
-    protected abstract BasePresenter getPresenter();
     private ProgressDialog progressDialog;
     private boolean destroyed = false;
+
+    protected abstract BasePresenter getPresenter();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
             progressDialog = new ProgressDialog(this);
             progressDialog.setIndeterminate(true);
         }
-        if (TextUtils.isEmpty(message)){
+        if (TextUtils.isEmpty(message)) {
             message = getString(R.string.wait);
         }
         progressDialog.setMessage(message);
