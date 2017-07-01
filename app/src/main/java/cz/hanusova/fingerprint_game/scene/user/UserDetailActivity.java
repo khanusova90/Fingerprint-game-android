@@ -15,10 +15,10 @@ import java.util.List;
 
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.adapter.ImageAdapter;
-import cz.hanusova.fingerprint_game.model.AppUser;
-import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.base.service.UserService;
 import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
+import cz.hanusova.fingerprint_game.model.AppUser;
+import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.view.ActivityItemView;
 import cz.hanusova.fingerprint_game.view.ActivityItemView_;
 
@@ -69,7 +69,7 @@ public class UserDetailActivity extends AppCompatActivity {
         showActivities();
     }
 
-    private void showActivities(){
+    private void showActivities() {
         List<UserActivity> activities = userService.getActualUser().getActivities();
         for (UserActivity activity : activities) {
             ActivityItemView view = ActivityItemView_.build(this);

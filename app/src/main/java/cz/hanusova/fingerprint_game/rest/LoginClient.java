@@ -5,8 +5,8 @@ import org.androidannotations.rest.spring.annotations.Post;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
-import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.base.utils.Constants;
+import cz.hanusova.fingerprint_game.model.AppUser;
 
 /**
  * Created by khanusova on 23.4.2017.

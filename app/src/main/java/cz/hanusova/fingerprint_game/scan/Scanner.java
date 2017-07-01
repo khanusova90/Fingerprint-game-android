@@ -222,7 +222,7 @@ public class Scanner {
         //stepDetector.enableStepDetector(false);
         try { //android does not have method to find out if receiver is registered
             context.unregisterReceiver(wifiBroadcastReceiver);
-        } catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Log.d(TAG, "Could not unregister receiver");
         }
         beaconConsumer.unBind();

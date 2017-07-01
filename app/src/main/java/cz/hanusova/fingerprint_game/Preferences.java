@@ -19,6 +19,6 @@ public interface Preferences {
     @DefaultString("")
     String user();
 
-   @DefaultBoolean(false)
+    @DefaultBoolean(false)
     boolean stayIn();
 }

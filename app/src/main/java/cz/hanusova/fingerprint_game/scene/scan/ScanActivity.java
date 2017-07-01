@@ -41,6 +41,8 @@ import java.util.concurrent.ExecutionException;
 import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
+import cz.hanusova.fingerprint_game.base.service.UserService;
+import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
 import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 import cz.hanusova.fingerprint_game.base.utils.Constants;
@@ -59,8 +61,6 @@ import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
-import cz.hanusova.fingerprint_game.base.service.UserService;
-import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -69,7 +69,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  * Created by khanusova on 9.9.2016.
  */
 @EActivity(R.layout.qr_capture)
-public class ScanActivity extends BaseActivity implements ScanActivityView{
+public class ScanActivity extends BaseActivity implements ScanActivityView {
     private static final String TAG = "ScanActivity";
 
     // intent request code to handle updating play services if needed.
@@ -302,7 +302,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
 
     private Place getPlaceInfo() {
         String code = getPlaceCode();
-        if (code != null){
+        if (code != null) {
             Log.d(TAG, "Getting place with code " + code);
             Place place = restClient.getPlaceByCode(code);
             return place;
@@ -311,9 +311,9 @@ public class ScanActivity extends BaseActivity implements ScanActivityView{
     }
 
     @Override
-    public String getPlaceCode(){
+    public String getPlaceCode() {
         Barcode barcode = getActualBarcode();
-        if (barcode != null){
+        if (barcode != null) {
             String url = barcode.rawValue;
             return url.substring(url.lastIndexOf("/") + 1);
         }

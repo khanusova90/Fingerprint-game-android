@@ -4,7 +4,7 @@ package cz.hanusova.fingerprint_game.base;
  * Created by khanusova on 31.5.2017.
  */
 
-public interface BasePresenter <V extends BaseView> {
+public interface BasePresenter<V extends BaseView> {
 
     /**
      * Method called when presenter is attached (links view with presenter)

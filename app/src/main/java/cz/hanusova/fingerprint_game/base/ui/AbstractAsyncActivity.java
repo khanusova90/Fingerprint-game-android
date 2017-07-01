@@ -23,7 +23,7 @@ import org.androidannotations.annotations.UiThread;
 
 /**
  * Created by khanusova on 21.3.2016.
- *
+ * <p>
  * Parent class for asynchronous activities <br/>
  * Zdroj: https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/AbstractAsyncActivity.java
  *
@@ -32,7 +32,7 @@ import org.androidannotations.annotations.UiThread;
  */
 @EActivity
 @Deprecated
-public abstract class AbstractAsyncActivity extends AppCompatActivity{
+public abstract class AbstractAsyncActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 

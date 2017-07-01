@@ -37,126 +37,6 @@ public class Fingerprint implements Serializable {
     public Fingerprint() {
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public void setAccX(float accX) {
-        this.accX = accX;
-    }
-
-    public void setAccY(float accY) {
-        this.accY = accY;
-    }
-
-    public void setAccZ(float accZ) {
-        this.accZ = accZ;
-    }
-
-    public void setGyroX(float gyroX) {
-        this.gyroX = gyroX;
-    }
-
-    public void setGyroY(float gyroY) {
-        this.gyroY = gyroY;
-    }
-
-    public void setGyroZ(float gyroZ) {
-        this.gyroZ = gyroZ;
-    }
-
-    public void setMagX(float magX) {
-        this.magX = magX;
-    }
-
-    public void setMagY(float magY) {
-        this.magY = magY;
-    }
-
-    public void setMagZ(float magZ) {
-        this.magZ = magZ;
-    }
-
-    public void setBoard(String board) {
-        this.board = board;
-    }
-
-    public void setBootloader(String bootloader) {
-        this.bootloader = bootloader;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public void setDevice(String device) {
-        this.device = device;
-    }
-
-    public void setDisplay(String display) {
-        this.display = display;
-    }
-
-    public void setFingerprint(String fingerprint) {
-        this.fingerprint = fingerprint;
-    }
-
-    public void setHardware(String hardware) {
-        this.hardware = hardware;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void setOsId(String osId) {
-        this.osId = osId;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setProduct(String product) {
-        this.product = product;
-    }
-
-    public void setSerial(String serial) {
-        this.serial = serial;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public void setDeviceID(String deviceID) {
-        this.deviceID = deviceID;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -200,32 +80,28 @@ public class Fingerprint implements Serializable {
                 "}";
     }
 
-    public void setWifiScans(List<WifiScan> wifiScans) {
-        this.wifiScans = wifiScans;
-    }
-
-    public void setBleScans(List<BleScan> bleScans) {
-        this.bleScans = bleScans;
-    }
-
-    public void setSupportsBLE(boolean supportsBLE) {
-        this.supportsBLE = supportsBLE;
-    }
-
-    public void setCellScans(List<CellScan> cellScans) {
-        this.cellScans = cellScans;
-    }
-
     public String getLevel() {
         return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public int getX() {
         return x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
     public int getY() {
         return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public String getDescription() {
@@ -236,120 +112,240 @@ public class Fingerprint implements Serializable {
         return wifiScans;
     }
 
+    public void setWifiScans(List<WifiScan> wifiScans) {
+        this.wifiScans = wifiScans;
+    }
+
     public List<BleScan> getBleScans() {
         return bleScans;
+    }
+
+    public void setBleScans(List<BleScan> bleScans) {
+        this.bleScans = bleScans;
     }
 
     public List<CellScan> getCellScans() {
         return cellScans;
     }
 
+    public void setCellScans(List<CellScan> cellScans) {
+        this.cellScans = cellScans;
+    }
+
     public float getAccX() {
         return accX;
+    }
+
+    public void setAccX(float accX) {
+        this.accX = accX;
     }
 
     public float getAccY() {
         return accY;
     }
 
+    public void setAccY(float accY) {
+        this.accY = accY;
+    }
+
     public float getAccZ() {
         return accZ;
+    }
+
+    public void setAccZ(float accZ) {
+        this.accZ = accZ;
     }
 
     public float getGyroX() {
         return gyroX;
     }
 
+    public void setGyroX(float gyroX) {
+        this.gyroX = gyroX;
+    }
+
     public float getGyroY() {
         return gyroY;
+    }
+
+    public void setGyroY(float gyroY) {
+        this.gyroY = gyroY;
     }
 
     public float getGyroZ() {
         return gyroZ;
     }
 
+    public void setGyroZ(float gyroZ) {
+        this.gyroZ = gyroZ;
+    }
+
     public float getMagX() {
         return magX;
+    }
+
+    public void setMagX(float magX) {
+        this.magX = magX;
     }
 
     public float getMagY() {
         return magY;
     }
 
+    public void setMagY(float magY) {
+        this.magY = magY;
+    }
+
     public float getMagZ() {
         return magZ;
+    }
+
+    public void setMagZ(float magZ) {
+        this.magZ = magZ;
     }
 
     public String getBoard() {
         return board;
     }
 
+    public void setBoard(String board) {
+        this.board = board;
+    }
+
     public String getBootloader() {
         return bootloader;
+    }
+
+    public void setBootloader(String bootloader) {
+        this.bootloader = bootloader;
     }
 
     public String getBrand() {
         return brand;
     }
 
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     public String getDevice() {
         return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
     }
 
     public String getDisplay() {
         return display;
     }
 
+    public void setDisplay(String display) {
+        this.display = display;
+    }
+
     public String getFingerprint() {
         return fingerprint;
+    }
+
+    public void setFingerprint(String fingerprint) {
+        this.fingerprint = fingerprint;
     }
 
     public String getHardware() {
         return hardware;
     }
 
+    public void setHardware(String hardware) {
+        this.hardware = hardware;
+    }
+
     public String getHost() {
         return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public String getOsId() {
         return osId;
     }
 
+    public void setOsId(String osId) {
+        this.osId = osId;
+    }
+
     public String getManufacturer() {
         return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getModel() {
         return model;
     }
 
+    public void setModel(String model) {
+        this.model = model;
+    }
+
     public String getProduct() {
         return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public String getSerial() {
         return serial;
     }
 
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
     public String getTags() {
         return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public String getType() {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getUser() {
         return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public boolean isSupportsBLE() {
         return supportsBLE;
     }
 
+    public void setSupportsBLE(boolean supportsBLE) {
+        this.supportsBLE = supportsBLE;
+    }
+
     public String getDeviceID() {
         return deviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
     }
 
     public Float getLat() {
@@ -364,7 +360,11 @@ public class Fingerprint implements Serializable {
         return createdDate;
     }
 
-    public String getClientVersion(){
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getClientVersion() {
         return clientVersion;
     }
 

@@ -12,6 +12,7 @@ import org.androidannotations.rest.spring.annotations.RestService;
 import java.util.Date;
 import java.util.List;
 
+import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
@@ -22,7 +23,6 @@ import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scan.DeviceInformation;
 import cz.hanusova.fingerprint_game.scan.Scanner;
 import cz.hanusova.fingerprint_game.scan.SensorScanner;
-import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 
 /**
  * Created by khanusova on 16/06/2017.
@@ -30,11 +30,9 @@ import cz.hanusova.fingerprint_game.base.utils.AppUtils;
 @EBean
 public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     private static final String TAG = "ScanAcPresenter";
-    private ScanActivityView view;
-
     @RestService
     RestClient restClient;
-
+    private ScanActivityView view;
     private BluetoothAdapter bluetoothAdapter;
     private WifiManager wm;
     private CountDownTimer timer;
@@ -54,7 +52,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     }
 
     @Override
-    public void init(Context context){
+    public void init(Context context) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         wasBTEnabled = bluetoothAdapter.isEnabled();
@@ -64,7 +62,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
         view.startTracking();
     }
 
-    public void destroy(){
+    public void destroy() {
         changeBTWifiState(false);
         timer.cancel();
         scanner.stopScan();
@@ -97,12 +95,12 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     }
 
     @Override
-    public void createTimer(){
+    public void createTimer() {
         timer = new Timer(10 * 1000, 1000);
     }
 
     @Override
-    public void startTimer(final Place place, final Context context){
+    public void startTimer(final Place place, final Context context) {
         timer.start();
         scanner.startScan(10000, new ScanResultListener() {
             @Override
@@ -139,7 +137,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
         return p;
     }
 
-    private class Timer extends CountDownTimer{
+    private class Timer extends CountDownTimer {
         String code;
 
         /**
@@ -157,11 +155,11 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
         @Override
         public void onTick(long millisUntilFinished) {
             view.updateCountdown(millisUntilFinished);
-            if (code == null){
+            if (code == null) {
                 code = view.getPlaceCode();
             }
             String actualCode = view.getPlaceCode();
-            if (code == null || actualCode == null|| !code.equals(actualCode)){
+            if (code == null || actualCode == null || !code.equals(actualCode)) {
                 Log.d(TAG, "Capturing stopped");
                 view.stopCountDown();
                 view.startTracking();

@@ -137,60 +137,6 @@ public class TouchImageView extends ImageView {
         });
     }
 
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
-            mode = ZOOM;
-            return true;
-        }
-
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-
-          //  if (values[Matrix.MSCALE_Y] - 0.1 >= 0.7 && values[Matrix.MSCALE_Y] + 0.1  < 1.5) {
-                return setScale(detector);
-           // }
-          //  return false;
-        }
-
-        public boolean setScale(ScaleGestureDetector detector) {
-            scaleFactor = detector.getScaleFactor();
-
-            //matrix.postScale(scaleFactor, scaleFactor, getX(detector), getY(detector));
-            matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
-            return true;
-        }
-
-        public float getX(ScaleGestureDetector detector) {
-            float var;
-            if (values[Matrix.MTRANS_X] >= 0) {
-                var = 0;
-            } else if (values[Matrix.MTRANS_X] <=(-origW + screenWidth) * values[0]){
-                var = screenWidth;
-            }else{
-                var = detector.getFocusX();
-            }
-
-            return var;
-        }
-
-        public float getY(ScaleGestureDetector detector) {
-            float var;
-            if (values[Matrix.MTRANS_Y] >= 0) {
-                var = 0;
-            } else if (values[Matrix.MTRANS_Y] <= (-origH + screenHeight) * values[4]) {
-                var = screenHeight;
-            } else {
-                var = detector.getFocusY();
-            }
-
-            return var;
-        }
-
-
-    }
-
     public void setPlaces(List<Place> places) {
         this.places = places;
     }
@@ -213,5 +159,59 @@ public class TouchImageView extends ImageView {
 //            placeInfoFragment.setPlace(places.get(i - 1));
 //            placeInfoFragment.show(fragmentManager, "placeInfoFragment");
         }
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            mode = ZOOM;
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+
+            //  if (values[Matrix.MSCALE_Y] - 0.1 >= 0.7 && values[Matrix.MSCALE_Y] + 0.1  < 1.5) {
+            return setScale(detector);
+            // }
+            //  return false;
+        }
+
+        public boolean setScale(ScaleGestureDetector detector) {
+            scaleFactor = detector.getScaleFactor();
+
+            //matrix.postScale(scaleFactor, scaleFactor, getX(detector), getY(detector));
+            matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
+            return true;
+        }
+
+        public float getX(ScaleGestureDetector detector) {
+            float var;
+            if (values[Matrix.MTRANS_X] >= 0) {
+                var = 0;
+            } else if (values[Matrix.MTRANS_X] <= (-origW + screenWidth) * values[0]) {
+                var = screenWidth;
+            } else {
+                var = detector.getFocusX();
+            }
+
+            return var;
+        }
+
+        public float getY(ScaleGestureDetector detector) {
+            float var;
+            if (values[Matrix.MTRANS_Y] >= 0) {
+                var = 0;
+            } else if (values[Matrix.MTRANS_Y] <= (-origH + screenHeight) * values[4]) {
+                var = screenHeight;
+            } else {
+                var = detector.getFocusY();
+            }
+
+            return var;
+        }
+
+
     }
 }

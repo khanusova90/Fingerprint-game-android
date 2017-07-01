@@ -7,7 +7,8 @@ import android.widget.EditText;
  */
 public final class ValidationUtils {
 
-    private ValidationUtils(){}
+    private ValidationUtils() {
+    }
 
 
     public static Boolean isNotEmpty(EditText editText) {

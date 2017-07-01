@@ -10,12 +10,12 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 import java.util.List;
 
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.Ranking;
 import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
-import cz.hanusova.fingerprint_game.base.utils.Constants;
 
 /**
  * Created by khanusova on 7.9.2016.

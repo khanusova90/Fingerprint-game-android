@@ -34,8 +34,8 @@ public class AuthInterceptor implements ClientHttpRequestInterceptor {
         final String basic =
                 "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
         headers.add("authorization", basic);
-        ClientHttpResponse response =  execution.execute(request, body);
-        if (response == null || response.getStatusCode() == null){
+        ClientHttpResponse response = execution.execute(request, body);
+        if (response == null || response.getStatusCode() == null) {
             return response;
         }
 //        switch (response.getStatusCode().value()){

@@ -95,11 +95,11 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         }
 
         RectF rect = new RectF(barcode.getBoundingBox());
-            // Draws the bounding box around the barcode.
-            rect.left = translateX(rect.left);
-            rect.top = translateY(rect.top);
-            rect.right = translateX(rect.right);
-            rect.bottom = translateY(rect.bottom);
+        // Draws the bounding box around the barcode.
+        rect.left = translateX(rect.left);
+        rect.top = translateY(rect.top);
+        rect.right = translateX(rect.right);
+        rect.bottom = translateY(rect.bottom);
         if (placeIcon == null) {
             canvas.drawRect(rect, mRectPaint);
 

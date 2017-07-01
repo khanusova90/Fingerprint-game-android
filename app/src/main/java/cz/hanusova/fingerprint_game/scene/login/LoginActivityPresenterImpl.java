@@ -6,7 +6,7 @@ import org.androidannotations.annotations.EBean;
  * Created by khanusova on 14.6.2017.
  */
 @EBean
-public class LoginActivityPresenterImpl implements LoginActivityPresenter{
+public class LoginActivityPresenterImpl implements LoginActivityPresenter {
     LoginActivityView view;
 
     @Override
