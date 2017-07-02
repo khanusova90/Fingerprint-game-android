@@ -10,6 +10,7 @@ import org.androidannotations.annotations.ViewById;
 import java.text.SimpleDateFormat;
 
 import cz.hanusova.fingerprint_game.R;
+import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 
 /**
@@ -34,15 +35,23 @@ public class ActivityItemView extends LinearLayout {
     @ViewById(R.id.activity_since)
     TextView activityDate;
 
+    @ViewById(R.id.activity_material_count)
+    TextView activityMaterialCount;
+
     public ActivityItemView(Context context) {
         super(context);
     }
 
     public void bind(UserActivity userActivity) {
-        activityName.setText(userActivity.getPlace().getPlaceType().getPlaceType());
-        int materialStrId = getResources().getIdentifier(userActivity.getPlace().getMaterial().getName(), "string", getContext().getPackageName());
-        activityMaterial.setText(getResources().getString(materialStrId));
-        activityPlace.setText(userActivity.getPlace().getName());
+        Place place = userActivity.getPlace();
+        activityName.setText(place.getPlaceType().getPlaceType());
+        if (place.getPlaceType().getIdPlaceType() == 1L) {
+            int materialStrId = getResources().getIdentifier(place.getMaterial().getName(), "string", getContext().getPackageName());
+            activityMaterial.setText(getResources().getString(materialStrId));
+        }
+        activityPlace.setText(place.getName());
         activityDate.setText(getResources().getString(R.string.activity_start) + ": " + SDF.format(userActivity.getStartTime()));
+        int workerAmount = userActivity.getMaterialAmount().intValue();
+        activityMaterialCount.setText(workerAmount + " " + getResources().getQuantityString(R.plurals.workers, workerAmount));
     }
 }

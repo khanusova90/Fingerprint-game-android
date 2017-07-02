@@ -13,6 +13,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
@@ -109,8 +110,8 @@ public class MapActivity extends BaseActivity implements MapActivityView {
         }
         for (int i = 0; i < places.size(); i++) {
             Place p = places.get(i);
-            int x = p.getxCoord();
-            int y = p.getyCoord();
+            int x = (int) (p.getxCoord() * 5.6);
+            int y = (int) (p.getyCoord() * 4.72);
             ld.setLayerInset(i + 1, x, y, mapDrawable.getIntrinsicWidth() - x + ICON_SIZE, mapDrawable.getIntrinsicHeight() - y + ICON_SIZE);
         }
         mapView.setImageDrawable(ld);
@@ -138,6 +139,11 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @Click(R.id.action_camera)
     void startCamera() {
         ScanActivity_.intent(this).startForResult(REQ_CODE_QR);
+    }
+
+    @OnActivityResult(REQ_CODE_QR)
+    void refreshMap(){
+        init();
     }
 
     @Click(R.id.action_floor_down)

@@ -29,7 +29,13 @@
     <TextView
         android:id="@+id/activity_material"
         android:layout_width="match_parent"
-        android:layout_height="15pt"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5pt"/>
+
+    <TextView
+        android:id="@+id/activity_material_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingLeft="5pt"/>
 
     <TextView

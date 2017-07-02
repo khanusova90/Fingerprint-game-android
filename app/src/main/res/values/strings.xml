@@ -39,7 +39,9 @@
 
     <string name="no_camera_permission">Aplikace nemá povolení k používání fotoaparátu. Nyní bude aplikace ukončena.</string>
     <string name="low_storage_error">Nedostatek paměti</string>
-    <string name="permission_camera_rationale">Aplikace vyžaduje povolení k používání fotoaparátu</string>
+    <string name="permission_camera_rationale">Aplikace vyžaduje povolení k používání fotoaparátu, aby mohla scanovat místa</string>
+    <string name="permission_location">Aplikace vyžaduje povolení k lokalizaci, aby mohla ověřit vaši polohu</string>
+    <string name="permission_read_phone_state">Aplikace vyžaduje přístup k informacím o zařízení, abychom mohli vylepšit určování polohy</string>
 
     <string name="mining">Těžba</string>
     <string name="mine_free_workers">Pracovníci k dispozici</string>
@@ -77,5 +79,11 @@
     <string name="ladderTooltip">Urychluje sklizeň.</string>
 
     <string name="activity_start">Začátek</string>
+
+    <plurals name="workers">
+        <item quantity="one">dělník</item>
+        <item quantity="few">dělníci</item>
+        <item quantity="other">dělníků</item>
+    </plurals>
 
 </resources>
