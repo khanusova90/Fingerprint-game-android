@@ -135,7 +135,7 @@ public class Scanner {
         }
         if (cell) {
             //cyklicke spousteni skenovani GSM po urcite dobe
-            new Timer(true).scheduleAtFixedRate(
+            new Timer().scheduleAtFixedRate(
                     new TimerTask() {
                         public void run() {
                             List<NeighboringCellInfo> cells = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getNeighboringCellInfo();
