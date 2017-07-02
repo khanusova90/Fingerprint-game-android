@@ -72,6 +72,7 @@
     <string name="stayin">Zapamatovat</string>
     <string name="yes">Ano</string>
     <string name="no">Ne</string>
+    
     <string name="pickTooltip">Urychluje těžbu kamene.</string>
     <string name="axeTooltip">Urychluje těžbu dřeva.</string>
     <string name="ladderTooltip">Urychluje sklizeň.</string>
