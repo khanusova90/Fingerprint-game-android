@@ -36,6 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/qr_choose_workers"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:layout_margin="@dimen/text_margin"
         android:visibility="gone" />
 
 </RelativeLayout>

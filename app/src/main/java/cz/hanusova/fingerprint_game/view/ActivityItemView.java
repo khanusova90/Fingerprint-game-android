@@ -35,6 +35,9 @@ public class ActivityItemView extends LinearLayout {
     @ViewById(R.id.activity_since)
     TextView activityDate;
 
+    @ViewById(R.id.activity_material_count)
+    TextView activityMaterialCount;
+
     public ActivityItemView(Context context) {
         super(context);
     }
@@ -48,5 +51,7 @@ public class ActivityItemView extends LinearLayout {
         }
         activityPlace.setText(place.getName());
         activityDate.setText(getResources().getString(R.string.activity_start) + ": " + SDF.format(userActivity.getStartTime()));
+        int workerAmount = userActivity.getMaterialAmount().intValue();
+        activityMaterialCount.setText(workerAmount + " " + getResources().getQuantityString(R.plurals.workers, workerAmount));
     }
 }

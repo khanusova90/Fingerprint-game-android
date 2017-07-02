@@ -80,4 +80,10 @@
 
     <string name="activity_start">Začátek</string>
 
+    <plurals name="workers">
+        <item quantity="one">dělník</item>
+        <item quantity="few">dělníci</item>
+        <item quantity="other">dělníků</item>
+    </plurals>
+
 </resources>
