@@ -48,6 +48,8 @@
         <activity android:name=".scene.ranking.RankingActivity_"
             android:label="@string/ranking" />
 
+        <activity android:name=".scene.tutorial.TutorialActivity_"/>
+
 
         <service android:name=".firebase.FirebaseMsgService">
             <intent-filter>
