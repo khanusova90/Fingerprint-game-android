@@ -64,8 +64,6 @@ public class MarketActivity extends AppCompatActivity {
     @Bean(UserServiceImpl.class)
     UserService userService;
 
-    //ToolTipManager tooltips;
-
     @AfterViews
     public void init() {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
@@ -80,8 +78,6 @@ public class MarketActivity extends AppCompatActivity {
             TextView priceOfAnItem = (TextView) imageLayout.findViewById(R.id.item_name);
             TextView levelOfAnItem = (TextView) imageLayout.findViewById(R.id.item_level);
 
-
-            //TODO: tooltip for each item
             try {
                 Bitmap bitmap = new BitmapWorkerTask(item.getImgUrl(), this.getApplicationContext(), AppUtils.getVersionCode(this)).execute().get();
                 imageView.setImageBitmap(bitmap);
@@ -106,8 +102,6 @@ public class MarketActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         margin.setMargins(0, items.size() * 30, 0, 0);
-        //TODO: dynamic margin, not working dunnno why
-        // moneyLayout.setLayoutParams(margin);
     }
 
     @Click(R.id.market_buy)
