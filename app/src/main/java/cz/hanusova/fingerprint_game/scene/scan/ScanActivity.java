@@ -70,6 +70,7 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.google.android.gms.vision.barcode.Barcode.QR_CODE;
 
 /**
  * Created by khanusova on 9.9.2016.
@@ -491,7 +492,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
         // is set to receive the barcode detection results, track the barcodes, and maintain
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
+        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).setBarcodeFormats(QR_CODE).build();
         barcodeFactory = new BarcodeTrackerFactory(overlay);
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());

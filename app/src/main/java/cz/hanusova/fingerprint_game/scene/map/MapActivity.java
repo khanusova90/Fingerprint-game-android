@@ -64,7 +64,8 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
     private List<Drawable> icons = new ArrayList<>();
-    private Bitmap[] mapField = new Bitmap[4];
+//    private Bitmap[] mapField = new Bitmap[4];
+    private Bitmap map;
 
     @AfterViews
     void init() {
@@ -79,13 +80,19 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @UiThread
     public void updateView() {
         Log.d(TAG, "Updating map view");
-        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
+        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(map, MAP_WIDTH, MAP_HEIGHT, true));
+//        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(mapField[currentFloor - 1], MAP_WIDTH, MAP_HEIGHT, true));
         changeIconPosition(mapDrawable, createLayers(mapDrawable));
     }
 
     @Override
     public void setMapField(Bitmap[] mapField) {
-        this.mapField = mapField;
+//        this.mapField = mapField;
+    }
+
+    @Override
+    public void setMap(Bitmap map){
+        this.map = map;
     }
 
     @Override
