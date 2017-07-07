@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Camera;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -154,7 +153,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
 
     private void startScan() {
         if (cameraGranted && locationGranted && phoneStateGranted) {
-            createCameraSource(true, false);
+            createCameraSource(false);
             createScanThread();
             presenter.init(this);
             scanStarted = true;
@@ -485,7 +484,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
      * the constant.
      */
     @SuppressLint("InlinedApi")
-    private void createCameraSource(boolean autoFocus, boolean useFlash) {
+    private void createCameraSource(boolean useFlash) {
         Context context = getApplicationContext();
 
         // A barcode detector is created to track barcodes.  An associated multi-processor instance
@@ -525,14 +524,10 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
         // at long distances.
         CameraSource.Builder builder = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(1600, 1024)
+                .setRequestedPreviewSize(1080, 1920)
                 .setRequestedFps(15.0f);
+//                .setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
-        // make sure that auto focus is an available option
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            builder = builder.setFocusMode(
-                    autoFocus ? Camera.Parameters.FOCUS_MODE_AUTO : null);
-        }
 
         cameraSource = builder
                 .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)

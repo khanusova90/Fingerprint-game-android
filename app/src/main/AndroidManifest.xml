@@ -48,7 +48,7 @@
         <activity android:name=".scene.ranking.RankingActivity_"
             android:label="@string/ranking" />
 
-        <activity android:name=".scene.tutorial.TutorialActivity_"/>
+        <activity android:name=".scene.tutorial.IntroActivity_" />
 
 
         <service android:name=".firebase.FirebaseMsgService">
