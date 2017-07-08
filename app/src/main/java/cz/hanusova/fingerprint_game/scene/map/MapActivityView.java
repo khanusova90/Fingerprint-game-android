@@ -15,8 +15,6 @@ public interface MapActivityView extends BaseView {
 
     void updateView();
 
-    void setMapField(Bitmap[] mapField);
-
     void setMap(Bitmap map);
 
     void updateIcons(List<Drawable> icons);
