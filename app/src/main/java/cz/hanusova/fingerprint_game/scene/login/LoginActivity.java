@@ -1,7 +1,5 @@
 package cz.hanusova.fingerprint_game.scene.login;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.CheckedChange;
@@ -32,6 +31,7 @@ import cz.hanusova.fingerprint_game.base.utils.ValidationUtils;
 import cz.hanusova.fingerprint_game.model.AppUser;
 import cz.hanusova.fingerprint_game.rest.LoginClient;
 import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
+import cz.hanusova.fingerprint_game.scene.tutorial.IntroActivity_;
 
 /**
  * https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
@@ -41,7 +41,6 @@ import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
 @EActivity(R.layout.activity_login)
 public class LoginActivity extends BaseActivity implements LoginActivityView {
     private static final String TAG = "LoginActivity";
-    protected Context context;
     @Pref
     Preferences_ preferences;
     @Bean(LoginActivityPresenterImpl.class)
@@ -66,13 +65,16 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         return presenter;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = this;
-        String username = preferences.username().get();
-        if (preferences.stayIn().get() && !TextUtils.isEmpty(username) && TextUtils.isEmpty(error)) {
-            signIn(username);
+    @AfterViews
+    protected void init() {
+        boolean tutorialShown = preferences.sawTutorial().get();
+        if (!tutorialShown) {
+            IntroActivity_.intent(this).start();
+        } else {
+            String username = preferences.username().get();
+            if (preferences.stayIn().get() && !TextUtils.isEmpty(username) && TextUtils.isEmpty(error)) {
+                signIn(username);
+            }
         }
     }
 
@@ -111,7 +113,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 preferences.user().put(mapper.writeValueAsString(user)); //TODO: user userService
-                MapActivity_.intent(context).start();
+                MapActivity_.intent(this).start();
                 dismissProgressDialog();
                 finish();
             } catch (JsonProcessingException e) {

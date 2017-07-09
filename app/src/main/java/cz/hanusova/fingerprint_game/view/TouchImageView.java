@@ -120,13 +120,15 @@ public class TouchImageView extends ImageView {
                         break;
                     }
                     case MotionEvent.ACTION_MOVE: {
-                        matrix.getValues(values);
-                        float deltaX = currX - lastPoint.x;
-                        float deltaY = currY - lastPoint.y;
-                        //deltaX = values[Matrix.MTRANS_X] + deltaX >= 0 || values[Matrix.MTRANS_X] + deltaX <= (-origW + screenWidth) * values[0] ? 0 : deltaX;
-                        //deltaY = values[Matrix.MTRANS_Y] + deltaY >= 0 || values[Matrix.MTRANS_Y] + deltaY <= (-origH + screenHeight) * values[4] ? 0 : deltaY;
-                        matrix.postTranslate(deltaX, deltaY);
-                        lastPoint.set(currX, currY);
+                        if (mode != ZOOM) {
+                            matrix.getValues(values);
+                            float deltaX = currX - lastPoint.x;
+                            float deltaY = currY - lastPoint.y;
+                            //deltaX = values[Matrix.MTRANS_X] + deltaX >= 0 || values[Matrix.MTRANS_X] + deltaX <= (-origW + screenWidth) * values[0] ? 0 : deltaX;
+                            //deltaY = values[Matrix.MTRANS_Y] + deltaY >= 0 || values[Matrix.MTRANS_Y] + deltaY <= (-origH + screenHeight) * values[4] ? 0 : deltaY;
+                            matrix.postTranslate(deltaX, deltaY);
+                            lastPoint.set(currX, currY);
+                        }
                         break;
                     }
                 }

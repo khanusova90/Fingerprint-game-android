@@ -21,4 +21,7 @@ public interface Preferences {
 
     @DefaultBoolean(false)
     boolean stayIn();
+
+    @DefaultBoolean(false)
+    boolean sawTutorial();
 }

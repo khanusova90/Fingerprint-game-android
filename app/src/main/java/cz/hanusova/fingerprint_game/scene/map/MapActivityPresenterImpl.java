@@ -30,35 +30,31 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
     @Bean(UserServiceImpl.class)
     UserService userService;
     private MapActivityView view;
-    private Bitmap[] mapField = new Bitmap[4];
     private List<Place> places;
 
     @Override
     public void createMap(int currentFloor, Context context) {
         Log.d(TAG, "creating map");
-        int index = currentFloor - 1;
-        if (mapField[index] == null) {
-            Log.d(TAG, "Map was null");
-            String drawableName = "j" + currentFloor + "np";
-            int drawableId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
-            mapField[index] = BitmapFactory.decodeResource(context.getResources(), drawableId);
-            downloadMap(currentFloor, context);
-        }
-        view.setMapField(mapField);
+        String drawableName = "j" + currentFloor + "np";
+        int drawableId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
+        Bitmap map = BitmapFactory.decodeResource(context.getResources(), drawableId);
+        downloadMap(currentFloor, context);
+        view.setMap(map);
         view.updateView();
     }
 
     @Background
     void downloadMap(int currentFloor, Context context) {
         Log.i(TAG, "Downloading map from server - " + currentFloor + " floor");
+        Bitmap map = null;
         try {
-            mapField[currentFloor - 1] = new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
+            map = new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
                     .execute().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         if (view != null) {
-            view.setMapField(mapField);
+            view.setMap(map);
             view.updateView();
         }
     }
