@@ -19,7 +19,18 @@ import cz.hanusova.fingerprint_game.R;
 @EActivity
 public class IntroActivity extends AppIntro {
 
-    private static final String[] slideNames = new String[]{"screen_login", "screen_map", "screen_user_detail", "screen_place_info"};
+    private static final String[] slideNames = new String[]{
+            "screen_login",
+            "screen_map",
+            "icon_food",
+            "icon_money",
+            "icon_stone",
+            "icon_house",
+            "icon_shop",
+            "screen_scan",
+            "screen_user_detail",
+            "screen_place_info"
+    };
 
     @Pref
     Preferences_ preferences;
@@ -27,12 +38,12 @@ public class IntroActivity extends AppIntro {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < slideNames.length; i++) {
             createSlide(i);
         }
     }
 
-    private int getDrawableId(int page){
+    private int getDrawableId(int page) {
         return getResources().getIdentifier(slideNames[page], "drawable", getPackageName());
     }
 
@@ -48,7 +59,7 @@ public class IntroActivity extends AppIntro {
         finishTutorial();
     }
 
-    private void finishTutorial(){
+    private void finishTutorial() {
         preferences.sawTutorial().put(true);
         finish();
     }
@@ -68,12 +79,39 @@ public class IntroActivity extends AppIntro {
                         "Za každé načtení místa získáváte body. Průběžné pořadí uživatelů je možné prohlížet pomocí volby v horním menu.";
                 break;
             case 2:
-                title = "Detail uživatele";
-                text = "Na tomto místě se zobrazuje aktuální stav hráče. " +
-                        "\n Zlato je potřeba pro platbu za domy pro dělníky. " +
-                        "Jídlo dostávají dělníci, kteří zrovna pracují. Dřevo a kamení slouží ke stavbě nových domů pro dělníky.";
+                title = "Jídlo";
+                text = "Jídlo je pro pracovníky, kteří aktuálně těží nějaké suroviny \n" +
+                        "Pokud nemáte dost jídla, probíhající těžba bude zastavena";
                 break;
             case 3:
+                title = "Zlato";
+                text = "Zlatem se platí všem pracovníkům, které máte k dispozici. \n" +
+                        "Pokud nemáte dost zlata, budou odebrány postavené domky a dělníci, kteří v nich žijí";
+                break;
+            case 4:
+                title = "Suroviny na stavbu";
+                text = "Kámen a dřevo je potřeba ke stavbě nových domků pro pracovníky";
+                break;
+            case 5:
+                title = "Nové domy";
+                text = "Na určených místech lze postavit nové domy pro dělníky. V každém domě žije jeden dělník.";
+                break;
+            case 6:
+                title = "Obchod";
+                text = "V obchodě lze nakupovat předměty pro urychlení těžby. \n" +
+                        "Sekera urychluje těžbu dřeva, krumpáč těžbu kamení a žebřík sběr jídla";
+                break;
+            case 7:
+                title = "Snímání kódu";
+                text = "Hledejte ve škole QR kódy ke hře. Každý kód zastupuje jedno místo \n" +
+                        "Při snímání se spustí odpočet, během kterého můžete zvolit, kolik dělníků použijete pro těžbu, případně kolik nových domů postavíte.";
+                break;
+            case 8:
+                title = "Detail uživatele";
+                text = "Na tomto místě se zobrazuje aktuální stav hráče. \n" +
+                        "Každý dosažený level zlepšuje schopnost těžby surovin" ;
+                break;
+            case 9:
                 title = "Detail místa";
                 text = "Detaily každého navštíveného místa se zobrazí po kliknutí na ikonu objeveného místa.";
                 break;

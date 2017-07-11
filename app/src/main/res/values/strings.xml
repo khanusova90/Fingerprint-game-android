@@ -61,6 +61,7 @@
 
     <string name="action_settings">Nastavení</string>
     <string name="action_show_rankings">Zobrazit pořadí</string>
+    <string name="action_show_tutorial">Zobrazit návod</string>
     <string name="title_activity_user_detail">Profil uživatele</string>
     <string name="inventory">Inventář</string>
     <string name="stag_name">Jméno ve stagu</string>
