@@ -9,7 +9,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 5
-        versionName "1.0.0"
+//        versionName "1.0.0"
+        versionName "develop"
         multiDexEnabled true
     }
     buildTypes {
@@ -49,6 +50,11 @@ android {
 
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -69,6 +75,9 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.2.6'
     compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.github.apl-devs:appintro:v4.2.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
 
     testCompile 'junit:junit:4.12'
     apt 'org.androidannotations:androidannotations:4.1.0'
