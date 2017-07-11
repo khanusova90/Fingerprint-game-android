@@ -120,6 +120,6 @@ public class IntroActivity extends AppIntro {
                 text = null;
                 break;
         }
-        addSlide(AppIntroFragment.newInstance(title, text, getDrawableId(position), getResources().getColor(R.color.colorNude)));
+        addSlide(AppIntroFragment.newInstance(title, text, getDrawableId(position), getResources().getColor(R.color.colorNude), getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorAccent)));
     }
 }

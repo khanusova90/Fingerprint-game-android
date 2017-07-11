@@ -8,8 +8,8 @@ android {
         applicationId "cz.hanusova.fingerprint_game"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 6
-        versionName "1.0.0"
+        versionCode 7
+        versionName "1.0.1"
 //        versionName "develop"
         multiDexEnabled true
     }
@@ -72,7 +72,6 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.google.android.gms:play-services:10.2.6'
     compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.github.apl-devs:appintro:v4.2.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
