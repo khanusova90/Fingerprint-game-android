@@ -25,6 +25,12 @@
         android:theme="@style/AppTheme"
         android:largeHeap="true"
         android:name=".FingerprintApplication_">
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="501281f61dd5203dc450f8bc855baae3fcde9f6f"
+            />
+
         <activity
             android:name=".scene.login.LoginActivity_"
             android:label="@string/app_name">

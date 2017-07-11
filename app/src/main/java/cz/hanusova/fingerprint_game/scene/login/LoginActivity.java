@@ -7,6 +7,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -109,7 +110,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         showProgressDialog(null);
         try {
             AppUser user = restClient.login(username);
-
+            Crashlytics.setUserIdentifier(username);
             ObjectMapper mapper = new ObjectMapper();
             try {
                 preferences.user().put(mapper.writeValueAsString(user)); //TODO: user userService
