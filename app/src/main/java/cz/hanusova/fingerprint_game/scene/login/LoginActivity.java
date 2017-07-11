@@ -111,6 +111,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         try {
             AppUser user = restClient.login(username);
             Crashlytics.setUserIdentifier(username);
+            Crashlytics.setUserName(username);
             ObjectMapper mapper = new ObjectMapper();
             try {
                 preferences.user().put(mapper.writeValueAsString(user)); //TODO: user userService
