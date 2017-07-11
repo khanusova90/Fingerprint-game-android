@@ -4,8 +4,13 @@
     <!-- "Show map options" -->
     <item
         android:id="@+id/action_map_logout"
-        android:icon="@drawable/ic_action_options"
-        android:title="@string/logout" />
+        android:title="@string/logout"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_show_tutorial"
+        android:title="@string/action_show_tutorial"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_show_rankings"

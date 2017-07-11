@@ -31,6 +31,7 @@ import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.scene.login.LoginActivity_;
 import cz.hanusova.fingerprint_game.scene.ranking.RankingActivity_;
 import cz.hanusova.fingerprint_game.scene.scan.ScanActivity_;
+import cz.hanusova.fingerprint_game.scene.tutorial.IntroActivity_;
 import cz.hanusova.fingerprint_game.scene.user.UserDetailActivity_;
 import cz.hanusova.fingerprint_game.view.TouchImageView;
 
@@ -134,6 +135,11 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @OptionsItem(R.id.action_show_rankings)
     void showRankings() {
         RankingActivity_.intent(this).start();
+    }
+
+    @OptionsItem(R.id.action_show_tutorial)
+    void showTutorial() {
+        IntroActivity_.intent(this).start();
     }
 
     @Click(R.id.action_camera)
