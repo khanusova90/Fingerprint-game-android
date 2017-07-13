@@ -2,10 +2,14 @@ package cz.hanusova.fingerprint_game.scene.map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
@@ -18,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import cz.hanusova.fingerprint_game.base.service.UserService;
 import cz.hanusova.fingerprint_game.base.service.impl.UserServiceImpl;
 import cz.hanusova.fingerprint_game.base.utils.AppUtils;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
@@ -37,10 +42,29 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
         Log.d(TAG, "creating map");
         String drawableName = "j" + currentFloor + "np";
         int drawableId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
-        Bitmap map = BitmapFactory.decodeResource(context.getResources(), drawableId);
-        downloadMap(currentFloor, context);
-        view.setMap(map);
-        view.updateView();
+//        Bitmap map = BitmapFactory.decodeResource(context.getResources(), drawableId);
+//        downloadMap(currentFloor, context);
+
+//        private void createGlideMap(){
+//            String drawableName = "j" + currentFloor + "np";
+//            int drawableId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
+            Glide.with(context)
+                    .load(Constants.IMG_URL_BASE + currentFloor + "NP.jpg")
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(drawableId)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            view.setMap(resource);
+                            view.updateView();
+                            Glide.clear(this);
+                        }
+                    });
+//        }
+
+//        view.setMap(map);
+//        view.updateView();
     }
 
     @Background
@@ -84,7 +108,7 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
             }
         }
         view.updateIcons(icons);
-        view.updateView();
+//        view.updateView();
     }
 
     private String getFloorName(int currentFloor) {
