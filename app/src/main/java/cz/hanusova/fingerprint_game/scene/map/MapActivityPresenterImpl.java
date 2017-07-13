@@ -11,7 +11,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 
@@ -37,8 +36,11 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
     private MapActivityView view;
     private List<Place> places;
 
+    private static final int MAP_HEIGHT = 2800;
+    private static final int MAP_WIDTH = 2600;
+
     @Override
-    public void createMap(int currentFloor, Context context) {
+    public void createMap(int currentFloor, final Context context) {
         Log.d(TAG, "creating map");
         String drawableName = "j" + currentFloor + "np";
         int drawableId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
@@ -51,14 +53,16 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
             Glide.with(context)
                     .load(Constants.IMG_URL_BASE + currentFloor + "NP.jpg")
                     .asBitmap()
+                    .override(MAP_WIDTH, MAP_HEIGHT)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(drawableId)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), resource);
                             view.setMap(resource);
                             view.updateView();
-                            Glide.clear(this);
+//                            Glide.clear(this);
                         }
                     });
 //        }
@@ -67,21 +71,21 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
 //        view.updateView();
     }
 
-    @Background
-    void downloadMap(int currentFloor, Context context) {
-        Log.i(TAG, "Downloading map from server - " + currentFloor + " floor");
-        Bitmap map = null;
-        try {
-            map = new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
-                    .execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        if (view != null) {
-            view.setMap(map);
-            view.updateView();
-        }
-    }
+//    @Background
+//    void downloadMap(int currentFloor, Context context) {
+//        Log.i(TAG, "Downloading map from server - " + currentFloor + " floor");
+//        Bitmap map = null;
+//        try {
+//            map = new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
+//                    .execute().get();
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//        if (view != null) {
+//            view.setMap(map);
+//            view.updateView();
+//        }
+//    }
 
     @Override
     public List<Place> getPlaces(int currentFloor) {

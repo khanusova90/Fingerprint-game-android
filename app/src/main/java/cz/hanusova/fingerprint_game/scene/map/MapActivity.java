@@ -2,7 +2,6 @@ package cz.hanusova.fingerprint_game.scene.map;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.Log;
@@ -47,8 +46,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     private static final int REQ_CODE_QR = 1;
     private static final int ICON_SIZE = 8;
-    private static final int MAP_HEIGHT = 2800;
-    private static final int MAP_WIDTH = 2600;
 
     @ViewById(R.id.img_map)
     TouchImageView mapView;
@@ -80,13 +77,15 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @UiThread
     public void updateView() {
         Log.d(TAG, "Updating map view");
-        final Drawable mapDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(map, MAP_WIDTH, MAP_HEIGHT, true));
+//        final Drawable mapDrawable = new BitmapDrawable(getResources(), map);
+        Drawable mapDrawable = mapView.getDrawable();
         changeIconPosition(mapDrawable, createLayers(mapDrawable));
     }
 
     @Override
     public void setMap(Bitmap map){
         this.map = map;
+        mapView.setImageBitmap(map);
     }
 
     @Override
