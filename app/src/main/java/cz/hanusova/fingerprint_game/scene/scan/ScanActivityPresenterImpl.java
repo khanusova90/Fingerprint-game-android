@@ -2,10 +2,13 @@ package cz.hanusova.fingerprint_game.scene.scan;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.rest.spring.annotations.RestService;
 
@@ -23,6 +26,11 @@ import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scan.DeviceInformation;
 import cz.hanusova.fingerprint_game.scan.Scanner;
 import cz.hanusova.fingerprint_game.scan.SensorScanner;
+import cz.hanusova.fingerprint_game.scene.scan.service.GyroscopeService;
+import cz.hanusova.fingerprint_game.scene.scan.service.impl.GyroscopeServiceImpl;
+
+import static android.content.Context.SENSOR_SERVICE;
+import static android.hardware.Sensor.TYPE_GYROSCOPE;
 
 /**
  * Created by khanusova on 16/06/2017.
@@ -30,13 +38,20 @@ import cz.hanusova.fingerprint_game.scan.SensorScanner;
 @EBean
 public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     private static final String TAG = "ScanAcPresenter";
+
     @RestService
     RestClient restClient;
+
+    @Bean(GyroscopeServiceImpl.class)
+    GyroscopeService gyroscopeService;
+
     private ScanActivityView view;
     private BluetoothAdapter bluetoothAdapter;
     private WifiManager wm;
     private CountDownTimer timer;
     private Scanner scanner;
+    private SensorManager sensorManager;
+    private Sensor gyroscope;
 
     private boolean wasBTEnabled;
     private boolean wasWifiEnabled;
@@ -54,7 +69,9 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     @Override
     public void init(Context context) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
+        gyroscope = sensorManager.getDefaultSensor(TYPE_GYROSCOPE);
         wasBTEnabled = bluetoothAdapter.isEnabled();
         wasWifiEnabled = wm.isWifiEnabled();
         changeBTWifiState(true);
@@ -102,6 +119,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     @Override
     public void startTimer(final Place place, final Context context) {
         timer.start();
+        sensorManager.registerListener(gyroscopeService, gyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         scanner.startScan(10000, new ScanResultListener() {
             @Override
             public void onScanFinished(List<WifiScan> wifiScans, List<BleScan> bleScans, List<CellScan> cellScans) {
@@ -110,6 +128,15 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
                 restClient.sendFingerprint(fingerprint);
             }
         });
+    }
+
+    @Override
+    public void stopTimer(){
+        sensorManager.unregisterListener(gyroscopeService, gyroscope);
+        scanner.stopScan();
+        timer.cancel();
+        view.stopCountDown();
+        view.startTracking();
     }
 
     /**
@@ -155,22 +182,23 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
         @Override
         public void onTick(long millisUntilFinished) {
             view.updateCountdown(millisUntilFinished);
-            if (code == null) {
-                code = view.getPlaceCode();
-            }
-            String actualCode = view.getPlaceCode();
-            if (code == null || actualCode == null || !code.equals(actualCode)) {
-                Log.d(TAG, "Capturing stopped");
-                view.stopCountDown();
-                view.startTracking();
-                scanner.stopScan();
-                cancel();
-            }
+//            if (code == null) {
+//                code = view.getPlaceCode();
+//            }
+//            String actualCode = view.getPlaceCode();
+//            if (code == null || actualCode == null || !code.equals(actualCode)) {
+//                Log.d(TAG, "Capturing stopped");
+//                view.stopCountDown();
+//                view.startTracking();
+//                scanner.stopScan();
+//                cancel();
+//            }
         }
 
         @Override
         public void onFinish() {
             view.onCountdownFinished();
+            sensorManager.unregisterListener(gyroscopeService, gyroscope);
         }
     }
 }

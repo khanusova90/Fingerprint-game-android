@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -20,8 +21,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -36,6 +42,8 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.androidannotations.rest.spring.annotations.RestService;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +72,7 @@ import cz.hanusova.fingerprint_game.model.Item;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
+import cz.hanusova.fingerprint_game.scene.scan.event.UserMovedEvent;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -76,7 +85,7 @@ import static com.google.android.gms.vision.barcode.Barcode.QR_CODE;
  * Created by khanusova on 9.9.2016.
  */
 @EActivity(R.layout.qr_capture)
-public class ScanActivity extends BaseActivity implements ScanActivityView {
+public class ScanActivity extends BaseActivity implements ScanActivityView  {
     private static final String TAG = "ScanActivity";
 
     // intent request code to handle updating play services if needed.
@@ -95,6 +104,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
     @Bean(ScanActivityPresenterImpl.class)
     ScanActivityPresenter presenter;
 
+
     @Pref
     Preferences_ preferences;
 
@@ -112,6 +122,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
     private Thread scanThread;
+    private GoogleApiClient googleApiClient;
 
     private Place place;
 
@@ -125,8 +136,26 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
 
     @AfterViews
     public void init() {
+        EventBus.getDefault().register(this);
         checkPermissions();
+//        addActivityRecognition();
         startScan();
+
+
+//        Sensor stepSensor = sensorManager.getDefaultSensor(TYPE_STEP_DETECTOR);
+//        Sensor significantSensor = sensorManager.getDefaultSensor(TYPE_SIGNIFICANT_MOTION);
+
+
+
+//        TriggerEventListener listener = new TriggerEventListener() {
+//            @Override
+//            public void onTrigger(TriggerEvent event) {
+//                System.out.println("EVENT TRIGGERED " + event.toString() + event.sensor.getName());
+//            }
+//        };
+
+//        sensorManager.requestTriggerSensor(listener, stepSensor);
+//        sensorManager.requestTriggerSensor(listener, significantSensor);
     }
 
     private void checkPermissions(){
@@ -161,6 +190,16 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
         }
     }
 
+//    private void addActivityRecognition(){
+//        googleApiClient = new GoogleApiClient.Builder(this)
+//                .addApi(ActivityRecognition.API)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .build();
+//
+//        googleApiClient.connect();
+//    }
+
     private void hideSeekers() {
         seekWorkers.setVisibility(View.GONE);
         workAmountText.setVisibility(View.GONE);
@@ -181,17 +220,32 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
                 presenter.startTimer(place, getApplicationContext());
                 if (place != null) { // scan could be being interrupted just now -> place is set to null and thread is being interrupted
                     ActivityEnum activity = place.getPlaceType().getActivity();
-                    try {
-                        BarcodeGraphic.placeIcon = new BitmapWorkerTask(PlaceUtils.getIconName(place), getApplicationContext(), AppUtils.getVersionCode(getApplicationContext())).execute().get();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        BarcodeGraphic.placeIcon = new BitmapWorkerTask(PlaceUtils.getIconName(place), getApplicationContext(), AppUtils.getVersionCode(getApplicationContext())).execute().get();
+                        loadImage();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    } catch (ExecutionException e) {
+//                        e.printStackTrace();
+//                    }
                     showActivity(activity);
                 }
             }
         });
+    }
+
+    @UiThread
+    void loadImage(){
+        Glide.with(getApplicationContext())
+                .load(Constants.IMG_URL_BASE + PlaceUtils.getIconName(place))
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        BarcodeGraphic.placeIcon = resource;
+                    }
+                });
     }
 
     /**
@@ -236,6 +290,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (preview != null) {
             preview.release();
         }
@@ -303,7 +358,9 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
     @Override
     public void startTracking() {
         presenter.createTimer();
-        scanThread.start();
+        if (!scanThread.getState().equals(Thread.State.RUNNABLE)) {
+            scanThread.start();
+        }
     }
 
     @UiThread
@@ -324,6 +381,11 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
         hideSeekers();
         scanThread.interrupt();
         place = null;
+    }
+
+    @Subscribe
+    public void onUserMoved(UserMovedEvent event) {
+        presenter.stopTimer();
     }
 
     @Override
@@ -535,4 +597,20 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
                 .build();
     }
 
+//    @Override
+//    public void onConnected(@Nullable Bundle bundle) {
+//        Intent intent = new Intent(this, ActivityRecognitionIntentService.class);
+//        PendingIntent pendingIntent = PendingIntent.getService( this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+//        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates( googleApiClient, 50, pendingIntent );
+//    }
+//
+//    @Override
+//    public void onConnectionSuspended(int i) {
+//
+//    }
+//
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+//    }
 }

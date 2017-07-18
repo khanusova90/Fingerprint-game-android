@@ -8,8 +8,8 @@ android {
         applicationId "cz.hanusova.fingerprint_game"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 11
-        versionName "1.0.4-alfa"
+        versionCode 12
+        versionName "1.0.5-alfa"
 //        versionName "develop"
         multiDexEnabled true
     }
@@ -78,6 +78,8 @@ dependencies {
         transitive = true;
     }
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.android.gms:play-services-location:10.2.6'
+    compile 'org.greenrobot:eventbus:3.0.0'
 
     testCompile 'junit:junit:4.12'
     apt 'org.androidannotations:androidannotations:4.1.0'
