@@ -6,6 +6,7 @@ package cz.hanusova.fingerprint_game.model;
 
 public class Ranking {
 
+    private int ranking;
     private String username;
     private int xp;
 
@@ -23,5 +24,13 @@ public class Ranking {
 
     public void setXp(int xp) {
         this.xp = xp;
+    }
+
+    public int getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
     }
 }

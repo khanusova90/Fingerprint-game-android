@@ -57,19 +57,6 @@
             android:label="@string/ranking" />
 
         <activity android:name=".scene.tutorial.IntroActivity_" />
-
-
-        <service android:name=".firebase.FirebaseMsgService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".firebase.FirebaseIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".scene.scan.intentservice.ActivityRecognitionIntentService" />
     </application>
 
 </manifest>

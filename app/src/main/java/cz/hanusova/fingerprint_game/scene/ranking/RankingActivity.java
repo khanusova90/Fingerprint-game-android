@@ -63,7 +63,9 @@ public class RankingActivity extends BaseActivity implements RankingActivityView
 
         @Override
         public Ranking getItem(int position) {
-            return presenter.getRankings().get(position);
+            Ranking ranking =  presenter.getRankings().get(position);
+            ranking.setRanking(position + 1);
+            return ranking;
         }
 
         @Override

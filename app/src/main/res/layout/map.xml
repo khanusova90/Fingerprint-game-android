@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/map_layer_list" />
+        android:src="@drawable/map_layer_list"
+        android:layout_centerInParent="true"/>
 
 
     <com.github.clans.fab.FloatingActionMenu

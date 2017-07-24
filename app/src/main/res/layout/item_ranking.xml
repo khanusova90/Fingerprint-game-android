@@ -4,17 +4,29 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/ranking_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:layout_margin="@dimen/text_margin"/>
+
+    <TextView
         android:id="@+id/ranking_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/username"/>
+        android:text="@string/username"
+        android:textColor="@color/colorAccent"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_toEndOf="@id/ranking_number"/>
 
     <TextView
         android:id="@+id/ranking_xp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="body"/>
+        android:text="body"
+        android:textColor="@color/colorAccent"
+        android:layout_margin="@dimen/text_margin"/>
 
 
 

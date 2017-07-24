@@ -20,6 +20,8 @@ public class RankingItemView extends RelativeLayout {
     TextView usernameTextView;
     @ViewById(R.id.ranking_xp)
     TextView xpTextView;
+    @ViewById(R.id.ranking_number)
+    TextView rankingTextView;
 
     private String actualUsername;
 
@@ -31,11 +33,16 @@ public class RankingItemView extends RelativeLayout {
     public void bind(Ranking ranking) {
         usernameTextView.setText(ranking.getUsername());
         xpTextView.setText(String.valueOf(ranking.getXp()));
+        rankingTextView.setText(String.valueOf(ranking.getRanking()));
 
         if (ranking.getUsername().equals(actualUsername)){
-            int color = getResources().getColor(R.color.colorAccent);
-            usernameTextView.setTextColor(color);
-            xpTextView.setTextColor(color);
+            int colorAccent = getResources().getColor(R.color.colorAccent);
+            int colorWhite = getResources().getColor(R.color.colorWhite);
+
+            usernameTextView.setTextColor(colorWhite);
+            xpTextView.setTextColor(colorWhite);
+            rankingTextView.setTextColor(colorWhite);
+            setBackgroundColor(colorAccent);
         }
 
     }
