@@ -1,6 +1,7 @@
 package cz.hanusova.fingerprint_game;
 
 import org.androidannotations.annotations.sharedpreferences.DefaultBoolean;
+import org.androidannotations.annotations.sharedpreferences.DefaultInt;
 import org.androidannotations.annotations.sharedpreferences.DefaultString;
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 
@@ -24,4 +25,7 @@ public interface Preferences {
 
     @DefaultBoolean(false)
     boolean sawTutorial();
+
+    @DefaultInt(1)
+    int lastFloor();
 }

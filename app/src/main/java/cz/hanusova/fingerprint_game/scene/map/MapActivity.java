@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
@@ -61,8 +62,13 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @Bean(MapActivityPresenterImpl.class)
     MapActivityPresenter presenter;
 
-    private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
+    private int currentFloor;  // 1 - 4 NP, not 0 - 3
     private List<Drawable> icons = new ArrayList<>();
+
+    @AfterInject
+    void setFloorFromPref(){
+        currentFloor = preferences.lastFloor().get();
+    }
 
     @AfterViews
     void init() {
@@ -71,6 +77,12 @@ public class MapActivity extends BaseActivity implements MapActivityView {
         presenter.createMap(currentFloor, this);
         buttonFloorDown.setEnabled(!(currentFloor == 1));
         buttonFloorUp.setEnabled(!(currentFloor == 4));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        preferences.lastFloor().put(currentFloor);
     }
 
     @Override

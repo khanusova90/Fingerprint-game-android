@@ -50,6 +50,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     LoginClient restClient;
     @Extra(value = Constants.EXTRA_ERROR)
     Integer errorCode;
+
     @ViewById(R.id.username)
     EditText etUsername;
     @ViewById(R.id.password)
