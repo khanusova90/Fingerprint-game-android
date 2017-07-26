@@ -27,6 +27,12 @@ public final class Constants {
     public static final String EXTRA_ITEMS = "items";
     public static final String EXTRA_FLOOR = "floor";
 
+    public static final String ICON_GOLD = "icon_money.png";
+    public static final String ICON_FOOD = "icon_food.png";
+    public static final String ICON_WOOD = "icon_wood.png";
+    public static final String ICON_STONE = "icon_stone.png";
+    public static final String ICON_WORKER = "icon_worker.png";
+
     public static final String MATERIAL_WORKER = "WORKER";
     public static final String MATERIAL_WOOD = "WOOD";
     public static final String MATERIAL_STONE = "STONE";

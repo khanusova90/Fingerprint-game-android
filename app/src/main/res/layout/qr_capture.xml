@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <cz.hanusova.fingerprint_game.camera.CameraSourcePreview
@@ -15,31 +17,73 @@
 
     </cz.hanusova.fingerprint_game.camera.CameraSourcePreview>
 
-    <Button
-        android:id="@+id/qr_countdown"
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:id="@+id/qr_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:clickable="false"/>
+        android:layout_margin="@dimen/text_margin"
 
-    <SeekBar
-        android:id="@+id/qr_choose_workers"
+        custom:progress_max="10"
+        custom:progress_unreached_color="@color/colorNude"
+        custom:progress_reached_color="@color/colorNude"
+        custom:progress_text_color="@color/colorAccent"
+
+        custom:progress_unreached_bar_height="5dp"
+        custom:progress_reached_bar_height="5dp"
+        custom:progress_text_size="16sp"
+
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/qr_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/qr_progress"
+        android:textColor="@color/colorAccent"
+        android:shadowColor="@color/colorNude"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
+        android:shadowRadius="1.5"
+        android:layout_margin="@dimen/text_margin"
+        android:visibility="gone"/>
+
+
+    <ImageView
+        android:id="@+id/material_image"
+        android:layout_width="10dp"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:id="@+id/qr_material_used"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/qr_countdown"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:visibility="gone"/>
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/text_margin">
+    </LinearLayout>
 
     <TextView
         android:id="@+id/qr_seek_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/qr_choose_workers"
+        android:layout_toEndOf="@id/material_image"
+        android:layout_above="@id/qr_material_used"
         android:textStyle="bold"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
+        android:shadowColor="@color/colorNude"
+        android:shadowDx="1.5"
+        android:shadowDy="1.5"
+        android:shadowRadius="1.5"
         android:layout_margin="@dimen/text_margin"
         android:visibility="gone" />
+
+    <SeekBar
+        android:id="@+id/qr_choose_workers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_above="@id/qr_seek_value"
+        android:visibility="gone"/>
 
 </RelativeLayout>

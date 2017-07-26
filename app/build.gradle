@@ -70,7 +70,7 @@ dependencies {
     compile 'org.altbeacon:android-beacon-library:2.7'
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.github.clans:fab:1.6.4'
-    compile 'com.daimajia.numberprogressbar:library:1.2@aar'
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.github.apl-devs:appintro:v4.2.0'

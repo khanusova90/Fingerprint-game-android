@@ -16,7 +16,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +26,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -74,6 +75,8 @@ import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.scene.market.MarketActivity_;
 import cz.hanusova.fingerprint_game.scene.scan.event.UserMovedEvent;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
+import cz.hanusova.fingerprint_game.view.MaterialUsedView;
+import cz.hanusova.fingerprint_game.view.MaterialUsedView_;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.CAMERA;
@@ -113,16 +116,25 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     @ViewById(R.id.graphicOverlay)
     GraphicOverlay<GraphicOverlay.Graphic> overlay;
     @ViewById(R.id.qr_countdown)
-    Button qrCountdown;
+    TextView qrCountdown;
+    @ViewById(R.id.qr_progress)
+    NumberProgressBar qrProgress;
     @ViewById(R.id.qr_choose_workers)
     SeekBar seekWorkers;
     @ViewById(R.id.qr_seek_value)
     TextView workAmountText;
+    @ViewById(R.id.material_image)
+    ImageView materialImage;
+    @ViewById(R.id.qr_material_used)
+    ViewGroup materialUsedLayout;
+
+    private MaterialUsedView workersView;
+    private MaterialUsedView woodView;
+    private MaterialUsedView stoneView;
 
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
     private Thread scanThread;
-    private GoogleApiClient googleApiClient;
 
     private Place place;
 
@@ -175,9 +187,19 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         }
     }
 
-    private void hideSeekers() {
-        seekWorkers.setVisibility(View.GONE);
-        workAmountText.setVisibility(View.GONE);
+    @UiThread
+    void changeVisibility(boolean visible) {
+        int visibility = visible ? View.VISIBLE : View.GONE;
+
+        seekWorkers.setVisibility(visibility);
+        workAmountText.setVisibility(visibility);
+        qrCountdown.setVisibility(visibility);
+        qrProgress.setVisibility(visibility);
+        materialImage.setVisibility(visibility);
+        if (materialUsedLayout.getChildCount() > 0) {
+            materialUsedLayout.removeAllViews();
+        }
+        materialUsedLayout.setVisibility(visibility);
     }
 
     private void createScanThread() {
@@ -191,7 +213,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
                     }
                     place = presenter.getPlace(getPlaceCode());
                 }
-                changeCountdownVisibility();
+                changeVisibility(true);
                 presenter.startTimer(place, getApplicationContext());
                 if (place != null) { // scan could be being interrupted just now -> place is set to null and thread is being interrupted
                     ActivityEnum activity = place.getPlaceType().getActivity();
@@ -223,7 +245,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     protected void onResume() {
         super.onResume();
         startCameraSource();
-        qrCountdown.setVisibility(View.GONE);
+        changeVisibility(false);
     }
 
     /**
@@ -236,9 +258,8 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
             if (preview != null) {
                 preview.stop();
             }
-            qrCountdown.setVisibility(View.GONE);
             presenter.destroy();
-            hideSeekers();
+            changeVisibility(false);
             if (!scanThread.isInterrupted()) {
                 scanThread.interrupt();
             }
@@ -332,21 +353,16 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     }
 
     @UiThread
-    public void changeCountdownVisibility() {
-        int visibility = qrCountdown.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
-        qrCountdown.setVisibility(visibility);
-    }
-
-    @UiThread
     @Override
     public void updateCountdown(long millisLeft) {
-        qrCountdown.setText(getString(R.string.qr_countdown, millisLeft / 1000));
+        int secondsLeft = (int) millisLeft / 1000;
+        qrCountdown.setText(getString(R.string.qr_countdown, secondsLeft));
+        qrProgress.setProgress(10 - secondsLeft);
     }
 
     @Override
     public void stopCountDown() {
-        qrCountdown.setVisibility(View.GONE);
-        hideSeekers();
+        changeVisibility(false);
         scanThread.interrupt();
         place = null;
     }
@@ -436,6 +452,11 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         seekWorkers.setProgress(workersAmount / 2);
         seekWorkers.setVisibility(View.VISIBLE);
         workAmountText.setVisibility(View.VISIBLE);
+
+        workersView = MaterialUsedView_.build(this);
+        workersView.setMaterialImage(Constants.ICON_WORKER);
+        workersView.setMaterialUsed(String.valueOf(workersAmount / 2));
+        materialUsedLayout.addView(workersView);
     }
 
     @UiThread
@@ -444,11 +465,32 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         seekWorkers.setProgress(maxValue / 2);
         seekWorkers.setVisibility(View.VISIBLE);
         workAmountText.setVisibility(View.VISIBLE);
+
+        woodView = MaterialUsedView_.build(this);
+        woodView.setMaterialImage(Constants.ICON_WOOD);
+        woodView.setMaterialUsed(String.valueOf(maxValue / 2 * Constants.BUILD_WOOD));
+        materialUsedLayout.addView(woodView);
+        System.out.println("ADDING WOOD");
+
+        stoneView = MaterialUsedView_.build(this);
+        stoneView.setMaterialImage(Constants.ICON_STONE);
+        stoneView.setMaterialUsed(String.valueOf(maxValue / 2 * Constants.BUILD_STONE));
+        materialUsedLayout.addView(stoneView);
+        System.out.println("ADDING STONE");
     }
 
     @SeekBarProgressChange(R.id.qr_choose_workers)
     void updateAmountText() {
-        workAmountText.setText(String.valueOf(seekWorkers.getProgress()));
+        workAmountText.setText(seekWorkers.getProgress() + "/" + seekWorkers.getMax());
+        if (workersView != null) {
+            workersView.setMaterialUsed(String.valueOf(seekWorkers.getProgress()));
+        }
+        if (stoneView != null) {
+            stoneView.setMaterialUsed(String.valueOf(seekWorkers.getProgress() * Constants.BUILD_STONE));
+        }
+        if (woodView != null){
+            woodView.setMaterialUsed(String.valueOf(seekWorkers.getProgress() * Constants.BUILD_WOOD));
+        }
     }
 
     @Override
@@ -549,28 +591,9 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1080, 1920)
                 .setRequestedFps(15.0f);
-//                .setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-
 
         cameraSource = builder
                 .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
                 .build();
     }
-
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-//        Intent intent = new Intent(this, ActivityRecognitionIntentService.class);
-//        PendingIntent pendingIntent = PendingIntent.getService( this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-//        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates( googleApiClient, 50, pendingIntent );
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-//    }
 }
