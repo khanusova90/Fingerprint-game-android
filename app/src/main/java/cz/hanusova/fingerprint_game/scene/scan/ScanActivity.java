@@ -138,24 +138,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     public void init() {
         EventBus.getDefault().register(this);
         checkPermissions();
-//        addActivityRecognition();
         startScan();
-
-
-//        Sensor stepSensor = sensorManager.getDefaultSensor(TYPE_STEP_DETECTOR);
-//        Sensor significantSensor = sensorManager.getDefaultSensor(TYPE_SIGNIFICANT_MOTION);
-
-
-
-//        TriggerEventListener listener = new TriggerEventListener() {
-//            @Override
-//            public void onTrigger(TriggerEvent event) {
-//                System.out.println("EVENT TRIGGERED " + event.toString() + event.sensor.getName());
-//            }
-//        };
-
-//        sensorManager.requestTriggerSensor(listener, stepSensor);
-//        sensorManager.requestTriggerSensor(listener, significantSensor);
     }
 
     private void checkPermissions(){
@@ -187,18 +170,10 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
             createScanThread();
             presenter.init(this);
             scanStarted = true;
+        } else {
+            checkPermissions();
         }
     }
-
-//    private void addActivityRecognition(){
-//        googleApiClient = new GoogleApiClient.Builder(this)
-//                .addApi(ActivityRecognition.API)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .build();
-//
-//        googleApiClient.connect();
-//    }
 
     private void hideSeekers() {
         seekWorkers.setVisibility(View.GONE);
@@ -214,20 +189,13 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
                     while (tracker == null || tracker.getBarcode() == null) {
                         tracker = barcodeFactory.getTracker();
                     }
-                    place = getPlaceInfo();
+                    place = presenter.getPlace(getPlaceCode());
                 }
                 changeCountdownVisibility();
                 presenter.startTimer(place, getApplicationContext());
                 if (place != null) { // scan could be being interrupted just now -> place is set to null and thread is being interrupted
                     ActivityEnum activity = place.getPlaceType().getActivity();
-//                    try {
-//                        BarcodeGraphic.placeIcon = new BitmapWorkerTask(PlaceUtils.getIconName(place), getApplicationContext(), AppUtils.getVersionCode(getApplicationContext())).execute().get();
                         loadImage();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    } catch (ExecutionException e) {
-//                        e.printStackTrace();
-//                    }
                     showActivity(activity);
                 }
             }
@@ -408,23 +376,25 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     @Background
     public void startActivity() {
         AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place);
-        userService.updateUser(user);
-        Intent i = new Intent();
-        setResult(Activity.RESULT_OK, i);
-        finish();
+        finishScanActivity(user);
     }
 
     @OnActivityResult(REQ_CODE_MARKET)
     public void returnToMap(@OnActivityResult.Extra(value = Constants.EXTRA_ITEMS) ArrayList<Item> items) {
         buyItems(items);
-        setResult(Activity.RESULT_OK);
     }
 
     @Background
     void buyItems(List<Item> items) {
         AppUser user = restClient.buyItem(items); //Prida item do DB a vrati aktualizovaneho uzivatele
+        finishScanActivity(user);
+    }
+
+    private void finishScanActivity(AppUser user){
         userService.updateUser(user);
-        setResult(Activity.RESULT_OK);
+        Intent i = new Intent();
+        i.putExtra(Constants.EXTRA_FLOOR, place.getFloor());
+        setResult(Activity.RESULT_OK, i);
         finish();
     }
 
@@ -479,16 +449,6 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     @SeekBarProgressChange(R.id.qr_choose_workers)
     void updateAmountText() {
         workAmountText.setText(String.valueOf(seekWorkers.getProgress()));
-    }
-
-    private Place getPlaceInfo() {
-        String code = getPlaceCode();
-        if (code != null) {
-            Log.d(TAG, "Getting place with code " + code);
-            Place place = restClient.getPlaceByCode(code);
-            return place;
-        }
-        return null;
     }
 
     @Override

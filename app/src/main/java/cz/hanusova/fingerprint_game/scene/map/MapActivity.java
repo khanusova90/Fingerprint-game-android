@@ -26,6 +26,7 @@ import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
 import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.ui.BaseActivity;
+import cz.hanusova.fingerprint_game.base.utils.Constants;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.scene.login.LoginActivity_;
 import cz.hanusova.fingerprint_game.scene.ranking.RankingActivity_;
@@ -62,7 +63,6 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     private int currentFloor = 1;  // 1 - 4 NP, not 0 - 3
     private List<Drawable> icons = new ArrayList<>();
-    private Bitmap map;
 
     @AfterViews
     void init() {
@@ -77,14 +77,12 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     @UiThread
     public void updateView() {
         Log.d(TAG, "Updating map view");
-//        final Drawable mapDrawable = new BitmapDrawable(getResources(), map);
         Drawable mapDrawable = mapView.getDrawable();
         changeIconPosition(mapDrawable, createLayers(mapDrawable));
     }
 
     @Override
     public void setMap(Bitmap map){
-        this.map = map;
         mapView.setImageBitmap(map);
     }
 
@@ -147,7 +145,10 @@ public class MapActivity extends BaseActivity implements MapActivityView {
     }
 
     @OnActivityResult(REQ_CODE_QR)
-    void refreshMap(){
+    void refreshMap(@OnActivityResult.Extra(value = Constants.EXTRA_FLOOR) Integer floor){
+        if (floor != null) {
+            currentFloor = floor;
+        }
         init();
     }
 

@@ -35,15 +35,21 @@ public class RankingItemView extends RelativeLayout {
         xpTextView.setText(String.valueOf(ranking.getXp()));
         rankingTextView.setText(String.valueOf(ranking.getRanking()));
 
-        if (ranking.getUsername().equals(actualUsername)){
             int colorAccent = getResources().getColor(R.color.colorAccent);
             int colorWhite = getResources().getColor(R.color.colorWhite);
-
-            usernameTextView.setTextColor(colorWhite);
-            xpTextView.setTextColor(colorWhite);
-            rankingTextView.setTextColor(colorWhite);
-            setBackgroundColor(colorAccent);
+        int textColor;
+        int backgroundColor;
+        if (ranking.getUsername().equals(actualUsername)){
+            textColor = colorWhite;
+            backgroundColor = colorAccent;
+        } else {
+            textColor = colorAccent;
+            backgroundColor = colorWhite;
         }
+            usernameTextView.setTextColor(textColor);
+            xpTextView.setTextColor(textColor);
+            rankingTextView.setTextColor(textColor);
+            setBackgroundColor(backgroundColor);
 
     }
 }

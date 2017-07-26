@@ -25,6 +25,14 @@ public interface ScanActivityPresenter extends BasePresenter<ScanActivityView> {
     void destroy();
 
     /**
+     * Finds place by given code
+     *
+     * @param code unique String value of place code
+     * @return {@link Place} with code from method parameter or <code>null</code> in case that no place is found
+     */
+    Place getPlace(String code);
+
+    /**
      * Creates new timer instance
      */
     void createTimer();

@@ -25,6 +25,8 @@ public final class Constants {
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_ERROR = "error";
     public static final String EXTRA_ITEMS = "items";
+    public static final String EXTRA_FLOOR = "floor";
+
     public static final String MATERIAL_WORKER = "WORKER";
     public static final String MATERIAL_WOOD = "WOOD";
     public static final String MATERIAL_STONE = "STONE";

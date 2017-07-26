@@ -112,6 +112,16 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     }
 
     @Override
+    public Place getPlace(String code){
+        if (code != null) {
+            Log.d(TAG, "Getting place with code " + code);
+            Place place = restClient.getPlaceByCode(code);
+            return place;
+        }
+        return null;
+    }
+
+    @Override
     public void createTimer() {
         timer = new Timer(10 * 1000, 1000);
     }
@@ -165,7 +175,6 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     }
 
     private class Timer extends CountDownTimer {
-        String code;
 
         /**
          * @param millisInFuture    The number of millis in the future from the call
@@ -182,17 +191,6 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
         @Override
         public void onTick(long millisUntilFinished) {
             view.updateCountdown(millisUntilFinished);
-//            if (code == null) {
-//                code = view.getPlaceCode();
-//            }
-//            String actualCode = view.getPlaceCode();
-//            if (code == null || actualCode == null || !code.equals(actualCode)) {
-//                Log.d(TAG, "Capturing stopped");
-//                view.stopCountDown();
-//                view.startTracking();
-//                scanner.stopScan();
-//                cancel();
-//            }
         }
 
         @Override

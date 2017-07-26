@@ -8,8 +8,8 @@ android {
         applicationId "cz.hanusova.fingerprint_game"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 13
-        versionName "1.0.6-alfa"
+        versionCode 14
+        versionName "1.0.7-alfa"
 //        versionName "develop"
         multiDexEnabled true
     }
