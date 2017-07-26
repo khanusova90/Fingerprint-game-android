@@ -88,7 +88,7 @@ import static com.google.android.gms.vision.barcode.Barcode.QR_CODE;
  * Created by khanusova on 9.9.2016.
  */
 @EActivity(R.layout.qr_capture)
-public class ScanActivity extends BaseActivity implements ScanActivityView  {
+public class ScanActivity extends BaseActivity implements ScanActivityView {
     private static final String TAG = "ScanActivity";
 
     // intent request code to handle updating play services if needed.
@@ -132,6 +132,10 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     private MaterialUsedView woodView;
     private MaterialUsedView stoneView;
 
+    private Integer workersAmount;
+    private Integer woodAmount;
+    private Integer stoneAmount;
+
     private CameraSource cameraSource;
     private BarcodeTrackerFactory barcodeFactory;
     private Thread scanThread;
@@ -151,9 +155,10 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         EventBus.getDefault().register(this);
         checkPermissions();
         startScan();
+        setInventoryAmount();
     }
 
-    private void checkPermissions(){
+    private void checkPermissions() {
         int permissionCamera = ContextCompat.checkSelfPermission(this, CAMERA);
         if (permissionCamera == PERMISSION_GRANTED) {
             cameraGranted = true;
@@ -169,7 +174,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         }
 
         int permissionPhoneState = ContextCompat.checkSelfPermission(this, READ_PHONE_STATE);
-        if (permissionPhoneState == PERMISSION_GRANTED){
+        if (permissionPhoneState == PERMISSION_GRANTED) {
             phoneStateGranted = true;
         } else {
             requestPerm(READ_PHONE_STATE, RC_READ_PHONE_STATE, R.string.permission_read_phone_state);
@@ -185,6 +190,17 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         } else {
             checkPermissions();
         }
+    }
+
+    private void setInventoryAmount() {
+        Inventory workers = userService.getWorkers();
+        workersAmount = workers.getAmount().intValue();
+
+        Inventory wood = userService.getInventory(Constants.MATERIAL_WOOD);
+        woodAmount = wood.getAmount().intValue();
+
+        Inventory stone = userService.getInventory(Constants.MATERIAL_STONE);
+        stoneAmount = stone.getAmount().intValue();
     }
 
     @UiThread
@@ -217,7 +233,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
                 presenter.startTimer(place, getApplicationContext());
                 if (place != null) { // scan could be being interrupted just now -> place is set to null and thread is being interrupted
                     ActivityEnum activity = place.getPlaceType().getActivity();
-                        loadImage();
+                    loadImage();
                     showActivity(activity);
                 }
             }
@@ -225,7 +241,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     }
 
     @UiThread
-    void loadImage(){
+    void loadImage() {
         Glide.with(getApplicationContext())
                 .load(Constants.IMG_URL_BASE + PlaceUtils.getIconName(place))
                 .asBitmap()
@@ -255,10 +271,10 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     protected void onPause() {
         super.onPause();
         if (scanStarted) {
+            presenter.destroy();
             if (preview != null) {
                 preview.stop();
             }
-            presenter.destroy();
             changeVisibility(false);
             if (!scanThread.isInterrupted()) {
                 scanThread.interrupt();
@@ -332,7 +348,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
                 }
                 break;
             case RC_READ_PHONE_STATE:
-                if (grantResults.length > 0 && grantResults [0] == PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
                     phoneStateGranted = true;
                     startScan();
                 } else {
@@ -391,7 +407,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
 
     @Background
     public void startActivity() {
-        AppUser user = restClient.startActivity(Integer.valueOf(seekWorkers.getProgress()), place);
+        AppUser user = restClient.startActivity(seekWorkers.getProgress(), place);
         finishScanActivity(user);
     }
 
@@ -406,7 +422,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         finishScanActivity(user);
     }
 
-    private void finishScanActivity(AppUser user){
+    private void finishScanActivity(AppUser user) {
         userService.updateUser(user);
         Intent i = new Intent();
         i.putExtra(Constants.EXTRA_FLOOR, place.getFloor());
@@ -418,15 +434,10 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
         //TODO: upravit, pokud uz uzivatel na danem miste ma spustenou aktivitu -> ukazat aktualni pocet
         switch (activity) {
             case MINE:
-                Inventory workers = userService.getWorkers();
-                showWorkersSeek(workers);
+                showWorkersSeek();
                 break;
             case BUILD:
-                Inventory wood = userService.getInventory(Constants.MATERIAL_WOOD);
-                Inventory stone = userService.getInventory(Constants.MATERIAL_STONE);
-                int woodAmount = wood.getAmount().intValue() / Constants.BUILD_WOOD;
-                int stoneAmount = stone.getAmount().intValue() / Constants.BUILD_STONE;
-                showSeekBar(Math.min(woodAmount, stoneAmount));
+                showSeekBar(Math.min(woodAmount / Constants.BUILD_WOOD, stoneAmount / Constants.BUILD_STONE));
                 break;
             case BUY:
                 possibleItems = (ArrayList<Item>) restClient.getPossibleItems();
@@ -446,16 +457,16 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
     }
 
     @UiThread
-    void showWorkersSeek(Inventory workers) {
-        int workersAmount = workers.getAmount().intValue();
-        seekWorkers.setMax(workersAmount);
-        seekWorkers.setProgress(workersAmount / 2);
+    void showWorkersSeek() {
+        int workers = workersAmount;
+        seekWorkers.setMax(workers);
+        seekWorkers.setProgress(workers / 2);
         seekWorkers.setVisibility(View.VISIBLE);
         workAmountText.setVisibility(View.VISIBLE);
 
         workersView = MaterialUsedView_.build(this);
         workersView.setMaterialImage(Constants.ICON_WORKER);
-        workersView.setMaterialUsed(String.valueOf(workersAmount / 2));
+        workersView.setMaterialUsed(String.valueOf(workers / 2));
         materialUsedLayout.addView(workersView);
     }
 
@@ -468,28 +479,26 @@ public class ScanActivity extends BaseActivity implements ScanActivityView  {
 
         woodView = MaterialUsedView_.build(this);
         woodView.setMaterialImage(Constants.ICON_WOOD);
-        woodView.setMaterialUsed(String.valueOf(maxValue / 2 * Constants.BUILD_WOOD));
+        woodView.setMaterialUsed(String.valueOf(maxValue / 2 * Constants.BUILD_WOOD) + "/" + woodAmount);
         materialUsedLayout.addView(woodView);
-        System.out.println("ADDING WOOD");
 
         stoneView = MaterialUsedView_.build(this);
         stoneView.setMaterialImage(Constants.ICON_STONE);
-        stoneView.setMaterialUsed(String.valueOf(maxValue / 2 * Constants.BUILD_STONE));
+        stoneView.setMaterialUsed(String.valueOf(maxValue / 2 * Constants.BUILD_STONE) + "/" + stoneAmount);
         materialUsedLayout.addView(stoneView);
-        System.out.println("ADDING STONE");
     }
 
     @SeekBarProgressChange(R.id.qr_choose_workers)
     void updateAmountText() {
         workAmountText.setText(seekWorkers.getProgress() + "/" + seekWorkers.getMax());
         if (workersView != null) {
-            workersView.setMaterialUsed(String.valueOf(seekWorkers.getProgress()));
+            workersView.setMaterialUsed(String.valueOf(seekWorkers.getProgress()) + "/" + workersAmount);
         }
         if (stoneView != null) {
-            stoneView.setMaterialUsed(String.valueOf(seekWorkers.getProgress() * Constants.BUILD_STONE));
+            stoneView.setMaterialUsed(String.valueOf(seekWorkers.getProgress() * Constants.BUILD_STONE) + "/" + stoneAmount);
         }
-        if (woodView != null){
-            woodView.setMaterialUsed(String.valueOf(seekWorkers.getProgress() * Constants.BUILD_WOOD));
+        if (woodView != null) {
+            woodView.setMaterialUsed(String.valueOf(seekWorkers.getProgress() * Constants.BUILD_WOOD) + "/" + woodAmount);
         }
     }
 

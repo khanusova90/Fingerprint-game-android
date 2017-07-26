@@ -83,6 +83,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
         changeBTWifiState(false);
         timer.cancel();
         scanner.stopScan();
+        sensorManager.unregisterListener(gyroscopeService, gyroscope);
     }
 
     /**
@@ -112,7 +113,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     }
 
     @Override
-    public Place getPlace(String code){
+    public Place getPlace(String code) {
         if (code != null) {
             Log.d(TAG, "Getting place with code " + code);
             Place place = restClient.getPlaceByCode(code);
@@ -141,7 +142,7 @@ public class ScanActivityPresenterImpl implements ScanActivityPresenter {
     }
 
     @Override
-    public void stopTimer(){
+    public void stopTimer() {
         sensorManager.unregisterListener(gyroscopeService, gyroscope);
         scanner.stopScan();
         timer.cancel();
