@@ -52,7 +52,9 @@
 
     <string name="ranking">Pořadí ve hře</string>
 
-    <string name="qr_countdown">Start za %1$d s</string>
+    <string name="qr_countdown">Aktivita se spustí za %1$d s</string>
+    <string name="mine_countdown">Těžba se spustí za %1$d s</string>
+    <string name="build_countdown">Stavba se spustí za %1$d s</string>
 
     <!-- floor array -->
     <string name="floor_up">Nahoru</string>

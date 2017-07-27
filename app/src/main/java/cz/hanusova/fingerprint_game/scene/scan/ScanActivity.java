@@ -372,7 +372,17 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
     @Override
     public void updateCountdown(long millisLeft) {
         int secondsLeft = (int) millisLeft / 1000;
-        qrCountdown.setText(getString(R.string.qr_countdown, secondsLeft));
+        switch (place.getPlaceType().getActivity()) {
+            case BUILD:
+                qrCountdown.setText(getString(R.string.build_countdown, secondsLeft));
+                break;
+            case MINE:
+                qrCountdown.setText(getString(R.string.mine_countdown, secondsLeft));
+                break;
+            default:
+                qrCountdown.setText(getString(R.string.qr_countdown, secondsLeft));
+                break;
+        }
         qrProgress.setProgress(10 - secondsLeft);
     }
 
