@@ -75,10 +75,10 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class CameraSource {
 
-    @SuppressLint("InlinedApi")
-    public static final int CAMERA_FACING_BACK = Camera.CameraInfo.CAMERA_FACING_BACK;
-    @SuppressLint("InlinedApi")
-    public static final int CAMERA_FACING_FRONT = Camera.CameraInfo.CAMERA_FACING_FRONT;
+//    @SuppressLint("InlinedApi")
+//    public static final int CAMERA_FACING_BACK = Camera.CameraInfo.CAMERA_FACING_BACK;
+//    @SuppressLint("InlinedApi")
+//    public static final int CAMERA_FACING_FRONT = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
     private static final String TAG = "OpenCameraSource";
 
@@ -97,7 +97,7 @@ public class CameraSource {
     private Context mContext;
     // Guarded by mCameraLock
     private Camera mCamera;
-    private int mFacing = CAMERA_FACING_BACK;
+//    private int mFacing = CAMERA_FACING_BACK;
     /**
      * Rotation of the device, and thus the associated preview images captured from the device.
      * See {@link Frame.Metadata#getRotation()}.
@@ -109,7 +109,7 @@ public class CameraSource {
     private float mRequestedFps = 30.0f;
     private int mRequestedPreviewWidth = 1024;
     private int mRequestedPreviewHeight = 768;
-    private String mFocusMode = null;
+//    private String mFocusMode = null;
     private String mFlashMode = null;
     // These instances need to be held onto to avoid GC of their underlying resources.  Even though
     // these aren't used outside of the method that creates them, they still must have hard
@@ -138,14 +138,12 @@ public class CameraSource {
     /**
      * Gets the id for the camera specified by the direction it is facing.  Returns -1 if no such
      * camera was found.
-     *
-     * @param facing the desired camera (front-facing or rear-facing)
      */
-    private static int getIdForRequestedCamera(int facing) {
+    private static int getIdForRequestedCamera() {
         CameraInfo cameraInfo = new CameraInfo();
         for (int i = 0; i < Camera.getNumberOfCameras(); ++i) {
             Camera.getCameraInfo(i, cameraInfo);
-            if (cameraInfo.facing == facing) {
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 return i;
             }
         }
@@ -265,15 +263,8 @@ public class CameraSource {
 
             mCamera = createCamera();
 
-            // SurfaceTexture was introduced in Honeycomb (11), so if we are running and
-            // old version of Android. fall back to use SurfaceView.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
-                mCamera.setPreviewTexture(mDummySurfaceTexture);
-            } else {
-                mDummySurfaceView = new SurfaceView(mContext);
-                mCamera.setPreviewDisplay(mDummySurfaceView.getHolder());
-            }
+            mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
+            mCamera.setPreviewTexture(mDummySurfaceTexture);
             mCamera.startPreview();
 
             mProcessingThread = new Thread(mFrameProcessor);
@@ -343,17 +334,7 @@ public class CameraSource {
                 mCamera.stopPreview();
                 mCamera.setPreviewCallbackWithBuffer(null);
                 try {
-                    // We want to be compatible back to Gingerbread, but SurfaceTexture
-                    // wasn't introduced until Honeycomb.  Since the interface cannot use a SurfaceTexture, if the
-                    // developer wants to display a preview we must use a SurfaceHolder.  If the developer doesn't
-                    // want to display a preview we use a SurfaceTexture if we are running at least Honeycomb.
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        mCamera.setPreviewTexture(null);
-
-                    } else {
-                        mCamera.setPreviewDisplay(null);
-                    }
+                    mCamera.setPreviewTexture(null);
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to clear camera preview: " + e);
                 }
@@ -368,14 +349,6 @@ public class CameraSource {
      */
     public Size getPreviewSize() {
         return mPreviewSize;
-    }
-
-    /**
-     * Returns the selected camera; one of {@link #CAMERA_FACING_BACK} or
-     * {@link #CAMERA_FACING_FRONT}.
-     */
-    public int getCameraFacing() {
-        return mFacing;
     }
 
     public int doZoom(float scale) {
@@ -410,70 +383,70 @@ public class CameraSource {
             return currentZoom;
         }
     }
-
-    /**
-     * Initiates taking a picture, which happens asynchronously.  The camera source should have been
-     * activated previously with {@link #start()} or {@link #start(SurfaceHolder)}.  The camera
-     * preview is suspended while the picture is being taken, but will resume once picture taking is
-     * done.
-     *
-     * @param shutter the callback for image capture moment, or null
-     * @param jpeg    the callback for JPEG image data, or null
-     */
-    public void takePicture(ShutterCallback shutter, PictureCallback jpeg) {
-        synchronized (mCameraLock) {
-            if (mCamera != null) {
-                PictureStartCallback startCallback = new PictureStartCallback();
-                startCallback.mDelegate = shutter;
-                PictureDoneCallback doneCallback = new PictureDoneCallback();
-                doneCallback.mDelegate = jpeg;
-                mCamera.takePicture(startCallback, null, null, doneCallback);
-            }
-        }
-    }
-
-    /**
-     * Gets the current focus mode setting.
-     *
-     * @return current focus mode. This value is null if the camera is not yet created. Applications should call {@link
-     * #autoFocus(AutoFocusCallback)} to start the focus if focus
-     * mode is FOCUS_MODE_AUTO or FOCUS_MODE_MACRO.
-     * @see Camera.Parameters#FOCUS_MODE_AUTO
-     * @see Camera.Parameters#FOCUS_MODE_INFINITY
-     * @see Camera.Parameters#FOCUS_MODE_MACRO
-     * @see Camera.Parameters#FOCUS_MODE_FIXED
-     * @see Camera.Parameters#FOCUS_MODE_EDOF
-     * @see Camera.Parameters#FOCUS_MODE_CONTINUOUS_VIDEO
-     * @see Camera.Parameters#FOCUS_MODE_CONTINUOUS_PICTURE
-     */
-    @Nullable
-    @FocusMode
-    public String getFocusMode() {
-        return mFocusMode;
-    }
-
-    /**
-     * Sets the focus mode.
-     *
-     * @param mode the focus mode
-     * @return {@code true} if the focus mode is set, {@code false} otherwise
-     * @see #getFocusMode()
-     */
-    public boolean setFocusMode(@FocusMode String mode) {
-        synchronized (mCameraLock) {
-            if (mCamera != null && mode != null) {
-                Camera.Parameters parameters = mCamera.getParameters();
-                if (parameters.getSupportedFocusModes().contains(mode)) {
-                    parameters.setFocusMode(mode);
-                    mCamera.setParameters(parameters);
-                    mFocusMode = mode;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
+//
+//    /**
+//     * Initiates taking a picture, which happens asynchronously.  The camera source should have been
+//     * activated previously with {@link #start()} or {@link #start(SurfaceHolder)}.  The camera
+//     * preview is suspended while the picture is being taken, but will resume once picture taking is
+//     * done.
+//     *
+//     * @param shutter the callback for image capture moment, or null
+//     * @param jpeg    the callback for JPEG image data, or null
+//     */
+//    public void takePicture(ShutterCallback shutter, PictureCallback jpeg) {
+//        synchronized (mCameraLock) {
+//            if (mCamera != null) {
+//                PictureStartCallback startCallback = new PictureStartCallback();
+//                startCallback.mDelegate = shutter;
+//                PictureDoneCallback doneCallback = new PictureDoneCallback();
+//                doneCallback.mDelegate = jpeg;
+//                mCamera.takePicture(startCallback, null, null, doneCallback);
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Gets the current focus mode setting.
+//     *
+//     * @return current focus mode. This value is null if the camera is not yet created. Applications should call {@link
+//     * #autoFocus(AutoFocusCallback)} to start the focus if focus
+//     * mode is FOCUS_MODE_AUTO or FOCUS_MODE_MACRO.
+//     * @see Camera.Parameters#FOCUS_MODE_AUTO
+//     * @see Camera.Parameters#FOCUS_MODE_INFINITY
+//     * @see Camera.Parameters#FOCUS_MODE_MACRO
+//     * @see Camera.Parameters#FOCUS_MODE_FIXED
+//     * @see Camera.Parameters#FOCUS_MODE_EDOF
+//     * @see Camera.Parameters#FOCUS_MODE_CONTINUOUS_VIDEO
+//     * @see Camera.Parameters#FOCUS_MODE_CONTINUOUS_PICTURE
+//     */
+//    @Nullable
+//    @FocusMode
+//    public String getFocusMode() {
+//        return mFocusMode;
+//    }
+//
+//    /**
+//     * Sets the focus mode.
+//     *
+//     * @param mode the focus mode
+//     * @return {@code true} if the focus mode is set, {@code false} otherwise
+//     * @see #getFocusMode()
+//     */
+//    public boolean setFocusMode(@FocusMode String mode) {
+//        synchronized (mCameraLock) {
+//            if (mCamera != null && mode != null) {
+//                Camera.Parameters parameters = mCamera.getParameters();
+//                if (parameters.getSupportedFocusModes().contains(mode)) {
+//                    parameters.setFocusMode(mode);
+//                    mCamera.setParameters(parameters);
+//                    mFocusMode = mode;
+//                    return true;
+//                }
+//            }
+//
+//            return false;
+//        }
+//    }
 
     /**
      * Gets the current flash mode setting.
@@ -520,12 +493,6 @@ public class CameraSource {
      * the camera is focused.  This method is only valid when preview is active
      * (between {@link #start()} or {@link #start(SurfaceHolder)} and before {@link #stop()} or {@link #release()}).
      * <p/>
-     * <p>Callers should check
-     * {@link #getFocusMode()} to determine if
-     * this method should be called. If the camera does not support auto-focus,
-     * it is a no-op and {@link AutoFocusCallback#onAutoFocus(boolean)}
-     * callback will be called immediately.
-     * <p/>
      * <p>If the current flash mode is not
      * {@link Camera.Parameters#FLASH_MODE_OFF}, flash may be
      * fired during auto-focus, depending on the driver and camera hardware.<p>
@@ -570,10 +537,6 @@ public class CameraSource {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public boolean setAutoFocusMoveCallback(@Nullable AutoFocusMoveCallback cb) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            return false;
-        }
-
         synchronized (mCameraLock) {
             if (mCamera != null) {
                 CameraAutoFocusMoveCallback autoFocusMoveCallback = null;
@@ -595,7 +558,7 @@ public class CameraSource {
      */
     @SuppressLint("InlinedApi")
     private Camera createCamera() {
-        int requestedCameraId = getIdForRequestedCamera(mFacing);
+        int requestedCameraId = getIdForRequestedCamera();
         if (requestedCameraId == -1) {
             throw new RuntimeException("Could not find requested camera.");
         }
@@ -627,17 +590,19 @@ public class CameraSource {
 
         setRotation(camera, parameters, requestedCameraId);
 
-        if (mFocusMode != null) {
-            if (parameters.getSupportedFocusModes().contains(
-                    mFocusMode)) {
-                parameters.setFocusMode(mFocusMode);
-            } else {
-                Log.i(TAG, "Camera focus mode: " + mFocusMode + " is not supported on this device.");
-            }
-        }
+
+
+//        if (mFocusMode != null) {
+//            if (parameters.getSupportedFocusModes().contains(
+//                    mFocusMode)) {
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+//            } else {
+//                Log.i(TAG, "Camera focus mode: " + mFocusMode + " is not supported on this device.");
+//            }
+//        }
 
         // setting mFocusMode to the one set in the params
-        mFocusMode = parameters.getFocusMode();
+//        mFocusMode = parameters.getFocusMode();
 
         if (mFlashMode != null) {
             if (parameters.getSupportedFlashModes().contains(
@@ -685,6 +650,21 @@ public class CameraSource {
         // that the desired value is outside of, but this is often preferred.  For example, if the
         // desired frame rate is 29.97, the range (30, 30) is probably more desirable than the
         // range (15, 30).
+
+        Camera.Parameters params = camera.getParameters();
+        final int[] previewFpsRange = new int[2];
+        params.getPreviewFpsRange(previewFpsRange);
+        if (previewFpsRange[0] == previewFpsRange[1]) {
+            final List<int[]> supportedFpsRanges = params.getSupportedPreviewFpsRange();
+            for (int[] range : supportedFpsRanges) {
+                if (range[0] != range[1]) {
+                    return range;
+//                    params.setPreviewFpsRange(range[0], range[1]);
+//                    break;
+                }
+            }
+        }
+//        camera.setParameters(params);
         int[] selectedFpsRange = null;
         int minDiff = Integer.MAX_VALUE;
         List<int[]> previewFpsRangeList = camera.getParameters().getSupportedPreviewFpsRange();
@@ -697,6 +677,7 @@ public class CameraSource {
                 minDiff = diff;
             }
         }
+
         return selectedFpsRange;
     }
 
@@ -899,11 +880,11 @@ public class CameraSource {
             mCameraSource.mRequestedFps = fps;
             return this;
         }
-
-        public Builder setFocusMode(@FocusMode String mode) {
-            mCameraSource.mFocusMode = mode;
-            return this;
-        }
+//
+//        public Builder setFocusMode(@FocusMode String mode) {
+//            mCameraSource.mFocusMode = mode;
+//            return this;
+//        }
 
         public Builder setFlashMode(@FlashMode String mode) {
             mCameraSource.mFlashMode = mode;
@@ -929,17 +910,17 @@ public class CameraSource {
             return this;
         }
 
-        /**
-         * Sets the camera to use (either {@link #CAMERA_FACING_BACK} or
-         * {@link #CAMERA_FACING_FRONT}). Default: back facing.
-         */
-        public Builder setFacing(int facing) {
-            if ((facing != CAMERA_FACING_BACK) && (facing != CAMERA_FACING_FRONT)) {
-                throw new IllegalArgumentException("Invalid camera: " + facing);
-            }
-            mCameraSource.mFacing = facing;
-            return this;
-        }
+//        /**
+//         * Sets the camera to use (either {@link #CAMERA_FACING_BACK} or
+//         * {@link #CAMERA_FACING_FRONT}). Default: back facing.
+//         */
+//        public Builder setFacing(int facing) {
+//            if ((facing != CAMERA_FACING_BACK) && (facing != CAMERA_FACING_FRONT)) {
+//                throw new IllegalArgumentException("Invalid camera: " + facing);
+//            }
+//            mCameraSource.mFacing = facing;
+//            return this;
+//        }
 
         /**
          * Creates an instance of the camera source.

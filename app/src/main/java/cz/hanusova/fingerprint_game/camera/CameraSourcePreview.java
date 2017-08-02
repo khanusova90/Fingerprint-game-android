@@ -18,7 +18,6 @@ package cz.hanusova.fingerprint_game.camera;
 import android.Manifest;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.hardware.Camera;
 import android.support.annotation.RequiresPermission;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -110,7 +109,7 @@ public class CameraSourcePreview extends ViewGroup {
     private void startIfReady() throws IOException, SecurityException {
         if (mStartRequested && mSurfaceAvailable) {
             cameraSource.start(surfaceView.getHolder());
-            cameraSource.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+//            cameraSource.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             if (overlay != null) {
                 Size size = cameraSource.getPreviewSize();
                 int min = Math.min(size.getWidth(), size.getHeight());
@@ -118,9 +117,9 @@ public class CameraSourcePreview extends ViewGroup {
                 if (isPortraitMode()) {
                     // Swap width and height sizes when in portrait, since it will be rotated by
                     // 90 degrees
-                    overlay.setCameraInfo(min, max, cameraSource.getCameraFacing());
+                    overlay.setCameraInfo(min, max);
                 } else {
-                    overlay.setCameraInfo(max, min, cameraSource.getCameraFacing());
+                    overlay.setCameraInfo(max, min);
                 }
                 overlay.clear();
             }

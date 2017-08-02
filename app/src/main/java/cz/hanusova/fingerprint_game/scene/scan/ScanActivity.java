@@ -607,7 +607,7 @@ public class ScanActivity extends BaseActivity implements ScanActivityView {
         // to other detection examples to enable the barcode detector to detect small barcodes
         // at long distances.
         CameraSource.Builder builder = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
+//                .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1080, 1920)
                 .setRequestedFps(15.0f);
 
