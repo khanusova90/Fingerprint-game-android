@@ -22,7 +22,8 @@ import cz.hanusova.fingerprint_game.model.fingerprint.Fingerprint;
  * <p>
  * Rest client for communication with server
  */
-@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE, interceptors = {AuthInterceptor.class, LogInterceptor.class})
+@Rest(converters = {MappingJackson2HttpMessageConverter.class}, rootUrl = Constants.URL_BASE,
+        interceptors = {AuthInterceptor.class, LogInterceptor.class})
 public interface RestClient {
 
     @Get("/qr/{code}")
@@ -33,9 +34,6 @@ public interface RestClient {
 
     @Put("/fingerprint/save")
     void sendFingerprint(@Body Fingerprint fingerprint);
-
-    @Get("/update/itemType")
-    List<Item> getItemTypes();
 
     @Get("/activity/getItems")
     List<Item> getPossibleItems();

@@ -115,7 +115,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
             Crashlytics.setUserName(username);
             ObjectMapper mapper = new ObjectMapper();
             try {
-                preferences.user().put(mapper.writeValueAsString(user)); //TODO: user userService
+                preferences.user().put(mapper.writeValueAsString(user));
                 MapActivity_.intent(this).start();
                 dismissProgressDialog();
                 finish();
@@ -136,7 +136,7 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         tvError.setVisibility(View.VISIBLE);
         tvError.setText(text);
         etPassword.setText("");
-        preferences.clear();
+        preferences.password().put(null);
     }
 
 }

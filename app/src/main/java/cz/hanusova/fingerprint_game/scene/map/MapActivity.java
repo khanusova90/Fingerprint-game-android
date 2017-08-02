@@ -136,7 +136,7 @@ public class MapActivity extends BaseActivity implements MapActivityView {
 
     @OptionsItem
     void action_map_logout() {
-        preferences.clear();
+        preferences.password().put(null);
         LoginActivity_.intent(this).flags(Intent.FLAG_ACTIVITY_NEW_TASK).start();
         finish();
     }
