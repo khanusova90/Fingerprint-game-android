@@ -38,26 +38,26 @@ public class Scanner {
     /**
      * zda prave probiha sken
      */
-    public boolean running;
+    private boolean running;
     /**
      * zdali je scan dokoncen, slouzi pro snimaci aktivitu
      */
-    public boolean scanFinished;
-    Context context;
-    List<BleScan> bleScans = new ArrayList<>();
-    List<WifiScan> wifiScans = new ArrayList<>();
-    List<CellScan> cellScans = new ArrayList<>();
-    long startTime;
+    private boolean scanFinished;
+    private Context context;
+    private List<BleScan> bleScans = new ArrayList<>();
+    private List<WifiScan> wifiScans = new ArrayList<>();
+    private List<CellScan> cellScans = new ArrayList<>();
+    private long startTime;
     /**
      * zda ma byt znovu spusteno cyklicke synchronni skenovani (wifi a gsm)
      */
-    boolean cont = false;
-    DefaultBeaconConsumer beaconConsumer;
-    WifiManager wm;
-    BroadcastReceiver wifiBroadcastReceiver;
-    ProgressDialog progressDialog;
-    Timer timer;
-    CountDownTimer cdt;
+    private boolean cont = false;
+    private DefaultBeaconConsumer beaconConsumer;
+    private WifiManager wm;
+    private BroadcastReceiver wifiBroadcastReceiver;
+    private ProgressDialog progressDialog;
+    private Timer timer;
+    private CountDownTimer cdt;
 
     public Scanner(Context context) {
         this.context = context;
