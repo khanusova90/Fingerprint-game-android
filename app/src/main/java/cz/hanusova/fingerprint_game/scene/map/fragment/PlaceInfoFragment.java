@@ -31,6 +31,9 @@ import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
+/**
+ * Fragment for displaying information about place
+ */
 @EFragment(R.layout.fragment_place_info)
 public class PlaceInfoFragment extends DialogFragment {
     private static final SimpleDateFormat SDF = new SimpleDateFormat("d.M.yyyy HH:mm");
@@ -48,7 +51,6 @@ public class PlaceInfoFragment extends DialogFragment {
 
     @Bean(UserServiceImpl.class)
     UserService userService;
-
 
     @FragmentArg
     Place place;
@@ -79,9 +81,7 @@ public class PlaceInfoFragment extends DialogFragment {
         try {
             String iconName = PlaceUtils.getIconName(place);
             bitmap = new BitmapWorkerTask(iconName, getContext(), AppUtils.getVersionCode(getContext())).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         imageView.setImageDrawable(new BitmapDrawable(this.getContext().getResources(), bitmap));
