@@ -14,6 +14,8 @@ import cz.hanusova.fingerprint_game.base.BasePresenter;
 import cz.hanusova.fingerprint_game.base.BaseView;
 
 /**
+ * Parent class for all activities in app
+ *
  * Created by khanusova on 31.5.2017.
  */
 @EActivity
@@ -37,6 +39,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         destroyed = true;
     }
 
+    /**
+     * Shows progress dialog
+     *
+     * @param message Message to show in dialog. In case that this parameter is empty, shows {@link R.string.wait}
+     */
     @UiThread
     protected void showProgressDialog(CharSequence message) {
         if (progressDialog == null) {
@@ -50,6 +57,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         progressDialog.show();
     }
 
+    /**
+     * Closes progress dialog if it was not destroyed before
+     */
     @UiThread
     public void dismissProgressDialog() {
         if (progressDialog != null && !destroyed) {

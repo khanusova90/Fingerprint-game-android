@@ -7,9 +7,7 @@ import java.io.Serializable;
  */
 public class WifiScan implements Serializable {
 
-    //FIXME: refactor
-
-    long time;
+    private long time;
     private String SSID, MAC, technology;
     private int frequency, channel, strength;
 

@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.fragment;
+package cz.hanusova.fingerprint_game.scene.map.fragment;
 
 
 import android.app.Dialog;

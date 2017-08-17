@@ -3,6 +3,8 @@ package cz.hanusova.fingerprint_game.base.utils;
 import android.widget.EditText;
 
 /**
+ * Util class for validations
+ *
  * Created by Kristyna on 27/03/2017.
  */
 public final class ValidationUtils {

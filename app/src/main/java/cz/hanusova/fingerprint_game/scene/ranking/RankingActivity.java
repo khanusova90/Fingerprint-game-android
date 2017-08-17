@@ -19,6 +19,8 @@ import cz.hanusova.fingerprint_game.scene.ranking.view.RankingItemView;
 import cz.hanusova.fingerprint_game.scene.ranking.view.RankingItemView_;
 
 /**
+ * Activity to display rankings
+ *
  * Created by khanusova on 1.7.2017.
  */
 @EActivity(R.layout.activity_ranking)

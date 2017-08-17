@@ -20,13 +20,13 @@ public class Material implements Serializable {
 
     private String iconName;
 
+    /*
+     * Getters and setters
+     */
     public Long getIdMaterial() {
         return idMaterial;
     }
 
-    /*
-     * Getters and setters
-     */
     public void setIdMaterial(Long idMaterial) {
         this.idMaterial = idMaterial;
     }

@@ -60,17 +60,8 @@ public class CameraSourcePreview extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-//        int width = 320;
-//        int height = 240;
         int width = bottom - top;
         int height = right - left;
-//        if (cameraSource != null) {
-//            Size size = cameraSource.getPreviewSize();
-//            if (size != null) {
-//                width = size.getWidth();
-//                height = size.getHeight();
-//            }
-//        }
 
         // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
         if (isPortraitMode()) {

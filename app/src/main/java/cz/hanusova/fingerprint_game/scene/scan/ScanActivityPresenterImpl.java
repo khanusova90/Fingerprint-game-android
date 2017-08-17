@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import cz.hanusova.fingerprint_game.base.utils.AppUtils;
-import cz.hanusova.fingerprint_game.listener.ScanResultListener;
+import cz.hanusova.fingerprint_game.scan.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.Place;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
 import cz.hanusova.fingerprint_game.model.fingerprint.CellScan;
@@ -33,6 +33,8 @@ import static android.content.Context.SENSOR_SERVICE;
 import static android.hardware.Sensor.TYPE_GYROSCOPE;
 
 /**
+ * An activity for QR codes scanning
+ *
  * Created by khanusova on 16/06/2017.
  */
 @EBean

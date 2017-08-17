@@ -107,7 +107,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
             canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
         } else {
             canvas.drawBitmap(placeIcon, rect.left, rect.top, mTextPaint);
-//            canvas.drawText(activity.toString(), rect.left, rect.bottom, mTextPaint);
         }
 
     }

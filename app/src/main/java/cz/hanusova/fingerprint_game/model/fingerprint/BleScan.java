@@ -7,12 +7,23 @@ import java.io.Serializable;
  */
 public class BleScan implements Serializable {
 
-    //FIXME: REFACTOR NEEDED!
-    int rssi;
-    String uuid = "";
-    int major, minor;
-    String address = "";
-    long time;
+    /**
+     * Signal strength
+     */
+    private int rssi;
+    /**
+     * Beacon identification information
+     */
+    private String uuid = "";
+    private int major, minor;
+    /**
+     * MAC address
+     */
+    private String address = "";
+    /**
+     * Time in millis from scan start to this scan result
+     */
+    private long time;
 
     public BleScan() {
     }

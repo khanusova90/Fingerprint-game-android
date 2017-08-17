@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cz.hanusova.fingerprint_game.listener.ScanResultListener;
 import cz.hanusova.fingerprint_game.model.fingerprint.BleScan;
 import cz.hanusova.fingerprint_game.model.fingerprint.CellScan;
 import cz.hanusova.fingerprint_game.model.fingerprint.WifiScan;

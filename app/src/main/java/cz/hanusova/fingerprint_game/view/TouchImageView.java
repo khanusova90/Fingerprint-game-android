@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import java.util.Calendar;
 import java.util.List;
 
-import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment;
-import cz.hanusova.fingerprint_game.fragment.PlaceInfoFragment_;
+import cz.hanusova.fingerprint_game.scene.map.fragment.PlaceInfoFragment;
+import cz.hanusova.fingerprint_game.scene.map.fragment.PlaceInfoFragment_;
 import cz.hanusova.fingerprint_game.model.Place;
 
 /**
@@ -73,7 +73,6 @@ public class TouchImageView extends ImageView {
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Display display = v.getDisplay();
                 scaleDetector.onTouchEvent(event);
                 int pointerIndex = MotionEventCompat.getActionIndex(event);
                 int currX = (int) MotionEventCompat.getX(event, pointerIndex);
@@ -124,8 +123,6 @@ public class TouchImageView extends ImageView {
                             matrix.getValues(values);
                             float deltaX = currX - lastPoint.x;
                             float deltaY = currY - lastPoint.y;
-                            //deltaX = values[Matrix.MTRANS_X] + deltaX >= 0 || values[Matrix.MTRANS_X] + deltaX <= (-origW + screenWidth) * values[0] ? 0 : deltaX;
-                            //deltaY = values[Matrix.MTRANS_Y] + deltaY >= 0 || values[Matrix.MTRANS_Y] + deltaY <= (-origH + screenHeight) * values[4] ? 0 : deltaY;
                             matrix.postTranslate(deltaX, deltaY);
                             lastPoint.set(currX, currY);
                         }
@@ -148,18 +145,13 @@ public class TouchImageView extends ImageView {
     }
 
     public void showFragment(int i) {
-        System.out.println("SHOWING FRAGMENT");
         if (places == null) {
             return;
         }
         Place place = places.get(i - 1);
         if (place != null) {
-            System.out.println("OPENING FRAGMENT");
             PlaceInfoFragment fragment = PlaceInfoFragment_.builder().place(place).build();
             fragment.show(fragmentManager, "placeInfoFragment");
-//            PlaceInfoFragment placeInfoFragment = new PlaceInfoFragment_();
-//            placeInfoFragment.setPlace(places.get(i - 1));
-//            placeInfoFragment.show(fragmentManager, "placeInfoFragment");
         }
     }
 
@@ -173,47 +165,14 @@ public class TouchImageView extends ImageView {
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-
-            //  if (values[Matrix.MSCALE_Y] - 0.1 >= 0.7 && values[Matrix.MSCALE_Y] + 0.1  < 1.5) {
             return setScale(detector);
-            // }
-            //  return false;
         }
 
         public boolean setScale(ScaleGestureDetector detector) {
             scaleFactor = detector.getScaleFactor();
-
-            //matrix.postScale(scaleFactor, scaleFactor, getX(detector), getY(detector));
             matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
             return true;
         }
-
-        public float getX(ScaleGestureDetector detector) {
-            float var;
-            if (values[Matrix.MTRANS_X] >= 0) {
-                var = 0;
-            } else if (values[Matrix.MTRANS_X] <= (-origW + screenWidth) * values[0]) {
-                var = screenWidth;
-            } else {
-                var = detector.getFocusX();
-            }
-
-            return var;
-        }
-
-        public float getY(ScaleGestureDetector detector) {
-            float var;
-            if (values[Matrix.MTRANS_Y] >= 0) {
-                var = 0;
-            } else if (values[Matrix.MTRANS_Y] <= (-origH + screenHeight) * values[4]) {
-                var = screenHeight;
-            } else {
-                var = detector.getFocusY();
-            }
-
-            return var;
-        }
-
 
     }
 }

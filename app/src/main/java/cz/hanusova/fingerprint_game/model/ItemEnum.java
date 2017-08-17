@@ -1,6 +1,8 @@
 package cz.hanusova.fingerprint_game.model;
 
 /**
+ * Possible item types
+ *
  * Created by Kristyna on 28/03/2017.
  */
 

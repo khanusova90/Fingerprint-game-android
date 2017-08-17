@@ -22,7 +22,9 @@ import cz.hanusova.fingerprint_game.model.UserActivity;
 import cz.hanusova.fingerprint_game.view.ActivityItemView;
 import cz.hanusova.fingerprint_game.view.ActivityItemView_;
 
-
+/**
+ * Activity to show user details
+ */
 @EActivity(R.layout.content_user_detail)
 public class UserDetailActivity extends AppCompatActivity {
 
@@ -69,6 +71,9 @@ public class UserDetailActivity extends AppCompatActivity {
         showActivities();
     }
 
+    /**
+     * Shows all activities
+     */
     private void showActivities() {
         List<UserActivity> activities = userService.getActualUser().getActivities();
         for (UserActivity activity : activities) {

@@ -46,5 +46,8 @@ public interface ScanActivityPresenter extends BasePresenter<ScanActivityView> {
      */
     void startTimer(Place place, Context context);
 
+    /**
+     * Stops timer and unregisteres listeners
+     */
     void stopTimer();
 }

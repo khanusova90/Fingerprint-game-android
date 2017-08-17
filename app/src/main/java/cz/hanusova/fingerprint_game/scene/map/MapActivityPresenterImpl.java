@@ -44,12 +44,6 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
         Log.d(TAG, "creating map");
         String drawableName = "j" + currentFloor + "np";
         int drawableId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
-//        Bitmap map = BitmapFactory.decodeResource(context.getResources(), drawableId);
-//        downloadMap(currentFloor, context);
-
-//        private void createGlideMap(){
-//            String drawableName = "j" + currentFloor + "np";
-//            int drawableId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
             Glide.with(context)
                     .load(Constants.IMG_URL_BASE + currentFloor + "NP.jpg")
                     .asBitmap()
@@ -59,33 +53,11 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), resource);
                             view.setMap(resource);
                             view.updateView();
-//                            Glide.clear(this);
                         }
                     });
-//        }
-
-//        view.setMap(map);
-//        view.updateView();
     }
-
-//    @Background
-//    void downloadMap(int currentFloor, Context context) {
-//        Log.i(TAG, "Downloading map from server - " + currentFloor + " floor");
-//        Bitmap map = null;
-//        try {
-//            map = new BitmapWorkerTask(getFloorName(currentFloor), context, AppUtils.getVersionCode(context))
-//                    .execute().get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//        if (view != null) {
-//            view.setMap(map);
-//            view.updateView();
-//        }
-//    }
 
     @Override
     public List<Place> getPlaces(int currentFloor) {
@@ -112,11 +84,6 @@ public class MapActivityPresenterImpl implements MapActivityPresenter {
             }
         }
         view.updateIcons(icons);
-//        view.updateView();
-    }
-
-    private String getFloorName(int currentFloor) {
-        return currentFloor + "NP.jpg";
     }
 
     @Override

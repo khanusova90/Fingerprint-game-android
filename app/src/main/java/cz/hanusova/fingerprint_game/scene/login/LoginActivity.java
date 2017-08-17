@@ -35,8 +35,8 @@ import cz.hanusova.fingerprint_game.scene.map.MapActivity_;
 import cz.hanusova.fingerprint_game.scene.tutorial.IntroActivity_;
 
 /**
- * https://github.com/spring-projects/spring-android-samples/blob/master/spring-android-basic-auth/client/src/org/springframework/android/basicauth/MainActivity.java
- * <p/>↨
+ * Activity for user login
+ *
  * Created by khanusova on 21.3.2016.
  */
 @EActivity(R.layout.activity_login)
@@ -59,7 +59,6 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
     TextView tvError;
     @ViewById(R.id.checkBoxIn)
     CheckBox checkBoxIn;
-    private Boolean stayIn = false;
     private String error;
 
     @Override
@@ -91,6 +90,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         }
     }
 
+    /**
+     * Saves user info to shared preferences and validates input <br />
+     * Calls {@link #signIn(String)} in case that credentials are not empty
+     */
     @Click(R.id.btn_sign_in)
     protected void saveUser() {
         String username = etUsername.getText().toString();
@@ -131,6 +134,10 @@ public class LoginActivity extends BaseActivity implements LoginActivityView {
         }
     }
 
+    /**
+     * Shows login error and removes user password from preferences
+     * @param text
+     */
     @UiThread
     protected void setLoginError(String text) {
         tvError.setVisibility(View.VISIBLE);

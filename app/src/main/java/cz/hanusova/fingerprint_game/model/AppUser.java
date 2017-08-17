@@ -17,7 +17,6 @@ public class AppUser implements Serializable {
 
     private String password;
 
-    @Deprecated
     private String stagname;
 
     private Character character;
@@ -37,9 +36,7 @@ public class AppUser implements Serializable {
     private int levelProgress;
 
 
-    //FIXME: to neni metoda uzivatele!
     public List<Place> getPlacesByFloor(int currentFloor) {
-        // TODO: maybe fix this shit with a filter
         List<Place> places = new ArrayList<>();
         for (Place p : this.getPlaces()) {
             if (p.getFloor() == currentFloor) {

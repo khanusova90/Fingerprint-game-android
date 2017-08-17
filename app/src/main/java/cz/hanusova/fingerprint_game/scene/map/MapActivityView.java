@@ -15,7 +15,17 @@ public interface MapActivityView extends BaseView {
 
     void updateView();
 
+    /**
+     * Sets current map to view
+     *
+     * @param map
+     */
     void setMap(Bitmap map);
 
+    /**
+     * Updates map icons
+     *
+     * @param icons
+     */
     void updateIcons(List<Drawable> icons);
 }

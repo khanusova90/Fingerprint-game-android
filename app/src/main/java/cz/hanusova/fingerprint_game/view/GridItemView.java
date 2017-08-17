@@ -40,9 +40,7 @@ public class GridItemView extends LinearLayout {
         Bitmap bitmap = null;
         try {
             bitmap = new BitmapWorkerTask(inventory.getMaterial().getIconName(), this.getContext(), 4).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         imageView.setImageDrawable(new BitmapDrawable(this.getContext().getResources(), bitmap));

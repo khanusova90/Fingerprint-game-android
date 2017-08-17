@@ -1,4 +1,4 @@
-package cz.hanusova.fingerprint_game.listener;
+package cz.hanusova.fingerprint_game.scan;
 
 import java.util.List;
 

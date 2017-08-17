@@ -30,5 +30,10 @@ public interface UserService {
      */
     AppUser getActualUser();
 
+    /**
+     * Saves user to preferences so as there are actual values
+     *
+     * @param user actualized {@link AppUser}
+     */
     void updateUser(AppUser user);
 }

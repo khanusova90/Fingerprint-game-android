@@ -53,6 +53,9 @@ public class RankingActivityPresenterImpl implements RankingActivityPresenter {
         return rankings;
     }
 
+    /**
+     * Sorts rankings by users' XP
+     */
     private void sortRankings() {
         Collections.sort(rankings, new Comparator<Ranking>() {
             @Override

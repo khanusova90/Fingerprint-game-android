@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 
 /**
+ * Item that helps user with mining
+ *
  * @author khanusova
  */
 public class Item implements Serializable {

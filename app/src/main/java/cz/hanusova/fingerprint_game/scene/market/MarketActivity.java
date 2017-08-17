@@ -34,6 +34,8 @@ import cz.hanusova.fingerprint_game.rest.RestClient;
 import cz.hanusova.fingerprint_game.task.BitmapWorkerTask;
 
 /**
+ * Activity for displaying items to buy
+ *
  * Created by khanusova on 7.10.2016.
  */
 @EActivity(R.layout.activity_market)

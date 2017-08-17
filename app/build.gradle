@@ -35,17 +35,6 @@ android {
             exclude 'META-INF/LGPL2.1'
         }
     }
-
-//    dexOptions {
-//        incremental = true;
-//        preDexLibraries = false
-//        javaMaxHeapSize "4g"
-//    }
-//
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
 }
 
 apply plugin: 'com.android.application'

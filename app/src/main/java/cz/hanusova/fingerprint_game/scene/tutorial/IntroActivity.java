@@ -14,6 +14,8 @@ import cz.hanusova.fingerprint_game.Preferences_;
 import cz.hanusova.fingerprint_game.R;
 
 /**
+ * Activity to show introduction
+ *
  * Created by khanusova on 06/07/2017.
  */
 @EActivity

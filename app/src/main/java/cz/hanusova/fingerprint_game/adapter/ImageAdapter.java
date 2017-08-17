@@ -20,6 +20,8 @@ import cz.hanusova.fingerprint_game.view.GridItemView;
 import cz.hanusova.fingerprint_game.view.GridItemView_;
 
 /**
+ * Adapter for user inventory
+ *
  * Created by Kristyna on 16/02/2017.
  */
 
